@@ -9,6 +9,7 @@ import {xpThreshold} from '../src/core/progression.js';
 import {floorEncounterGroups} from '../src/core/encounter-groups.js';
 
 const moth='kagaribi_ember_moth', soot='kagaribi_soot_moth';
+const oilBeetle = 'kagaribi_oil_beetle';
 const hit={type:'damage',element:'fire',amount:1};
 function game(roster,mode='classic',setup=()=>{}) {
   const database={...data,enemies:structuredClone(data.enemies),encounters:{...data.encounters,habit_test:{id:'habit_test',enemies:roster,text:'灯蛾が現れた。',escape:true}}};
@@ -39,6 +40,40 @@ for(const mode of ['classic','grid','frontline'])test(mode+' 火の魔法が灯�
   assert.equal(g.state.records.kills[moth],1);
   assert.equal(g.state.records.wins,1);
   assert.equal(g.feedback.events.filter(e=>e.action==='引火爆弾'&&e.targets[0]?.key==='actor:ada').length,1);
+});
+
+for (const mode of ['classic','grid','frontline']) test(mode+' 火が命中すると油虫だけが燃え尽き、隣の灯蛾と味方には波及しない', () => {
+  const g = game([oilBeetle, moth], mode);
+  const s = g.state, [bug, neighbor] = s.battle.enemies;
+  const partyHP = () => s.members.map(id => s.actors[id].hp);
+  const before = partyHP(), neighborHP = neighbor.hp;
+  applyStatus(g.data,s,bug,'water_ward');
+  const spark = {name:'火花', effects:[hit]};
+  assert.equal(damage(g,bug,spark),0);
+  assert.equal(bug.hp,bug.stats.hp);
+  assert.equal(damage(g,bug,{name:'水滴',effects:[{type:'damage',element:'water',amount:1}]}),1);
+  applyStatus(g.data,s,s.actors.il,'blindness');
+  g.random = () => 0.99;
+  assert.equal(damage(g,bug,spark),0);
+  g.random = () => 0;
+  if (mode === 'grid') s.battle.grid.positions['actor:il'] = {x:2,y:3};
+  assert.ok(g.dispatch({type:'battle',action:'skill',skill:'fire',target:mode==='frontline'?'enemy:enemy_0':'enemy_0'}),s.notice);
+  assert.equal(bug.hp,0);
+  assert.equal(s.records.kills[oilBeetle],1);
+  assert.equal(neighbor.hp,neighborHP);
+  assert.deepEqual(partyHP(),before);
+  assert.equal(s.battle.log.filter(line => line.includes('習性「燃え尽き」')).length,1);
+  assert.ok(!g.feedback.events.some(e => e.action === '引火爆弾' || e.action === '燃え尽き'));
+});
+
+test('燃え尽きと引火爆弾を同じ魔物に付けても、設定順にかかわらず一度だけ反撃する', () => {
+  for (const ids of [['burn_out','ignition_bomb'],['ignition_bomb','burn_out']]) {
+    const g = game([oilBeetle],'classic',g => applyMonsterHabits(g.data.enemies,{[oilBeetle]:ids}));
+    const bug = g.state.battle.enemies[0], hp = bug.hp;
+    assert.equal(damage(g,bug,{name:'火花',effects:[hit]}),hp);
+    assert.equal(g.state.records.kills[oilBeetle],1);
+    assert.equal(g.feedback.events.filter(e => e.action === '引火爆弾').length,1);
+  }
 });
 
 test('燃える打撃は対象ごとに抽選し、戦闘不能者を除外して同じ生存者にも再命中する',()=>{

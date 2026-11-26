@@ -68,7 +68,11 @@ export function changeJob(engine,id,jobId){
 export function baseGrantsFor(data,state,id){
   const job=actorJob(data,state,id);if(!job)return [];
   const common=data.jobProfile.commonSkills.map(skill=>({skill,level:1,api:'battle.skill',target:data.skills[skill].target,maxTargets:1,lifetime:'equipped'}));
-  return [...common,...job.grants,...purchasedGrants(data,state,id)];
+  const personal = Object.entries(data.jobProfile.personalSkills?.[id] ?? {}).map(([skill, level]) => ({
+    skill, level, api:'battle.skill', target:data.skills[skill].target,
+    maxTargets:data.skills[skill].maxTargets ?? 1, lifetime:'equipped'
+  }));
+  return [...common,...personal,...job.grants,...purchasedGrants(data,state,id)];
 }
 export const grantsFor=(data,state,id)=>dungeonGrants(data,state,id,baseGrantsFor(data,state,id));
 export function knownSkills(data,state,id){

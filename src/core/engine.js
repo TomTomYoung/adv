@@ -13,7 +13,7 @@ import {advanceCampRoute} from './camp-route.js';
 import {stepScouting,returnRecon,clearScoutingTrip,camouflageRate,expireScoutingEffects} from './scouting.js';
 import {ignitionReason} from './fire-hazards.js';
 import {treasurePlan} from './treasures.js';
-import {removeStatus,tickStatuses,applyStatusClock,fieldItemUser} from './status-effects.js';
+import {removeStatus,tickStatuses,applyStatusClock,fieldItemUser,clearWaterWardConflicts} from './status-effects.js';
 import {rollbackEventCheckpoints} from './event-checkpoints.js';
 import {edgeBetween} from './edge-layers.js';
 import {dungeonRestrictionReason} from './dungeon-restrictions.js';
@@ -455,6 +455,10 @@ export class GameEngine {
     const catalog=seed || source.shiftingLayoutSeed!==undefined ? shiftingDungeonData(source,seed) : source;
     this.data=acceptedStoryRouteData(catalog,save.state);
     this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();restoreWorldConversations(this);
+    // Earlier battles could save oil or flames together with a water ward.
+    for (const unit of [...Object.values(this.state.actors), ...(this.state.battle?.enemies ?? [])]) {
+      if (unit.statuses.includes('water_ward')) clearWaterWardConflicts(unit);
+    }
     // Same-version saves from the side-based scheduler do not contain a turn queue.
     // Rebuild remaining turns without replaying allies already recorded in acted.
     if(this.state.battle&&this.state.battle.turnQueue===undefined){

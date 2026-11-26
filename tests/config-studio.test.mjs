@@ -81,16 +81,19 @@ test('monster chest editor names each monster and validates its item and probabi
 
 test('魔物の習性を未設定の種に付け、元の種から外して割当原稿だけを出力する',async t=>{
  const {app,root}=await ui(t,'monster-habits.json');
- const change=async(id,enabled)=>{
+ const change=async(id,habit,enabled)=>{
   await app.selectRecord(id);
-  const input=root.querySelectorAll('.record-detail input').find(n=>n.type==='checkbox');
+  const label=root.querySelectorAll('.record-detail label').find(n=>n.textContent===habit);
+  const input=label.querySelector('input');
   assert.equal(input.checked,!enabled);
   input.checked=enabled;
   input.dispatchEvent({type:'change'});
  };
- await change('kagaribi_ember_moth',false);
- await change('kagaribi_soot_moth',true);
+ await change('kagaribi_ember_moth','引火爆弾',false);
+ await change('kagaribi_soot_moth','引火爆弾',true);
+ await change('kagaribi_oil_beetle','燃え尽き',false);
+ await change('kagaribi_soot_rat','燃え尽き',true);
  await app.reviewChanges();
  assert.deepEqual(app.workspace.output.map(o=>o.file),['monster-habits.json']);
- assert.deepEqual(JSON.parse(app.workspace.output[0].text),{assignments:{kagaribi_soot_moth:['ignition_bomb']}});
+ assert.deepEqual(JSON.parse(app.workspace.output[0].text),{assignments:{kagaribi_soot_moth:['ignition_bomb'],kagaribi_soot_rat:['burn_out']}});
 });

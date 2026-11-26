@@ -2,7 +2,7 @@ import {fatalHitHabit} from './monster-habits.js';
 import {familyTurn} from './monster-family-actions.js';
 import {depth, familyAccuracy, familyAfterHit, familyAfterMove, familyIntercept, familyPower, syncFamilyBattle} from './monster-family-field.js';
 import {EMBER_MOTH, hasWhistled, joinReinforcements, mothSummonPositions, summonMoths} from './battle-reinforcements.js';
-import {cleanseCandidates} from './status-effects.js';
+import {cleanseCandidates, consumeWaterWard, hasActiveStatus} from './status-effects.js';
 import {battleAlive,frontlinePresent,frontlineState,removeFrontline,knockbackFrontline,syncFrontlineDefeats} from './frontline-lifecycle.js';
 import {isFrontline,frontPosition,frontlineUnits,frontlineMovePlan,moveFrontline,prepareFrontlineRound,traceFrontline,frontlineRevivePosition} from './battle-frontline.js';
 import {frontlineTargetPlan,frontlineSelections,frontlineProfile} from './frontline-targeting.js';
@@ -133,12 +133,13 @@ export function battleSkillPlan(engine,actorId,skillId,targetId,options={}){
 }
 // A habit is a hit reaction, not a turn. The blast uses the dead monster's
 // magic and normal damage mitigation, but spends no MP and ignores casting restrictions.
-function burstOnFatalHit(engine, monster, habit, habitImpacts) {
+function resolveFatalHit(engine, monster, habit, habitImpacts) {
   const {state, data} = engine;
   const hp = monster.hp;
   monster.hp = 0;
   state.battle.log.push(`${monster.name}の習性「${habit.name}」が発動し、燃え尽きた。`);
   recordDefeated(engine);
+  if (!habit.burstSkill) return hp;
   const living = state.members.map(id => state.actors[id]).filter(actor => battleAlive(state, actor));
   if (living.length) {
     const target = living[Math.floor(engine.random() * living.length)];
@@ -191,23 +192,36 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     const context={source:{...source,stats:{...sourceStats,str:sourceStats.str*factor,int:sourceStats.int*factor}},target:{...target,stats:targetStats}};
     const raw=Math.max(0,effect.formula?engine.value(engine.data.formulas[effect.formula],context):(effect.amount??0)*factor);
     if(effect.type==='damage'){
-      const habit=b && fatalHitHabit(engine.data,target,effect.element);
+      const physical = effect.element === 'physical';
+      const element = physical && hasActiveStatus(engine.data,s,source,'water_infusion') ? 'water' : effect.element;
+      const habit=b && fatalHitHabit(engine.data,target,element);
       if(habit){
-        damageTotal+=burstOnFatalHit(engine,target,habit,habitImpacts);
+        if (consumeWaterWard(engine.data,s,target,'炎')) continue;
+        damageTotal+=resolveFatalHit(engine,target,habit,habitImpacts);
         break;
       }
       if(critical===null){const chance=checkAccuracy?(series?.snapshot.criticalChance??criticalChance(engine.data,s,source,target)):0;critical=chance>0&&(chance>=1||engine.random()<chance);}
       const guardRate=series?.snapshot.guardRate??guardDamageRate(engine.data,guardLevel(b,target));
-      const elementScale=series?.snapshot.resist[effect.element]??(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,effect.element):1);
-      const power=(effect.element==='physical'?physicalPower:1)*dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
-      if(feedback){feedback.critical=Boolean(critical);feedback.guarded=guardRate<1;feedback.weak=elementScale>1;feedback.resisted=elementScale<1;}
+      const elementScale=series?.snapshot.resist[element]??(target.resist?.[element]??engine.data.actors[target.id]?.resist?.[element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,element):1);
+      const power=(physical?physicalPower:1)*dungeonDamageScale(engine.data,s,element)*(powers[physical?'physicalPower':'magicPower']??1)*(powers.elementPower?.[element]??1);
+      const fireRate = element === 'fire' ? fireDamageTaken(engine.data, s, target) : 1;
+      if(feedback){feedback.critical=Boolean(critical);feedback.guarded=guardRate<1;feedback.weak=elementScale*fireRate>1;feedback.resisted=elementScale*fireRate<1;}
       const taken=series?.snapshot.taken??(target.instance?1:(passives(engine.data,s,target.id).damageTaken??1));
       const familyScale=familyPower(engine,source,target);
       let damage=guardRate===0?0:Math.max(1,Math.floor(Math.floor(raw)*power*guardRate*elementScale*taken*familyScale*(critical?CRITICAL_DAMAGE_MULTIPLIER:1)));
       if(series?.basis==='final'){const index=skill.effects.indexOf(effect);series.finalBase[index]??=damage;damage=Math.max(0,Math.floor(series.finalBase[index]*series.factor));}
       if(series?.basis==='power'&&series.factor===0)damage=0;
-      if(effect.element==='physical')damage=takePhysicalHit(engine.data,b,unitKey(target),damage,dungeonBuffs(engine.data,s));
+      if (element === 'fire' && damage > 0 && consumeWaterWard(engine.data,s,target,'炎')) {
+        if (feedback) { feedback.guarded = true; feedback.weak = false; }
+        continue;
+      }
+      if (fireRate !== 1) damage = Math.floor(damage * fireRate);
+      if(physical)damage=takePhysicalHit(engine.data,b,unitKey(target),damage,dungeonBuffs(engine.data,s));
       target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
+      if (damage > 0 && element === 'fire' && hasActiveStatus(engine.data,s,target,'oiled')) {
+        removeStatus(target,'oiled');
+        if (applyStatus(engine.data,s,target,'ablaze')) (b?.log??s.log).push(`${targetName}の油に引火し、火だるまになった。`);
+      }
       if(damage>0&&!wakeChecked){wakeOnDamage(engine,target);wakeChecked=true;}
     }
     if(effect.type==='heal'){
@@ -631,6 +645,10 @@ function gridEnemyAction(engine,enemy){
   const steps=gridCells().map(p=>gridMovePlan(s,enemy,p,engine.data)).filter(p=>p.ok).sort((a,c)=>score(a.to)-score(c.to));
   if(steps.length&&score(steps[0].to)<score(from)){b.grid.positions[unitKey(enemy)]=steps[0].to;b.log.push(`${enemy.name}は移動した。`);}
   else{applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
+}
+
+function fireDamageTaken(data, state, target) {
+  return activeStatuses(data, state, target).reduce((scale, status) => scale * (status.fireDamageTaken ?? 1), 1);
 }
 
 function damageSnapshot(engine,source,target,enemySource){
