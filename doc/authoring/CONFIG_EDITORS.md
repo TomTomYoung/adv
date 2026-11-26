@@ -4,6 +4,10 @@
 
 入口は[設定一覧](../../config/index.html)。公開先は[Pages URL一覧](CONFIG_EDITOR_URLS.md)に全237件を掲載しています。[編集対象JSONの一覧](CONFIG_EDITOR_SOURCES.md)で、操作ごとの出力先・生成済みデータとの区別を確認できます。
 
+## 魔物の習性を付け外しする
+
+[魔物の習性](../../config/monster-habits.html)で魔物を検索して選び、習性名のチェックを切り替えます。「変更を確認・JSONを出力」で得た内容を [config/monster-habits.json](../../config/monster-habits.json) に保存し、`npm run build:dungeons` でゲームと図鑑に反映します。同じ魔物のレベル別個体にも引き継がれます。
+
 ## 迷宮から始めるマップ編集
 
 [ランダム生成](../dungeons/DUNGEON_GENERATION.md)は、独立した確認画面で単一マップ候補の生成と実GameEngineによる試遊まで実装済みです。階層ごとの設定から候補を選び、採用結果をこの編集器へ渡す仕組みは後続です。現在の8タブに生成・候補比較・一括ZIP出力はまだありません。

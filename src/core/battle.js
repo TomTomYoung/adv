@@ -1,3 +1,4 @@
+import {fatalHitHabit} from './monster-habits.js';
 import {familyTurn} from './monster-family-actions.js';
 import {depth, familyAccuracy, familyAfterHit, familyAfterMove, familyIntercept, familyPower, syncFamilyBattle} from './monster-family-field.js';
 import {joinReinforcements} from './battle-reinforcements.js';
@@ -28,7 +29,7 @@ import {passives,permission,costProblem,payCost} from './jobs.js';
 import {buffAccuracy,unitKey,buffStats,buffResistance,addBuff,tickBuffs,actionBuffs,actionPower,takePhysicalHit} from './buffs.js';
 import {triggerBattleEvent} from './battle-events.js';
 import {consumeFieldBattleSignals} from './field-signals.js';
-import {describeTarget,playBattleCue} from './feedback.js';
+import {describeTarget,emitFeedback,playBattleCue} from './feedback.js';
 export function startBattle(engine,id,continuations,options={}){
   if(engine.state.battle||engine.state.battleResult)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
@@ -130,14 +131,39 @@ export function battleSkillPlan(engine,actorId,skillId,targetId,options={}){
   if(skill.requiresAnalyzed&&targets.some(t=>!b.analyzed.includes(t.instance)))return fail('先にこの敵を魔物解析してください。');
   return {ok:true,skill,targets};
 }
-export function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null,checkAccuracy=true,series=null,physicalPower=1,feedback=null){
+// A habit is a hit reaction, not a turn. The blast uses the dead monster's
+// magic and normal damage mitigation, but spends no MP and ignores casting restrictions.
+function burstOnFatalHit(engine, monster, habit, habitImpacts) {
+  const {state, data} = engine;
+  const hp = monster.hp;
+  monster.hp = 0;
+  state.battle.log.push(`${monster.name}の習性「${habit.name}」が発動し、燃え尽きた。`);
+  recordDefeated(engine);
+  const living = state.members.map(id => state.actors[id]).filter(actor => battleAlive(state, actor));
+  if (living.length) {
+    const target = living[Math.floor(engine.random() * living.length)];
+    const skill = data.skills[habit.burstSkill];
+    const result = {...describeTarget(engine, unitKey(target)), hpBefore: target.hp};
+    result.damage = applySkill(engine, monster, target, {...skill, name: habit.name}, null, true, null, false, null, 1, result);
+    result.hpAfter = target.hp;
+    result.defeated = target.hp === 0;
+    const cue = data.presentation?.cues[data.presentation.bindings.skills[habit.burstSkill]];
+    if (cue) {
+      const impact = {effects: cue.effects, sound: cue.sound, source: describeTarget(engine, unitKey(monster)), targets: [result], phase: 'impact', action: habit.name};
+      if (habitImpacts) habitImpacts.push(impact);
+      else emitFeedback(engine, impact);
+    }
+  }
+  return hp;
+}
+export function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null,checkAccuracy=true,series=null,physicalPower=1,feedback=null,habitImpacts=null){
   let damageTotal=0,critical=null,wakeChecked=false;
   const b=engine.state.battle,s=engine.state;
   if(isFrontline(s)&&!frontlinePresent(s,target))return 0;
   const sourceStats=series?.snapshot.sourceStats??(enemySource?enemyStats(engine,source):engine.stats(source.id));
   const targetStats=series?.snapshot.targetStats??(target.instance?enemyStats(engine,target):engine.stats(target.id));
   const powers=enemySource?{}:passives(engine.data,s,source.id),targetName=target.name??engine.data.actors[target.id]?.name;
-  if(!dungeonEffectActive(engine.data,s,'skill',skillId)){(b?.log??s.log).push(`${skill.name}の効果は境界に遮られました。`);return;}
+  if(skillId!==null&&!dungeonEffectActive(engine.data,s,'skill',skillId)){(b?.log??s.log).push(`${skill.name}の効果は境界に遮られました。`);return;}
   if(target.hp<=0&&skill.effects.some(e=>e.type==='purge_undead')){
     if(isFrontline(s)&&target.instance&&engine.data.enemies[target.id]?.undead&&frontlineState(s,target)==='down'){removeFrontline(engine,target);b.log.push(`${target.name}の残骸を祓った。`);}
     return 0;
@@ -165,6 +191,11 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     const context={source:{...source,stats:{...sourceStats,str:sourceStats.str*factor,int:sourceStats.int*factor}},target:{...target,stats:targetStats}};
     const raw=Math.max(0,effect.formula?engine.value(engine.data.formulas[effect.formula],context):(effect.amount??0)*factor);
     if(effect.type==='damage'){
+      const habit=b && fatalHitHabit(engine.data,target,effect.element);
+      if(habit){
+        damageTotal+=burstOnFatalHit(engine,target,habit,habitImpacts);
+        break;
+      }
       if(critical===null){const chance=checkAccuracy?(series?.snapshot.criticalChance??criticalChance(engine.data,s,source,target)):0;critical=chance>0&&(chance>=1||engine.random()<chance);}
       const guardRate=series?.snapshot.guardRate??guardDamageRate(engine.data,guardLevel(b,target));
       const elementScale=series?.snapshot.resist[effect.element]??(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,effect.element):1);
@@ -232,10 +263,11 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
   targets=misfireTargets(engine,source,targets,skill,skillId,itemId);
   if(spatial(engine.state)&&targets.length===1&&!targets[0].instance)targets=[coveredTarget(engine,targets[0],skill)];
   targets=familyIntercept(engine,source,targets,skill);
+  const habitImpacts=[];
   const hit=(target,context)=>{
     const result={...describeTarget(engine,unitKey(target)),hpBefore:target.hp,mpBefore:target.mp};
     const statuses=[...target.statuses];
-    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId,true,context,physicalPower,result);
+    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId,true,context,physicalPower,result,habitImpacts);
     if(damage>0)result.damage=damage;
     result.hpAfter=target.hp;result.mpAfter=target.mp;
     if(target.hp>result.hpBefore)result.healing=target.hp-result.hpBefore;
@@ -251,6 +283,7 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
   const weapon=!enemySource&&skillId==='attack'?engine.data.items[source.equipment?.weapon]?.equipmentType:null;
   const cue=bindings?.weapons?.[weapon]??bindings?.skills[skillId];
   playBattleCue(engine,cue,origin,results,attacking,`${sourceName}・${skill.name}`);
+  for(const impact of habitImpacts)emitFeedback(engine,impact);
   familyAfterHit(engine,source,targets,skillId,skill,results,(enemy,victim)=>familyCast(engine,enemy,[victim],'attack'));
   wetAfterSkill(engine,source,skill);return true;
 }

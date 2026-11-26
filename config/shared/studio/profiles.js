@@ -7,6 +7,7 @@ export function collections(entry,value){
  case 'maps':case 'voxel':return [collection('maps',entry.family==='voxel'?'旧3Dマップ（通常配信外）':'マップと配置物','map'),...(value.scripts?[collection('scripts','処理','script')]:[])];
  case 'cells':return [collection('maps','セルの配置図','cellmap'),collection('presets','セル種','cell'),collection('edgePresets','エッジ種','edge'),collection('events','セル進入イベント','cellEvent'),collection('scripts','セルの処理','script')];
  case 'locations':return [collection(null,'町の場所・施設','location')];
+ case 'habits':return [collection('assignments','魔物別の習性','monsterHabits')];
  case 'rewards':return [collection('drops','魔物別の宝箱','drop')];
  case 'entities':return [collection('monsters','魔物の比較・編集','monster','array'),collection('actors','仲間の比較・編集','actor')];
  case 'jobs':return [collection('jobs','職業の比較・編集','job'),collection('skills','戦闘技能','skill'),collection('fieldAbilities','探索特技','ability'),collection('items','道具・装備','item'),collection('buffs','強化・弱体','buff'),collection('equipmentPatches','既存装備の調整','equipment'),collection('formulas','計算式','expression'),single('initialJobs','仲間の初期職業','assignments'),collection('shopGoods','店の商品','stock','array'),single('profile','共通の職業設定','profile'),single('skillCues','技能と演出の対応','bindings')];
@@ -40,6 +41,7 @@ export const groups={
  cue:[['効果・音',['effects','sound','target','gap']]],
 };
 export const editableScope={
+ habits:'魔物を選んで習性にチェックを入れると付与し、外すと解除します。',
  rewards:'魔物ごとの宝箱の品と確率（0〜1）。0は抽選なし、1は必ず当選します。',
  quest:'このクエストの配置・起動条件・調査用の会話と処理。本筋がJavaScript原稿にある場合、その本文は参照専用です。',
  dungeon:'この迷宮の入口・所属マップ・仕掛け・接続・条件付きイベント。セルと配置イベントはそれぞれの正本へ出力します。',

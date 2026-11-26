@@ -46918,6 +46918,7 @@ export const referenceData={
     "config/jobs.json",
     "config/kagaribi-content.json",
     "config/locations.json",
+    "config/monster-habits.json",
     "config/presentation.json",
     "config/quests/q001.events.json",
     "config/quests/q002.events.json",
