@@ -109,6 +109,15 @@ export const editors=[
     "hint": "場所の親子関係、出入口、施設サービスを編集します。"
   },
   {
+    "id": "monster-habits",
+    "file": "monster-habits.json",
+    "page": "monster-habits.html",
+    "family": "habits",
+    "title": "魔物の習性",
+    "group": "隊・戦闘",
+    "hint": "魔物を選び、戦闘中に自動で働く習性を付け外しします。"
+  },
+  {
     "id": "presentation",
     "file": "presentation.json",
     "page": "presentation.html",

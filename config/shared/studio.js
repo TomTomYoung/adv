@@ -15,6 +15,8 @@ import {addQuestEvent,projectMap} from './studio/map-model.js';
 import {previewPanel,renderArt} from './studio/preview.js';
 import {checkWorkspace,costWarnings} from './studio/checks.js';
 
+import {MONSTER_HABITS} from '../../src/core/monster-habits.js';
+
 const clone=value=>structuredClone(value);
 const readonlyKeys=new Set(['id','version','schemaVersion','source','examples','systems','fieldEvents']);
 const fileEntry=file=>editors.find(e=>e.file===file);
@@ -40,13 +42,14 @@ export class ConfigStudio {
  group(){return collections(this.entry,this.workspace.value(this.entry.file)).find(c=>c.key===this.collectionKey)??collections(this.entry,this.workspace.value(this.entry.file))[0];}
  rows(group=this.group(),value=this.workspace.value(this.entry.file)){
   const data=get(value,group.path);if(group.mode==='single')return [{key:'single',value:data,path:group.path}];
+  if(group.kind==='monsterHabits')return Object.keys(this.context.names('enemies')).map(key=>({key,value:data?.[key]??[],path:[...group.path,key]}));
   return Object.entries(data??{}).map(([key,value])=>({key:group.mode==='array'?Number(key):key,value,path:[...group.path,group.mode==='array'?Number(key):key]}));
  }
  current(){const rows=this.rows();return rows.find(r=>String(r.key)===String(this.recordId))??rows[0];}
  recordName(record=this.current()?.value,key=this.current()?.key,kind=this.group().kind){
   if(kind==='system')return record?.name??systemNames[record?.use]??'仕掛け';
   if(kind==='art')return this.context.name('dungeons',record?.dungeon);
-  if(kind==='drop')return this.context.name('enemies',key);
+  if(kind==='drop'||kind==='monsterHabits')return this.context.name('enemies',key);
   if(kind==='stock')return this.context.name('items',record?.item);
   if(kind==='cellmap'||kind==='map')return record?.name??this.context.name('maps',key);
   if(kind==='script')return record?.commands?.find(c=>typeof c.text==='string')?.text?.slice(0,42)??'処理 '+key;
@@ -91,13 +94,13 @@ export class ConfigStudio {
   const list=el('div','','record-buttons');this.list.append(list);const draw=()=>{clear(list);for(const row of rows){const v=row.value;if(!`${this.recordName(v,row.key)} ${v?.description??''} ${v?.id??row.key}`.toLowerCase().includes(this.search.toLowerCase()))continue;
    const b=button('',()=>this.selectRecord(row.key),'record-button');b.setAttribute('aria-pressed',String(this.current()?.key===row.key));b.append(el('span',this.recordName(v,row.key)),el('small',this.rowSummary(v,group.kind)));list.append(b);
   }};draw();
-  if(!['cellmap','art','story','drop'].includes(group.kind)&&this.entry.family!=='voxel')this.list.append(button(group.kind==='map'?'マップを追加':'新規作成',()=>this.addRecord()));
+  if(!['cellmap','art','story','drop','monsterHabits'].includes(group.kind)&&this.entry.family!=='voxel')this.list.append(button(group.kind==='map'?'マップを追加':'新規作成',()=>this.addRecord()));
   if(['monster','actor','job','skill','stock'].includes(group.kind)){
    const table=el('table','','compare-table'),head=el('tr');const keys=['monster','actor','job'].includes(group.kind)?['hp','mp','str','vit','agi','int']:group.kind==='skill'?['mp','target']:['price'];head.append(el('th','名前'));for(const k of keys)head.append(el('th',label(k)));const thead=el('thead');thead.append(head);table.append(thead);const body=el('tbody');
    for(const row of rows){const tr=el('tr'),cell=el('td');cell.append(button(this.recordName(row.value,row.key),()=>this.selectRecord(row.key)));tr.append(cell);for(const k of keys)tr.append(el('td',enumLabel(row.value?.stats?.[k]??row.value?.[k]??'—')));body.append(tr);}table.append(body);const disclosure=el('details');disclosure.append(el('summary','一覧で比較'),table);this.list.append(disclosure);
   }
  }
- rowSummary(v,kind){if(kind==='event')return `${enumLabel(v?.trigger)} / ${v?.points?.length??0}地点`;if(kind==='system')return systemNames[v?.use]??'';if(v?.stats)return Object.entries(v.stats).map(([k,n])=>`${label(k)} ${n}`).join(' / ');return v?.description?.slice(0,60)??v?.role??v?.id??'';}
+ rowSummary(v,kind){if(kind==='monsterHabits')return v.map(id=>MONSTER_HABITS[id]?.name??id).join('・');if(kind==='event')return `${enumLabel(v?.trigger)} / ${v?.points?.length??0}地点`;if(kind==='system')return systemNames[v?.use]??'';if(v?.stats)return Object.entries(v.stats).map(([k,n])=>`${label(k)} ${n}`).join(' / ');return v?.description?.slice(0,60)??v?.role??v?.id??'';}
  renderDetail(){
   clear(this.detail);const row=this.current(),group=this.group();if(!row){this.detail.append(el('p','まだ登録がありません。「新規作成」で追加できます。'));return;}
   this.recordId=row.key;const value=row.value,location={file:this.entry.file,path:row.path};
@@ -105,6 +108,19 @@ export class ConfigStudio {
   if(['cell','edge'].includes(group.kind)&&value.description)this.detail.append(el('p',value.description,'intro'));
   if(group.kind==='cell'){const source=this.workspace.value(this.entry.file);let count=0,maps=0;for(const p of Object.values(source.maps)){let n=0;for(const line of p.rows)for(const symbol of line)if(p.legend[symbol]===row.key)n++;if(n)maps++;count+=n;}this.detail.append(el('p',`共有セル種を編集中：${maps} マップ・${count} セルで使用。変更は全使用地点に反映され、地点ごとの上書きが優先されます。`,'cost-warning'));}
   this.detail.append(el('h2',this.recordName()),el('p',`出力先：config/${this.entry.file}${value?.id?' / ID: '+value.id:''}`,'source-caption'));
+  if(group.kind==='monsterHabits'){
+   for(const [id,habit] of Object.entries(MONSTER_HABITS)){
+    const label=el('label'), input=el('input');input.type='checkbox';input.checked=value.includes(id);
+    input.addEventListener('change',()=>{
+     const ids=input.checked?[...value,id]:value.filter(prior=>prior!==id);
+     this.workspace.set(location.file,location.path,ids.length?ids:undefined,this.recordName()+'の習性を変更');
+     this.refresh();
+    });
+    label.append(input,el('span',habit.name));this.detail.append(label,el('p',habit.description));
+   }
+   return;
+  }
+  if(group.kind==='monster')this.detail.append(button('習性を付け外し',()=>this.open('monster-habits.json',{record:value.id})));
   if(group.kind==='map'){
    const owner=this.context.maps()[row.key]?.owner;if(owner&&owner.file!==this.entry.file){this.detail.append(el('p',`このマップはconfig/${owner.file}の内容が優先されます。`,'unsupported'),button('有効なマップ原稿を開く',()=>this.open(owner.file,{collection:'maps',record:row.key})));return;}
   }
@@ -154,6 +170,8 @@ export class ConfigStudio {
     this.preview.append(mapPanel(this,{mapId:this.mapId,target:this.target,paint:['map','cellmap'].includes(kind)&&this.entry.family!=='voxel',selectedCell:this.selectedCell,z:this.z}));
     if(kind==='map'&&this.entry.family!=='voxel')this.preview.append(button('選択セルの詳細を編集',async()=>{const cell=this.selectedCell;await this.open('cell-layers.json',{collection:'maps',record:this.mapId});this.selectedCell=cell;this.refresh();}));
    }
+  }else if(kind==='monsterHabits'){
+   this.preview.append(previewPanel(this,this.context.names('enemies')[row.key],'monster'));
   }else this.preview.append(previewPanel(this,row.value,kind));
   const changed=this.workspace.changed();if(changed.length){const sources=section('今回の出力対象');for(const file of changed)sources.append(el('code','config/'+file));this.preview.append(sources);}
  }

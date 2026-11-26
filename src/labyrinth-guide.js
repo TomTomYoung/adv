@@ -2,6 +2,8 @@ import {gearStages, guideActor, guideBands, loadGuide, monsterFloorText} from '.
 import {conditionText, monsterGroups, targetText} from './application/monster-catalog.js';
 import {STAT_KEYS} from './core/jobs.js';
 
+import {MONSTER_HABITS} from './core/monster-habits.js';
+
 const $ = id => document.getElementById(id);
 const el = (tag, text, cls) => {
   const node = document.createElement(tag);
@@ -204,7 +206,16 @@ function drawMonster(id) {
   const floors = monsterFloorText(guideBands(data, false), id);
   if (floors) detail.append(el('p', '千変の迷宮　' + floors));
   detail.append(link);
-  card.append(header, parameters, rewards, affinity, actions, detail);
+  card.append(header, parameters, rewards, affinity);
+  if (enemy.habits?.length) {
+    const habits = block('習性');
+    for (const id of enemy.habits) {
+      const habit = MONSTER_HABITS[id];
+      habits.append(el('strong', habit.name), el('p', habit.description));
+    }
+    card.append(habits);
+  }
+  card.append(actions, detail);
   $('monster-sheet').replaceChildren(card);
 }
 function drawActor(id, job, level, mode) {

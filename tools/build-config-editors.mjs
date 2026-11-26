@@ -6,6 +6,7 @@ const root=path.resolve(import.meta.dirname,'..');
 const rootDocs={
  'battle-presentation':['battle-presentation','音・戦闘演出の編集','素材','合成音・粒子・軌道・タイムラインを専用画面で編集し、試聴・試写します。'],
  'expedition-content':['expedition','給油設備・中継所・技能教習','迷宮','既存区画への設備配置、携行油、技能宝石、購入技能と職業の対応を編集します。'],
+ 'monster-habits':['habits','魔物の習性','隊・戦闘','魔物を選び、戦闘中に自動で働く習性を付け外しします。'],
  'battle-rewards':['rewards','魔物別の宝箱','隊・戦闘','魔物ごとに宝箱のアイテムと確率（0〜1）を指定します。確率0は宝箱なしです。'],
  'catalog-q011-q020':['catalog','q011〜q020のシナリオ原稿','物語','本文と分岐の原稿です。ほかのクエストの本筋はauthoringのJavaScript原稿で管理しています。'],
  'cell-layers':['cells','セル種・エッジ種と配置','地形','セルとエッジの標準設定、配置、地点ごとの例外を編集する正本です。通常はマップ編集から操作します。'],

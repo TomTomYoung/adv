@@ -3324,6 +3324,8 @@ kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
 画像ID：monster_kagaribi_ember_moth。実ファイル：[assets/images/monsters/kagaribi_ember_moth.webp](../../assets/images/monsters/kagaribi_ember_moth.webp)。
 画像共有：他の敵定義との共有なし。
 
+習性：引火爆弾。火属性の攻撃が命中すると即死する。散り際に爆ぜ、生存中の味方からランダムに1人を選び、灯火の術に相当する火属性ダメージを与える。
+
 基礎能力：HP 42 / MP 8 / STR 11 / VIT 5 / AGI 12 / INT 10。報酬：7G / 17EXP。
 宝箱：予備灯油 1個 / 12.5％。
 属性倍率：physical 1 / fire 1 / light 1 / dark 1。

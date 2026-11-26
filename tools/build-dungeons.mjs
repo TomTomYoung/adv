@@ -2,6 +2,7 @@ import {buildQuestOrder} from './build-quest-order.mjs';
 import {buildBattleGrid} from './build-battle-grid.mjs';
 import {buildDungeonPackages} from './build-dungeon-packages.mjs';
 import {buildQuestInterruptions} from './build-quest-interruptions.mjs';
+import {buildMonsterHabits} from './build-monster-habits.mjs';
 import {buildBattleRewards} from './build-battle-rewards.mjs';
 import {buildCellLayers} from './build-cell-layers.mjs';
 import {buildWorld} from './build-world.mjs';
@@ -70,6 +71,7 @@ export async function buildDungeons(){
   await write('data/game.json',game);
   const presentation=await read('data/presentation.json');presentation.bindings.skills.repel_kuragari??='light';await write('data/presentation.json',presentation);
   await buildBattleRewards(root);
+  await buildMonsterHabits(root);
   await buildWorld(root);
   await buildCellLayers(root);
   await buildDungeonPackages(root);

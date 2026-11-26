@@ -78,3 +78,19 @@ test('monster chest editor names each monster and validates its item and probabi
  enter(field(root,['drops','waterwheel_beaver','chance']),'1.1');await app.reviewChanges();assert.equal(app.workspace.output,null);
  const validate=createValidator(readJSON);for(const change of [v=>delete v.drops.guard_1,v=>v.drops.unknown={item:'potion',chance:.5},v=>v.drops.guard_1.item='missing']){const bad=structuredClone(original);change(bad);assert.ok((await validate(entry('battle-rewards.json'),bad)).length);}
 });
+
+test('魔物の習性を未設定の種に付け、元の種から外して割当原稿だけを出力する',async t=>{
+ const {app,root}=await ui(t,'monster-habits.json');
+ const change=async(id,enabled)=>{
+  await app.selectRecord(id);
+  const input=root.querySelectorAll('.record-detail input').find(n=>n.type==='checkbox');
+  assert.equal(input.checked,!enabled);
+  input.checked=enabled;
+  input.dispatchEvent({type:'change'});
+ };
+ await change('kagaribi_ember_moth',false);
+ await change('kagaribi_soot_moth',true);
+ await app.reviewChanges();
+ assert.deepEqual(app.workspace.output.map(o=>o.file),['monster-habits.json']);
+ assert.deepEqual(JSON.parse(app.workspace.output[0].text),{assignments:{kagaribi_soot_moth:['ignition_bomb']}});
+});

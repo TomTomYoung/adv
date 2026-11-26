@@ -1,3 +1,4 @@
+import {MONSTER_HABITS} from '../../src/core/monster-habits.js';
 import {validatePresentationDesign} from '../../src/presentation-design.js';
 import {encounterGridProperties,targetingSchema,frontlineTargetingSchema,battleRulesSchema,battleGridPresentationSchema} from './battle-grid-schemas.js';
 import {actionStatusProperties} from './status-schemas.js';
@@ -34,6 +35,7 @@ export function createDefinitions(read=browserRead){
     const map=await schema('map'),mapValues=dict(map);
     let shape;
     if(family==='expedition')shape=obj({version:{const:1},oil:obj({item:{const:'torch'},units:{const:90}}),shopLocation:str,skillShopLocation:str,camps:array(obj({id:str,name:str,dungeon:str,map:str,x:uint,y:uint,facing:str,radius:uint,gems:uint,capacity:{enum:[180,270,330,390,450]},requiresQuest:str})),products:dict(obj({price:{type:'integer',minimum:1},tier:{enum:[1,2]},jobs:array(str),requiresCamp:str,requiresRelay:{type:'boolean'},upgrades:dict(str)},['price','tier','jobs'])),enemyGems:dict(uint)});
+    if(family==='habits')shape=obj({assignments:dict({...array({enum:Object.keys(MONSTER_HABITS)}),uniqueItems:true})});
     if(family==='rewards')shape=obj({drops:dict(obj({item:str,chance:{type:'number',minimum:0,maximum:1}}))});
     if(family==='maps')shape=obj({schemaVersion:{const:1},maps:mapValues,retiredMaps:array(str),retiredScriptFiles:array(str)});
     if(family==='bundle')shape=obj({images:dict(str),services:array(obj({id:str,label:str,detail:str,script:str,interior:bool},['id','label','detail','script'])),maps:mapValues,scripts,items:dict(item),enemies:dict(enemy),encounters:dict(encounter),statuses:dict(status),shopGoods:goods,mapOpenings:array(point),mapKnown:dict(array(str))},entry.file==='dungeon-content.json'?['maps','scripts','items','enemies','encounters','statuses','shopGoods','mapOpenings','mapKnown']:['maps','scripts','items','enemies','encounters']);
@@ -75,6 +77,10 @@ export function createValidator(read=browserRead){
     }
     walk(value);
     if(value.statuses)for(const e of statusDefinitionsErrors({statuses:value.statuses}))errors.push(e);
+    if(entry.family==='habits'){
+      const enemies=await read('data/enemies.json');
+      for(const id of Object.keys(value.assignments))if(!Object.hasOwn(enemies,id))fail(['assignments',id],'未知の魔物です。');
+    }
     if(entry.family==='rewards'){
       const enemies=await read('data/enemies.json'),items=await read('data/items.json');
       for(const id of Object.keys(enemies))if(!Object.hasOwn(value.drops,id))fail(['drops',id],'魔物の宝箱設定が必要です。');
