@@ -2,7 +2,7 @@
 
 全 210 本・659 結末。作品版 1.34.0。更新日: 2026-11-26。
 
-<!-- quest-catalog-source:f351c8c40139697428077476a8fa6f2384fe920b93159912fee43bdbed337592 -->
+<!-- quest-catalog-source:53504cc22d1c717825a7ef085a191581b888381354d62ff669acb6abc3ac5d5d -->
 
 表示順の正本は [quest-order.json](../../authoring/quest-order.json) です。掲載順と表示番号はこの一覧から決まり、見出し・リンク・進行状態の内部IDは固定です。
 

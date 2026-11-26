@@ -31531,7 +31531,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_torch_thief_solo"
+      "id": "kagaribi_prankster_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -31543,7 +31543,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_oil_slime"
+      "id": "kagaribi_torch_thief_solo"
     },
     {
       "file": "kagaribi-content.json",
@@ -31555,7 +31555,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_oil_pair"
+      "id": "kagaribi_oil_slime"
     },
     {
       "file": "kagaribi-content.json",
@@ -31567,7 +31567,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_prankster_pair"
+      "id": "kagaribi_oil_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -31771,7 +31771,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_shallow_guards"
+      "id": "kagaribi_ringleader"
     },
     {
       "file": "kagaribi-content.json",
@@ -31783,7 +31783,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_shallow_patrol_pair"
+      "id": "kagaribi_shallow_guards"
     },
     {
       "file": "kagaribi-content.json",
@@ -31795,7 +31795,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_ringleader"
+      "id": "kagaribi_shallow_patrol_pair"
     },
     {
       "file": "kagaribi-content.json",
