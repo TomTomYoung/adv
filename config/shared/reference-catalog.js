@@ -30918,6 +30918,42 @@ export const referenceData={
     {
       "file": "jobs.json",
       "path": [
+        "skills",
+        "aegis_field",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "aegis_ward"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "white_fang",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "twin_thunder",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
         "shopGoods",
         0,
         "item"
@@ -48558,6 +48594,15 @@ export const referenceData={
       },
       "water_bash": {
         "name": "ウォーターバッシュ"
+      },
+      "aegis_field": {
+        "name": "イージスフィールド"
+      },
+      "white_fang": {
+        "name": "ホワイトファング"
+      },
+      "twin_thunder": {
+        "name": "双雷"
       }
     },
     "items": {
@@ -49921,6 +49966,9 @@ export const referenceData={
       },
       "water_infusion": {
         "name": "水属性付与"
+      },
+      "aegis_ward": {
+        "name": "飛び道具の結界"
       }
     },
     "shops": {
@@ -77984,6 +78032,27 @@ export const referenceData={
       "path": [
         "skills",
         "water_bash"
+      ]
+    },
+    "skills/aegis_field": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "aegis_field"
+      ]
+    },
+    "skills/white_fang": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "white_fang"
+      ]
+    },
+    "skills/twin_thunder": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "twin_thunder"
       ]
     },
     "fieldAbilities/survey": {

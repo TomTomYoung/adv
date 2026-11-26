@@ -62,7 +62,7 @@ const statusLevelText=(id,def,level)=>{
   if(effect.criticalTakenChance!==undefined)parts.push(`被クリティカル率+${Math.round(effect.criticalTakenChance*1000)/10}ポイント`);
   if(effect.guaranteedCritical)parts.push('自分の命中したHP攻撃が確定クリティカル');
   if(effect.guaranteedCriticalTaken)parts.push('自分に命中したHP攻撃が確定クリティカル');
-  if (['oiled','water_ward','water_infusion'].includes(id)) parts.push(def.description);
+  if (['oiled','water_ward','water_infusion','aegis_ward'].includes(id)) parts.push(def.description);
   if(effect.fireDamageTaken!==undefined)parts.push(`受ける火属性ダメージ×${effect.fireDamageTaken}`);
   if(effect.battleOnly)parts.push(`持続${durationText(effect.duration)}`,'戦闘終了時に解除');
   for(const kind of effect.blockedActions??[])parts.push(`${{magic:'魔法',skills:'スキル',items:'アイテム'}[kind]}使用不可`);

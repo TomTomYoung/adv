@@ -40,7 +40,7 @@ export function frontlineTargetPlan(engine,source,skill,id,selection,{limit=skil
  if(skill.requiresAnalyzed)targets=targets.filter(u=>u.instance&&s.battle.analyzed.includes(u.instance));
  targets=orderFrontlineTargets(s,targets,profile.order);
  if(skill.selection==='lowest_hp_ratio')targets.sort((a,b)=>a.hp/(a.instance?a.stats.hp:engine.stats(a.id).hp)-b.hp/(b.instance?b.stats.hp:engine.stats(b.id).hp));
- targets=targets.slice(0,profile.maxAffected??limit);
+ if (skill.selection !== 'random_distinct') targets=targets.slice(0,profile.maxAffected??limit);
  const sameSide=enemy===Boolean(source.instance),range=sameSide?(profile.allyRange??{min:0,max:2}):profile.range,d=skill.target==='self'?0:requiredFrontlineRange(from,aim,sameSide),details={skill,targets,aim:{...aim,side:enemy?'enemies':'allies'},cells,profile,requiredRange:d,range};
  if(d<range.min||d>range.max)return fail(`射程外です（必要レンジ${d}／レンジ${range.min}–${range.max}）。`,details);
  if(profile.aim==='unit'&&(!selected||!frontlineTargetState(s,selected,profile)||!allowed(selected)))return fail('技能の対象状態に合う相手を選んでください。',details);
@@ -49,6 +49,10 @@ export function frontlineTargetPlan(engine,source,skill,id,selection,{limit=skil
 }
 export function frontlineSelections(engine,source,skill,id,options={}){
  const p=frontlineProfile(engine.data,source,skill,id),units=frontlineUnits(engine.state).filter(u=>frontlineTargetState(engine.state,u,p)&&(options.anySide||p.friendlyFire||(Boolean(u.instance)===Boolean(source.instance))===['ally','all_allies'].includes(skill.target)));
+ if(skill.selection==='random_distinct'&&!options?.anySide){
+   const plan=frontlineTargetPlan(engine,source,skill,id,undefined,options);
+   return [{id:'random',...plan}];
+ }
  const ids=skill.target==='self'?[unitKey(source)]:p.aim==='cell'?['enemies','allies'].flatMap(side=>Array.from({length:frontlineRows(engine.state,side==='enemies')*5},(_,i)=>`front:${side}:${Math.floor(i/5)},${i%5}`)):units.map(unitKey);
  return ids.map(id2=>({id:id2,...frontlineTargetPlan(engine,source,skill,id,id2,options)}));
 }

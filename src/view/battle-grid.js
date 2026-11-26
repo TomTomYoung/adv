@@ -25,7 +25,7 @@ export function renderGridControls(view,commands,m){
     const where=choice.aim?` (${choice.aim.x+1},${choice.aim.y+1})`:'',b=button(`${choice.name}${where}${choice.enabled?'':' ×'}`,`grid:choice:${choice.id}`,()=>{view.gridChoice=choice.id;view.render(m);refocus(view,`grid:choice:${choice.id}`);},false);
     b.className='battle-target'+(!choice.enabled?' unavailable':'');b.title=choice.reason;b.setAttribute('aria-pressed',String(selected?.id===choice.id));targets.append(b);
   }
-  const hint=selected?(selected.enabled?moving?'この場所へ移動して手番を終えます。':`効果対象：${selected.targetNames?.join('・')||'なし'}`:selected.reason):'対象を選択すると範囲と効果対象を確認できます。';
+  const hint=selected?(selected.enabled?moving?'この場所へ移動して手番を終えます。':`${entry?.selection==='random_distinct'?'抽選候補':'効果対象'}：${selected.targetNames?.join('・')||'なし'}`:selected.reason):'対象を選択すると範囲と効果対象を確認できます。';
   targets.append(make('p','grid-selection-info',hint));
   const confirm=button(moving?'移動を確定':'実行', 'grid:confirm',()=>{const intent={...pending.intent,...(moving?{to:selected.aim}:{target:selected.id})};view.pendingBattleAction=null;view.gridChoice=null;view.act(intent);},!selected?.enabled);confirm.className='primary';targets.append(confirm,button('戻る','battle:back',()=>view.cancel()));commands.append(targets);return true;
 }

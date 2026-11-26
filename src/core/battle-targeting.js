@@ -59,7 +59,7 @@ export function gridTargetPlan(engine,source,skill,skillId,selection,{limit=skil
   if(skill.effects.some(e=>e.type==='analyze'))targets=targets.filter(u=>u.instance);
   if(skill.requiresAnalyzed)targets=targets.filter(u=>u.instance&&s.battle.analyzed.includes(u.instance));
   if(skill.selection==='lowest_hp_ratio')targets.sort((a,b)=>a.hp/(a.instance?a.stats.hp:engine.stats(a.id).hp)-b.hp/(b.instance?b.stats.hp:engine.stats(b.id).hp));
-  targets=targets.slice(0,profile.maxAffected??limit);
+  if (skill.selection !== 'random_distinct') targets=targets.slice(0,profile.maxAffected??limit);
   if(!targets.length&&!profile.allowEmpty)return fail('範囲内に有効な対象がいません。');
   return {ok:true,skill,targets,aim:{...aim},cells,profile};
 }

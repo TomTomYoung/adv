@@ -124,7 +124,7 @@ export function battleSkillPlan(engine,actorId,skillId,targetId,options={}){
   else return fail('対象種別が未対応です。');
   if(skill.selection==='lowest_hp_ratio')targets.sort((a,c)=>a.hp/engine.stats(a.id).hp-c.hp/engine.stats(c.id).hp);
   if(!Number.isInteger(grant.maxTargets)||grant.maxTargets<1)return fail('対象数の許可が不正です。');
-  targets=targets.slice(0,Math.min(grant.maxTargets,skill.maxTargets??grant.maxTargets));
+  if (skill.selection !== 'random_distinct') targets=targets.slice(0,Math.min(grant.maxTargets,skill.maxTargets??grant.maxTargets));
   if(!targets.length)return fail('生存する対象を選んでください。');
   if(skill.effects.some(e=>e.type==='cover')&&targets.some(t=>t.id===actorId||t.instance))return fail('かばう相手は自分以外の味方です。');
   if(skill.effects.some(e=>e.type==='analyze')&&targets.some(t=>!t.instance))return fail('解析の対象は敵です。');
@@ -157,6 +157,18 @@ function resolveFatalHit(engine, monster, habit, habitImpacts) {
   }
   return hp;
 }
+function igniteOil(engine,unit) {
+  const {data,state} = engine;
+  if (unit.hp <= 0 || !hasActiveStatus(data,state,unit,'oiled')) return;
+  removeStatus(unit,'oiled');
+  if (applyStatus(data,state,unit,'ablaze')) state.battle.log.push(`${unit.name ?? data.actors[unit.id].name}の油に引火し、火だるまになった。`);
+}
+function isProjectile(data,source,skill,skillId) {
+  if (skill.projectile) return true;
+  if (skillId !== 'attack') return false;
+  if (source.instance) return source.classSkill === 'family_orc_10_cart' && source.tactics?.spent;
+  return data.items[source.equipment?.weapon]?.equipmentType === 'bow';
+}
 export function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null,checkAccuracy=true,series=null,physicalPower=1,feedback=null,habitImpacts=null){
   let damageTotal=0,critical=null,wakeChecked=false;
   const b=engine.state.battle,s=engine.state;
@@ -173,6 +185,12 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   const accuracy=offensive&&checkAccuracy?(series?.snapshot.accuracy??buffAccuracy(engine.data,s.battle,source,statusAccuracy(engine.data,s,source))):1;
   const chanceToHit=offensive&&checkAccuracy?familyAccuracy(engine,source,target,accuracy):accuracy;
   if(chanceToHit<1&&engine.random()>=chanceToHit){if(series)series.didHit=false;if(feedback)feedback.missed=true;(b?.log??s.log).push(`${source.name??engine.data.actors[source.id]?.name}の${skill.name}は${targetName}に当たらなかった。`);return 0;}
+  if (offensive && hasActiveStatus(engine.data,s,target,'aegis_ward') && isProjectile(engine.data,source,skill,skillId)) {
+    removeStatus(target,'aegis_ward');
+    if (feedback) { feedback.guarded=true; feedback.blocked=true; }
+    b.log.push(`${targetName}の飛び道具の結界が${skill.name}を防いで消えた。`);
+    return 0;
+  }
   for(const effect of skill.effects){
     if(effect.type==='frontline_remove'){removeFrontline(engine,target);break;}
     if(effect.type==='frontline_knockback'){const loss=knockbackFrontline(engine,target,effect);damageTotal+=loss;if(loss)wakeOnDamage(engine,target);recordDefeated(engine);continue;}
@@ -218,10 +236,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
       if (fireRate !== 1) damage = Math.floor(damage * fireRate);
       if(physical)damage=takePhysicalHit(engine.data,b,unitKey(target),damage,dungeonBuffs(engine.data,s));
       target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
-      if (damage > 0 && element === 'fire' && hasActiveStatus(engine.data,s,target,'oiled')) {
-        removeStatus(target,'oiled');
-        if (applyStatus(engine.data,s,target,'ablaze')) (b?.log??s.log).push(`${targetName}の油に引火し、火だるまになった。`);
-      }
+      if (damage > 0 && element === 'fire') igniteOil(engine,target);
       if(damage>0&&!wakeChecked){wakeOnDamage(engine,target);wakeChecked=true;}
     }
     if(effect.type==='heal'){
@@ -283,6 +298,15 @@ function torchTargets(engine, source, skillId) {
       return null;
   }
 }
+function sampleSkillTargets(engine,source,skill,skillId,targets) {
+  if (skill.selection !== 'random_distinct') return targets;
+  const grant = source.instance ? null : permission(engine.data,engine.state,source.id,skillId,'battle.skill');
+  const limit = Math.min(skill.maxTargets,grant?.maxTargets ?? Infinity);
+  if (targets.length <= limit) return targets;
+  const pool = [...targets], selected = [];
+  while (selected.length < limit) selected.push(pool.splice(Math.floor(engine.random()*pool.length),1)[0]);
+  return selected;
+}
 function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=null){
   const physicalPower=actionPower(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(source));
   const origin=describeTarget(engine,unitKey(source)),sourceName=source.name??engine.data.actors[source.id]?.name??'対象';
@@ -302,7 +326,10 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
     }
   } else targets=misfireTargets(engine,source,targets,skill,skillId,itemId);
   if(!torchPool&&spatial(engine.state)&&targets.length===1&&!targets[0].instance)targets=[coveredTarget(engine,targets[0],skill)];
+  targets=sampleSkillTargets(engine,source,skill,skillId,targets);
   targets=familyIntercept(engine,source,targets,skill);
+  const strikes = skill.hitCount ? targets.flatMap(target => Array(skill.hitCount).fill(target)) : targets;
+  const ignitesSource = hasActiveStatus(engine.data,engine.state,source,'oiled') && skill.effects.some(e=>e.type==='damage' && e.element==='fire');
   const habitImpacts=[];
   const hit=(target,context)=>{
     const result={...describeTarget(engine,unitKey(target)),hpBefore:target.hp,mpBefore:target.mp};
@@ -314,19 +341,34 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
     result.defeated=result.hpBefore>0&&target.hp<=0;
     result.statusAdded=target.statuses.filter(id=>!statuses.includes(id)).map(id=>engine.data.statuses[id].name);
     result.statusRemoved=statuses.filter(id=>!target.statuses.includes(id)).map(id=>engine.data.statuses[id].name);
-    result.hit=!result.missed&&context?.didHit!==false&&skill.effects.some(e=>['damage','stun','drain_mp','frontline_remove','frontline_knockback'].includes(e.type));
+    result.hit=!result.missed&&!result.blocked&&context?.didHit!==false&&skill.effects.some(e=>['damage','stun','drain_mp','frontline_remove','frontline_knockback'].includes(e.type));
     return result;
   };
-  const results=isFrontline(engine.state)?resolveFrontlineAttack(engine,source,targets,skill,skillId,{snapshot:target=>damageSnapshot(engine,source,target,enemySource),hit,react:(u,on,attacker)=>frontlineReact(engine,u,on,attacker)}):targets.map(target=>hit(target,null));
+  const results = [];
+  if (isFrontline(engine.state)) {
+    results.push(...resolveFrontlineAttack(engine,source,strikes,skill,skillId,{
+      snapshot:target=>damageSnapshot(engine,source,target,enemySource),hit,
+      react:(unit,on,attacker)=>frontlineReact(engine,unit,on,attacker)
+    }));
+  } else {
+    for (const target of strikes) {
+      if (skill.hitCount && (target.hp<=0 || source.hp<=0)) break;
+      results.push(hit(target,null));
+    }
+  }
   const attacking=skill.effects.some(effect=>effect.type==='damage');
   const bindings=engine.data.presentation?.bindings;
   const weapon=!enemySource&&skillId==='attack'?engine.data.items[source.equipment?.weapon]?.equipmentType:null;
   const cue=bindings?.weapons?.[weapon]??bindings?.skills[skillId];
-  playBattleCue(engine,cue,origin,results,attacking,`${sourceName}・${skill.name}`);
+  if (skill.hitCount) {
+    for (const result of results) playBattleCue(engine,cue,origin,[result],attacking,`${sourceName}・${skill.name}`);
+  } else playBattleCue(engine,cue,origin,results,attacking,`${sourceName}・${skill.name}`);
   if (skillId === 'moth_whistle' && torchPool && dungeonEffectActive(engine.data, engine.state, 'skill', skillId)) summonMoths(engine, source);
   for(const impact of habitImpacts)emitFeedback(engine,impact);
   familyAfterHit(engine,source,targets,skillId,skill,results,(enemy,victim)=>familyCast(engine,enemy,[victim],'attack'));
-  wetAfterSkill(engine,source,skill);return true;
+  if (ignitesSource && dungeonEffectActive(engine.data,engine.state,'skill',skillId)) igniteOil(engine,source);
+  wetAfterSkill(engine,source,skill);
+  return results;
 }
 function coveredTarget(engine,target,skill){
   if(!battleAlive(engine.state,target)||skill.target!=='enemy'||!skill.effects.some(e=>e.type==='damage'))return target;
@@ -366,8 +408,9 @@ function performSkill(engine,source,selection){
     }
     return;
   }
-  const activated=useSkill(engine,source,targets,skill,skillId,enemySource,itemId);
-  if(activated&&skill.selfEffects?.length)applySkill(engine,source,source,{...skill,effects:skill.selfEffects},skillId,enemySource,null,false);
+  const results=useSkill(engine,source,targets,skill,skillId,enemySource,itemId);
+  if(results&&skill.selfEffects?.length)applySkill(engine,source,source,{...skill,effects:skill.selfEffects},skillId,enemySource,null,false);
+  return results;
 }
 function confusedAction(engine,source){
   if(spatial(engine.state)){gridConfusedAction(engine,source);return;}
@@ -455,7 +498,7 @@ function familyCast(engine,source,targets,skillId) {
   const {data,state}=engine,skill=data.skills[skillId];
   if (!targets.length||!skill||source.mp<skill.mp||statusAbilityReason(data,state,source,skillId)||dungeonAbilityReason(data,state,skillId,'battle.skill')) return;
   if (!spatial(state)&&targets.length===1&&!targets[0].instance) targets=[coveredTarget(engine,targets[0],skill)];
-  performSkill(engine,source,{skill,skillId,targets});
+  return performSkill(engine,source,{skill,skillId,targets});
 }
 
 function performEnemyAction(engine,enemy,bonus=false){
@@ -666,7 +709,14 @@ function frontlineReact(engine,reactor,on,attacker){
   if(!plan.ok||reactor.instance&&reactor.mp<skill.mp)continue;
   if(reactor.instance)reactor.mp-=skill.mp;else{payCost(engine,reactor.id,skill);recordSkillUse(engine,reactor.id,rule.skill);}
   // Reactions use shared effects but do not recursively trigger onHit reactions.
-  for(const target of plan.targets)applySkill(engine,reactor,target,skill,rule.skill,Boolean(reactor.instance));
+  const wasOiled=hasActiveStatus(d,s,reactor,'oiled');
+  for(const target of sampleSkillTargets(engine,reactor,skill,rule.skill,plan.targets)){
+    for(let hit=0;hit<(skill.hitCount??1);hit++){
+      if(skill.hitCount && (!battleAlive(s,reactor)||!battleAlive(s,target)))break;
+      applySkill(engine,reactor,target,skill,rule.skill,Boolean(reactor.instance));
+    }
+  }
+  if(wasOiled && skill.effects.some(e=>e.type==='damage' && e.element==='fire'))igniteOil(engine,reactor);
   if(skill.selfEffects?.length)applySkill(engine,reactor,reactor,{...skill,effects:skill.selfEffects},rule.skill,Boolean(reactor.instance),null,false);
   cancel||=rule.cancelRemaining;traceFrontline(engine,'reaction',{unit:unitKey(reactor),on,skill:rule.skill,cancelRemaining:rule.cancelRemaining});
   b.log.push(`${reactor.name??d.actors[reactor.id].name}の被反応：${skill.name}${rule.cancelRemaining?'（後続命中中止）':''}。`);

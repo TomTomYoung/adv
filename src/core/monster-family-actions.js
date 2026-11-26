@@ -18,7 +18,7 @@ export function familyTurn(engine,e,{cast,order},bonus=false) {
   const say=msg=>b.log.push(e.name+'：'+msg);
   const use=(units,skill=e.classSkill,who=e)=>{
     const list=(Array.isArray(units)?units:[units]).filter(u=>u&&u.hp>0);
-    if (list.length) cast(who,list,skill);
+    if (list.length) return cast(who,list,skill);
   };
   const attack=(u=target)=>use(u,'attack');
   const signal=()=>{say(engine.data.skills[e.classSkill].name);use(e);};
@@ -157,7 +157,8 @@ export function familyTurn(engine,e,{cast,order},bonus=false) {
       if(f.owl)return attack();f.owl=(weakest(mates)??e).instance;return signal();
     case 'mud':f.mud[depth(s,front)]=b.round+2;return use(row(depth(s,front)));
     case 'harpoon':
-      use(back);if(back.hp>0){nextRank(back,0);if(f.mud[0]>=b.round){const m=mate('mud');if(m)use(back,m.classSkill,m);}}return;
+      if(use(back)?.some(hit=>hit.blocked))return;
+      if(back.hp>0){nextRank(back,0);if(f.mud[0]>=b.round){const m=mate('mud');if(m)use(back,m.classSkill,m);}}return;
     case 'hound': {
       const u=foes.find(v=>f.mud[depth(s,v)]>=b.round);
       return u?use(u):attack();
