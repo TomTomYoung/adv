@@ -159,7 +159,7 @@ function resolveFatalHit(engine, monster, habit, habitImpacts) {
 }
 function igniteOil(engine,unit) {
   const {data,state} = engine;
-  if (unit.hp <= 0 || !hasActiveStatus(data,state,unit,'oiled')) return;
+  if (!hasActiveStatus(data,state,unit,'oiled')) return;
   removeStatus(unit,'oiled');
   if (applyStatus(data,state,unit,'ablaze')) state.battle.log.push(`${unit.name ?? data.actors[unit.id].name}の油に引火し、火だるまになった。`);
 }
