@@ -48,6 +48,7 @@ test('アダ個人のLv3・4で習得通知が出て、転職・旧セーブの�
 for (const mode of ['classic','grid','frontline']) {
   test(mode+' ウォーターウォールは5人それぞれに油か炎を1回だけ防ぐ加護を付与する', () => {
     const g = battle(mode);
+    for (const id of g.state.members) removeStatus(g.state.actors[id],'oiled');
     assert.ok(g.dispatch({type:'battle',action:'skill',skill:'water_wall'}),g.state.notice);
     assert.equal(g.state.members.length,5);
     g.load(g.save());
@@ -68,24 +69,52 @@ for (const mode of ['classic','grid','frontline']) {
     assert.equal(other.hp,hp);
     assert.equal(hit(other),6);
     applyStatus(data,s,actor,'water_ward');
-    assert.equal(hit(actor),0);
-    assert.ok(actor.statuses.includes('oiled') && !actor.statuses.includes('water_ward') && !actor.statuses.includes('ablaze'));
+    assert.deepEqual(actor.statuses,[]);
+    assert.equal(hit(actor),6);
+    spray();
     assert.equal(hit(actor),12);
     assert.deepEqual(actor.statuses,['ablaze']);
-    assert.equal(hit(actor),6);
+    const loss = applyStatusClock(data,s,actor,'ablaze','turns',g.stats('ada'));
+    assert.equal(loss.hp,Math.ceil(g.stats('ada').hp/4));
+    actor.hp=g.stats('ada').hp;
     applyStatus(data,s,actor,'water_ward');
-    const tick = () => applyStatusClock(data,s,actor,'ablaze','turns',g.stats('ada')).hp;
-    assert.equal(tick(),0);
     g.load(g.save());
-    const burning = g.state.actors.ada;
-    assert.ok(burning.statuses.includes('ablaze') && !burning.statuses.includes('water_ward'));
-    assert.equal(applyStatusClock(data,g.state,burning,'ablaze','turns',g.stats('ada')).hp,Math.ceil(g.stats('ada').hp/4));
-    for (let i=0;i<3;i++) tickStatuses(data,g.state,burning,'turns');
-    assert.ok(!burning.statuses.includes('ablaze'));
+    assert.deepEqual(g.state.actors.ada.statuses,[]);
+    assert.equal(g.state.actors.ada.statusDurations?.ablaze,undefined);
+  });
+  test(mode+' ウォーターウォールは油・火だるまがある味方だけ加護を消費する', () => {
+    const g = battle(mode), s = g.state;
+    for (const id of s.members) removeStatus(s.actors[id],'oiled');
+    const [oily,burning,both,...clean] = s.members.map(id => s.actors[id]);
+    for (const unit of [oily,both]) applyStatus(data,s,unit,'oiled',undefined,3);
+    for (const unit of [burning,both]) applyStatus(data,s,unit,'ablaze');
+    applyStatus(data,s,oily,'water_infusion');
+    assert.ok(g.dispatch({type:'battle',action:'skill',skill:'water_wall'}),s.notice);
+    for (const unit of [oily,burning,both]) {
+      assert.ok(!unit.statuses.some(id => ['water_ward','oiled','ablaze'].includes(id)));
+      assert.equal(unit.statusDurations?.ablaze,undefined);
+      assert.equal(unit.statusDurations?.oiled,undefined);
+      assert.equal(unit.statusLevels?.oiled,undefined);
+    }
+    assert.ok(oily.statuses.includes('water_infusion'));
+    assert.ok(clean.every(unit => unit.statuses.includes('water_ward')));
+    const protectedUnit=clean[0];
+    applyStatus(data,s,protectedUnit,'ablaze');
+    assert.ok(!protectedUnit.statuses.includes('water_ward') && !protectedUnit.statuses.includes('ablaze'));
+    assert.ok(clean[1].statuses.includes('water_ward'));
+  });
+  test(mode+' ウォーターバッシュは攻撃後に自身の火だるまを消火して加護を消費する', () => {
+    const g = battle(mode), s = g.state, actor = s.actors.ada, enemy = s.battle.enemies[0];
+    applyStatus(data,s,actor,'ablaze');
+    const hp = enemy.hp;
+    assert.ok(g.dispatch({type:'battle',action:'skill',skill:'water_bash',target:enemy.instance}),s.notice);
+    assert.ok(enemy.hp < hp);
+    assert.ok(!actor.statuses.includes('ablaze') && !actor.statuses.includes('water_ward'));
   });
   for(const [skill,status] of [['water_edge','water_infusion'],['water_bash','water_ward']]) {
     test(mode+' '+skill+' は攻撃後に使用者だけを強化する', () => {
       const g = battle(mode), s = g.state, e = s.battle.enemies[0], a = s.actors.ada;
+      removeStatus(a,'oiled');
       e.hp = e.stats.hp;
       const before = e.hp;
       assert.ok(g.dispatch({type:'battle',action:'skill',skill,target:e.instance}),g.state.notice);
@@ -101,6 +130,25 @@ for (const mode of ['classic','grid','frontline']) {
     });
   }
 }
+
+test('水の加護と油・火だるまが共存していた旧セーブは、味方も敵も読込時に相殺する', () => {
+  const g = battle('classic'), s = g.state;
+  const actor = s.actors.ada, enemy = s.battle.enemies[0];
+  applyStatus(data,s,actor,'oiled',undefined,3);
+  applyStatus(data,s,enemy,'ablaze');
+  const old = JSON.parse(g.save());
+  old.state.actors.ada.statuses.push('water_ward');
+  old.state.battle.enemies[0].statuses.push('water_ward');
+  g.load(JSON.stringify(old));
+  for (const unit of [g.state.actors.ada,g.state.battle.enemies[0]]) {
+    assert.ok(!unit.statuses.some(id => ['water_ward','oiled','ablaze'].includes(id)));
+    assert.equal(unit.statusDurations?.ablaze,undefined);
+    assert.equal(unit.statusDurations?.oiled,undefined);
+  }
+  const normalized = g.save();
+  g.load(normalized);
+  assert.equal(g.save(),normalized);
+});
 
 test('千変の迷宮3〜100Fで4通りの混成を抽選し、階層別の灯蛾も引火爆弾を持つ', () => {
   const db = shiftingDungeonData(data);
