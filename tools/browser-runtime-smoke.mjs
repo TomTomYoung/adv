@@ -183,7 +183,14 @@ try{
   const catalog = JSON.parse(await fs.readFile(path.join(root,'data/encounter-groups.json'),'utf8'));
   assert.equal(await guide.locator('.band').count(),catalog.bands.length);
   await guide.locator('#band').selectOption('3');
-  assert.deepEqual(await guide.locator('.chance').allTextContents(),['30%','20%','25%','10%','15%']);
+  const floorWeights = {...catalog.dungeons.shifting_labyrinth.weights, ...catalog.dungeons.shifting_labyrinth.floors[3]};
+  const thirdFloor = catalog.bands.find(band => band.minLevel <= 3 && band.maxLevel >= 3);
+  const weights = Object.keys(thirdFloor.groups).map(id => floorWeights[id]).filter(weight => weight > 0);
+  const total = weights.reduce((sum, weight) => sum + weight, 0);
+  const percent = new Intl.NumberFormat('ja-JP',{style:'percent',maximumFractionDigits:1});
+  assert.deepEqual(await guide.locator('.chance').allTextContents(),weights.map(weight => percent.format(weight/total)));
+  assert.match(await guide.locator('#groups').innerText(),/火つけ小僧/);
+  assert.match(await guide.locator('#groups').innerText(),/油虫/);
   await guide.getByRole('link',{name:'煤ネズミ ×5',exact:true}).click();
   await guide.locator('#monsters').waitFor();
   assert.equal(await guide.locator('#monster').inputValue(),'kagaribi_soot_rat');
