@@ -17893,6 +17893,16 @@ export const referenceData={
       "id": "torch"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_oil_beetle",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -30836,6 +30846,18 @@ export const referenceData={
     {
       "file": "jobs.json",
       "path": [
+        "skills",
+        "oil_spray",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "oiled"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
         "shopGoods",
         0,
         "item"
@@ -31429,7 +31451,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_oil_slime"
+      "id": "kagaribi_oil_beetle_solo"
     },
     {
       "file": "kagaribi-content.json",
@@ -31438,6 +31460,18 @@ export const referenceData={
         "kagaribi_oilstore",
         "encounterPool",
         2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_oil_slime"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "encounterPool",
+        3,
         "encounter"
       ],
       "kind": "encounters",
@@ -31531,7 +31565,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_prankster_pair"
+      "id": "kagaribi_oil_beetle_moth"
     },
     {
       "file": "kagaribi-content.json",
@@ -31543,7 +31577,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_torch_thief_solo"
+      "id": "kagaribi_prankster_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -31555,7 +31589,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_oil_slime"
+      "id": "kagaribi_torch_thief_solo"
     },
     {
       "file": "kagaribi-content.json",
@@ -31564,6 +31598,18 @@ export const referenceData={
         "kagaribi_crossroads",
         "encounterPool",
         4,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_oil_slime"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "encounterPool",
+        5,
         "encounter"
       ],
       "kind": "encounters",
@@ -33551,6 +33597,40 @@ export const referenceData={
     {
       "file": "kagaribi-content.json",
       "path": [
+        "enemies",
+        "kagaribi_oil_beetle",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_oil_beetle"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_oil_beetle",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "oil_spray"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_oil_beetle",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
         "encounters",
         "kuragari_hunt",
         "enemies",
@@ -33987,6 +34067,39 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "kagaribi_torch_ringleader"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_beetle_solo",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_oil_beetle"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_beetle_moth",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_oil_beetle"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_beetle_moth",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ember_moth"
     },
     {
       "file": "kagaribi-content.json",
@@ -48373,6 +48486,9 @@ export const referenceData={
       },
       "torch_festival": {
         "name": "火祭り"
+      },
+      "oil_spray": {
+        "name": "油吹き"
       }
     },
     "items": {
@@ -49264,6 +49380,10 @@ export const referenceData={
       "kagaribi_torch_ringleader": {
         "name": "火つけ大将",
         "sprite": "monster_kagaribi_torch_ringleader"
+      },
+      "kagaribi_oil_beetle": {
+        "name": "油虫",
+        "sprite": "monster_oil_beetle"
       }
     },
     "encounters": {
@@ -49629,6 +49749,12 @@ export const referenceData={
       },
       "kagaribi_ringleader": {
         "name": "火つけ大将"
+      },
+      "kagaribi_oil_beetle_solo": {
+        "name": "油虫"
+      },
+      "kagaribi_oil_beetle_moth": {
+        "name": "油虫と灯蛾"
       }
     },
     "encounterGroups": {
@@ -49714,6 +49840,9 @@ export const referenceData={
       },
       "forge_burn": {
         "name": "火傷"
+      },
+      "oiled": {
+        "name": "油状態"
       }
     },
     "shops": {
@@ -77748,6 +77877,13 @@ export const referenceData={
         "torch_festival"
       ]
     },
+    "skills/oil_spray": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "oil_spray"
+      ]
+    },
     "fieldAbilities/survey": {
       "file": "jobs.json",
       "path": [
@@ -78336,6 +78472,13 @@ export const referenceData={
         "kagaribi_torch_ringleader"
       ]
     },
+    "enemies/kagaribi_oil_beetle": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_oil_beetle"
+      ]
+    },
     "encounters/kuragari_hunt": {
       "file": "kagaribi-content.json",
       "path": [
@@ -78544,6 +78687,20 @@ export const referenceData={
       "path": [
         "encounters",
         "kagaribi_ringleader"
+      ]
+    },
+    "encounters/kagaribi_oil_beetle_solo": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_beetle_solo"
+      ]
+    },
+    "encounters/kagaribi_oil_beetle_moth": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_beetle_moth"
       ]
     },
     "sounds/se_step": {
@@ -84584,7 +84741,8 @@ export const referenceData={
       "monster_kagaribi_soot_moth": "assets/images/monsters/kagaribi_soot_moth.webp",
       "monster_iron_moth": "assets/images/monsters/iron_moth.webp",
       "monster_kagaribi_torch_prankster": "assets/images/monsters/torch_prankster.webp",
-      "monster_kagaribi_torch_ringleader": "assets/images/monsters/torch_ringleader.webp"
+      "monster_kagaribi_torch_ringleader": "assets/images/monsters/torch_ringleader.webp",
+      "monster_oil_beetle": "assets/images/monsters/oil_beetle.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

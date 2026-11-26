@@ -139,6 +139,7 @@ function effectErrors(e){
   if(['battleOnly','beneficial','actionDisabled','forcedAttack','sureHit','guaranteedCritical','guaranteedCriticalTaken'].some(k=>e[k]!==undefined&&typeof e[k]!=='boolean'))return true;
   if(e.blockedActions!==undefined&&(!Array.isArray(e.blockedActions)||!e.blockedActions.length||new Set(e.blockedActions).size!==e.blockedActions.length||e.blockedActions.some(k=>!['magic','skills','items'].includes(k))))return true;
   if(e.recovery!==undefined&&(!record(e.recovery)||Object.keys(e.recovery).some(k=>!['initialChance','increment'].includes(k))||!Number.isFinite(e.recovery.initialChance)||e.recovery.initialChance<=0||e.recovery.initialChance>1||!Number.isFinite(e.recovery.increment)||e.recovery.increment<=0||e.recovery.increment>1))return true;
+  if(e.fireDamageTaken!==undefined&&(!Number.isFinite(e.fireDamageTaken)||e.fireDamageTaken<0||e.fireDamageTaken>5))return true;
   if(e.wetDamageScale!==undefined&&(!Number.isFinite(e.wetDamageScale)||e.wetDamageScale<0||e.wetDamageScale>5))return true;
   if(e.wetBacklashRate!==undefined&&(!Number.isFinite(e.wetBacklashRate)||e.wetBacklashRate<0||e.wetBacklashRate>1))return true;
   if(e.wetSuppressElements!==undefined&&(!Array.isArray(e.wetSuppressElements)||e.wetSuppressElements.some(x=>!['ice','lightning'].includes(x))))return true;

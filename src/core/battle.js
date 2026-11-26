@@ -200,12 +200,14 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
       const guardRate=series?.snapshot.guardRate??guardDamageRate(engine.data,guardLevel(b,target));
       const elementScale=series?.snapshot.resist[effect.element]??(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,effect.element):1);
       const power=(effect.element==='physical'?physicalPower:1)*dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
-      if(feedback){feedback.critical=Boolean(critical);feedback.guarded=guardRate<1;feedback.weak=elementScale>1;feedback.resisted=elementScale<1;}
+      const fireRate = effect.element === 'fire' ? series?.snapshot.fireDamageTaken ?? fireDamageTaken(engine.data, s, target) : 1;
+      if(feedback){feedback.critical=Boolean(critical);feedback.guarded=guardRate<1;feedback.weak=elementScale*fireRate>1;feedback.resisted=elementScale*fireRate<1;}
       const taken=series?.snapshot.taken??(target.instance?1:(passives(engine.data,s,target.id).damageTaken??1));
       const familyScale=familyPower(engine,source,target);
       let damage=guardRate===0?0:Math.max(1,Math.floor(Math.floor(raw)*power*guardRate*elementScale*taken*familyScale*(critical?CRITICAL_DAMAGE_MULTIPLIER:1)));
       if(series?.basis==='final'){const index=skill.effects.indexOf(effect);series.finalBase[index]??=damage;damage=Math.max(0,Math.floor(series.finalBase[index]*series.factor));}
       if(series?.basis==='power'&&series.factor===0)damage=0;
+      if (fireRate !== 1) damage = Math.floor(damage * fireRate);
       if(effect.element==='physical')damage=takePhysicalHit(engine.data,b,unitKey(target),damage,dungeonBuffs(engine.data,s));
       target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
       if(damage>0&&!wakeChecked){wakeOnDamage(engine,target);wakeChecked=true;}
@@ -633,9 +635,13 @@ function gridEnemyAction(engine,enemy){
   else{applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
 }
 
+function fireDamageTaken(data, state, target) {
+  return activeStatuses(data, state, target).reduce((scale, status) => scale * (status.fireDamageTaken ?? 1), 1);
+}
+
 function damageSnapshot(engine,source,target,enemySource){
  const {data:d,state:s}=engine;
- return {accuracy:buffAccuracy(d,s.battle,source,statusAccuracy(d,s,source)),sourceStats:clone(enemySource?enemyStats(engine,source):engine.stats(source.id)),targetStats:clone(target.instance?enemyStats(engine,target):engine.stats(target.id)),guardRate:guardDamageRate(d,guardLevel(s.battle,target)),taken:target.instance?1:passives(d,s,target.id).damageTaken??1,criticalChance:criticalChance(d,s,source,target),resist:Object.fromEntries(['physical','fire','ice','lightning','water','light','earth','dark'].map(e=>[e,(target.resist?.[e]??d.actors[target.id]?.resist?.[e]??1)*buffResistance(d,dungeonBuffs(d,s),unitKey(target),e)*(dungeonEffectActive(d,s,'status','wet')?wetResistance(d,target,e):1)]))};
+ return {fireDamageTaken:fireDamageTaken(d,s,target),accuracy:buffAccuracy(d,s.battle,source,statusAccuracy(d,s,source)),sourceStats:clone(enemySource?enemyStats(engine,source):engine.stats(source.id)),targetStats:clone(target.instance?enemyStats(engine,target):engine.stats(target.id)),guardRate:guardDamageRate(d,guardLevel(s.battle,target)),taken:target.instance?1:passives(d,s,target.id).damageTaken??1,criticalChance:criticalChance(d,s,source,target),resist:Object.fromEntries(['physical','fire','ice','lightning','water','light','earth','dark'].map(e=>[e,(target.resist?.[e]??d.actors[target.id]?.resist?.[e]??1)*buffResistance(d,dungeonBuffs(d,s),unitKey(target),e)*(dungeonEffectActive(d,s,'status','wet')?wetResistance(d,target,e):1)]))};
 }
 function frontlineReact(engine,reactor,on,attacker){
  const {data:d,state:s}=engine,b=s.battle;if(!isFrontline(s)||!battleAlive(s,reactor))return false;

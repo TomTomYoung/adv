@@ -2,13 +2,13 @@
 
 [ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)
 
-作品版1.34.0。配布中の敵は173定義、遭遇編成は121定義、敵が参照する画像ファイルは113点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.34.0。配布中の敵は174定義、遭遇編成は123定義、敵が参照する画像ファイルは114点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
 [個別デザインの通常魔物](#個別デザインの通常魔物)：100定義。
-[依頼に追加した敵](#依頼に追加した敵)：47定義。
+[依頼に追加した敵](#依頼に追加した敵)：48定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -3351,6 +3351,9 @@ kagaribi_manifold_pair：煤ネズミ×1・灯蛾×1。逃走可。
 kagaribi_prankster_pair：火つけ小僧×1・灯蛾×1。逃走可。
 通常遭遇候補：篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み10。
 
+kagaribi_oil_beetle_moth：油虫×1・灯蛾×1。逃走可。
+通常遭遇候補：篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み10。
+
 <a id="monster-kagaribi_ash_guard"></a>
 
 ### 赤錆の番兵 (kagaribi_ash_guard)
@@ -3493,7 +3496,7 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_oil_roaming：油染みの煤ネズミ×1。逃走可。
-通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み50 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み30 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み20。
+通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み35 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み20 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み20。
 
 kagaribi_oil_pair：油染みの煤ネズミ×1・油蔵の燭蝋スライム×1。逃走可。
 通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み15 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み60。
@@ -4158,6 +4161,34 @@ AIの選択順：
 
 kagaribi_ringleader：火つけ大将×1。逃走可。
 通常遭遇候補：篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み10。
+
+<a id="monster-kagaribi_oil_beetle"></a>
+
+### 油虫 (kagaribi_oil_beetle)
+
+<img src="../../assets/images/monsters/oil_beetle.webp" width="160" alt="油虫">
+
+画像ID：monster_oil_beetle。実ファイル：[assets/images/monsters/oil_beetle.webp](../../assets/images/monsters/oil_beetle.webp)。
+画像共有：他の敵定義との共有なし。
+
+壺そっくりの腹を六本脚で支える甲虫。身をかがめると、腹にためた琥珀色の油を口からひと吹きします。油を浴びた相手は、火属性の攻撃で2倍のダメージを受けます。
+
+基礎能力：HP 48 / MP 6 / STR 9 / VIT 7 / AGI 13 / INT 3。報酬：9G / 42EXP。
+宝箱：予備灯油 1個 / 12.5％。
+属性倍率：fire 1。
+
+AIの選択順：
+
+1. 優先度10、条件なし：油吹き (oil_spray)、MP3、対象は探索隊の生存者からランダムに1人。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_oil_beetle_solo：油虫×1。逃走可。
+通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み15。
+
+kagaribi_oil_beetle_moth：油虫×1・灯蛾×1。逃走可。
+通常遭遇候補：篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み10。
 
 ## 地域の迷宮獣と守護者
 

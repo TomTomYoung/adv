@@ -62,6 +62,7 @@ const statusLevelText=(id,def,level)=>{
   if(effect.criticalTakenChance!==undefined)parts.push(`被クリティカル率+${Math.round(effect.criticalTakenChance*1000)/10}ポイント`);
   if(effect.guaranteedCritical)parts.push('自分の命中したHP攻撃が確定クリティカル');
   if(effect.guaranteedCriticalTaken)parts.push('自分に命中したHP攻撃が確定クリティカル');
+  if(effect.fireDamageTaken!==undefined)parts.push(`受ける火属性ダメージ×${effect.fireDamageTaken}`);
   if(effect.battleOnly)parts.push(`持続${durationText(effect.duration)}`,'戦闘終了時に解除');
   for(const kind of effect.blockedActions??[])parts.push(`${{magic:'魔法',skills:'スキル',items:'アイテム'}[kind]}使用不可`);
   if(effect.recovery)parts.push(`ラウンド終了時に回復抽選（初回${percent(effect.recovery.initialChance)}、以後毎ラウンド${Math.round(effect.recovery.increment*1000)/10}ポイント上昇、上限100%）`,'戦闘終了後も状態と回復経過を持ち越す');
