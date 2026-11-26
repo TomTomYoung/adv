@@ -17873,6 +17873,26 @@ export const referenceData={
       "id": "torch"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_torch_prankster",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_torch_ringleader",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -31511,7 +31531,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_torch_thief_solo"
+      "id": "kagaribi_prankster_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -31523,7 +31543,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_oil_slime"
+      "id": "kagaribi_torch_thief_solo"
     },
     {
       "file": "kagaribi-content.json",
@@ -31532,6 +31552,18 @@ export const referenceData={
         "kagaribi_crossroads",
         "encounterPool",
         3,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_oil_slime"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "encounterPool",
+        4,
         "encounter"
       ],
       "kind": "encounters",
@@ -31739,7 +31771,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_shallow_guards"
+      "id": "kagaribi_ringleader"
     },
     {
       "file": "kagaribi-content.json",
@@ -31748,6 +31780,18 @@ export const referenceData={
         "kagaribi_relay",
         "encounterPool",
         2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_shallow_guards"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
+        "encounterPool",
+        3,
         "encounter"
       ],
       "kind": "encounters",
@@ -33439,6 +33483,74 @@ export const referenceData={
     {
       "file": "kagaribi-content.json",
       "path": [
+        "enemies",
+        "kagaribi_torch_prankster",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_kagaribi_torch_prankster"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_torch_prankster",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "torch_play"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_torch_ringleader",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_kagaribi_torch_ringleader"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_torch_ringleader",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "moth_whistle"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_torch_ringleader",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "torch_festival"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_torch_ringleader",
+        "ai",
+        2,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "torch_play"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
         "encounters",
         "kuragari_hunt",
         "enemies",
@@ -33842,6 +33954,39 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "kagaribi_torch_thief"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_prankster_pair",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_torch_prankster"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_prankster_pair",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ember_moth"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_ringleader",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_torch_ringleader"
     },
     {
       "file": "kagaribi-content.json",
@@ -48219,6 +48364,15 @@ export const referenceData={
       },
       "soot_beetle_dust": {
         "name": "煤払い"
+      },
+      "torch_play": {
+        "name": "火遊び"
+      },
+      "moth_whistle": {
+        "name": "集合笛"
+      },
+      "torch_festival": {
+        "name": "火祭り"
       }
     },
     "items": {
@@ -49102,6 +49256,14 @@ export const referenceData={
       "soot_beetle": {
         "name": "煤虫",
         "sprite": "monster_soot_beetle"
+      },
+      "kagaribi_torch_prankster": {
+        "name": "火つけ小僧",
+        "sprite": "monster_kagaribi_torch_prankster"
+      },
+      "kagaribi_torch_ringleader": {
+        "name": "火つけ大将",
+        "sprite": "monster_kagaribi_torch_ringleader"
       }
     },
     "encounters": {
@@ -49461,6 +49623,12 @@ export const referenceData={
       },
       "kagaribi_torch_thief_solo": {
         "name": "松明泥棒"
+      },
+      "kagaribi_prankster_pair": {
+        "name": "火つけ小僧と灯蛾"
+      },
+      "kagaribi_ringleader": {
+        "name": "火つけ大将"
       }
     },
     "encounterGroups": {
@@ -77559,6 +77727,27 @@ export const referenceData={
         "soot_beetle_dust"
       ]
     },
+    "skills/torch_play": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "torch_play"
+      ]
+    },
+    "skills/moth_whistle": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "moth_whistle"
+      ]
+    },
+    "skills/torch_festival": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "torch_festival"
+      ]
+    },
     "fieldAbilities/survey": {
       "file": "jobs.json",
       "path": [
@@ -78133,6 +78322,20 @@ export const referenceData={
         "kagaribi_torch_thief"
       ]
     },
+    "enemies/kagaribi_torch_prankster": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_torch_prankster"
+      ]
+    },
+    "enemies/kagaribi_torch_ringleader": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_torch_ringleader"
+      ]
+    },
     "encounters/kuragari_hunt": {
       "file": "kagaribi-content.json",
       "path": [
@@ -78327,6 +78530,20 @@ export const referenceData={
       "path": [
         "encounters",
         "kagaribi_torch_thief_solo"
+      ]
+    },
+    "encounters/kagaribi_prankster_pair": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_prankster_pair"
+      ]
+    },
+    "encounters/kagaribi_ringleader": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_ringleader"
       ]
     },
     "sounds/se_step": {
@@ -84365,7 +84582,9 @@ export const referenceData={
       "monster_soot_beetle": "assets/images/monsters/soot_beetle.webp",
       "monster_kagaribi_ember_moth": "assets/images/monsters/kagaribi_ember_moth.webp",
       "monster_kagaribi_soot_moth": "assets/images/monsters/kagaribi_soot_moth.webp",
-      "monster_iron_moth": "assets/images/monsters/iron_moth.webp"
+      "monster_iron_moth": "assets/images/monsters/iron_moth.webp",
+      "monster_kagaribi_torch_prankster": "assets/images/monsters/torch_prankster.webp",
+      "monster_kagaribi_torch_ringleader": "assets/images/monsters/torch_ringleader.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

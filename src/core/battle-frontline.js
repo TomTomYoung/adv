@@ -92,7 +92,12 @@ export function frontlineSaveErrors(s,data){
  const initial=data.encounters[b.encounter]?.enemies.length??b.enemies.length;
  const joins=Array.isArray(b.reinforcements)?b.reinforcements:[];
  // Historical snapshots contain only units that had joined by that round.
- const eventKeys=e=>keys.filter(k=>!k.startsWith('enemy:')||Number(k.slice(12))<initial||(joins[Number(k.slice(12))-initial]?.round??Infinity)<=e.round);
+ const eventKeys=e=>keys.filter(k=>{
+  const index=Number(k.slice(12))-initial;
+  if(!k.startsWith('enemy:')||index<0)return true;
+  const join=joins[index];
+  return join && (join.round<e.round || join.round===e.round && (join.eventId??0)<=e.id);
+ });
  const exact=(o,ks)=>isRecord(o)&&Object.keys(o).length===ks.length&&ks.every(k=>Object.hasOwn(o,k));
  if(g.events.some(e=>isRecord(e)&&e.rows!==undefined&&(!integer(e.rows,1,3)||!isRecord(e.removed)||Object.entries(e.removed).some(([k,r])=>!eventKeys(e).includes(k)||!['defeated','shrink','skill'].includes(r))||!exact(e.states,eventKeys(e))||eventKeys(e).some(k=>!['alive','down','removed'].includes(e.states[k])))))errors.push('前中後衛の状態履歴不正');
  if(g.events.some((e,i)=>!isRecord(e)||!integer(e.id,1,g.eventSerial)||i>0&&g.events[i-1].id>=e.id||!integer(e.round,1,b.round)||typeof e.type!=='string'||!exact(e.positions,eventKeys(e))||eventKeys(e).some(k=>!validFrontPosition(e.positions[k]))||!exact(e.hp,eventKeys(e))||eventKeys(e).some(k=>!integer(e.hp[k],0,1e9))))errors.push('前中後衛のイベント履歴不正');

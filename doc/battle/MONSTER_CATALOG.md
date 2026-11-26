@@ -2,13 +2,13 @@
 
 [ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)
 
-作品版1.34.0。配布中の敵は171定義、遭遇編成は119定義、敵が参照する画像ファイルは111点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.34.0。配布中の敵は173定義、遭遇編成は121定義、敵が参照する画像ファイルは113点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
 [個別デザインの通常魔物](#個別デザインの通常魔物)：100定義。
-[依頼に追加した敵](#依頼に追加した敵)：45定義。
+[依頼に追加した敵](#依頼に追加した敵)：47定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -3348,6 +3348,9 @@ kagaribi_patrol_pair：灯蛾×1・赤錆の番兵×1。逃走可。
 kagaribi_manifold_pair：煤ネズミ×1・灯蛾×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
 
+kagaribi_prankster_pair：火つけ小僧×1・灯蛾×1。逃走可。
+通常遭遇候補：篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み10。
+
 <a id="monster-kagaribi_ash_guard"></a>
 
 ### 赤錆の番兵 (kagaribi_ash_guard)
@@ -3490,7 +3493,7 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_oil_roaming：油染みの煤ネズミ×1。逃走可。
-通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み50 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み40 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み20。
+通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み50 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み30 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み20。
 
 kagaribi_oil_pair：油染みの煤ネズミ×1・油蔵の燭蝋スライム×1。逃走可。
 通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み15 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み60。
@@ -3544,7 +3547,7 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_shallow_moths：煤けた灯蛾×1。逃走可。
-通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み50 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み25 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み50。
+通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み50 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み25 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み40。
 
 kagaribi_shallow_patrol_pair：煤けた灯蛾×1・巡回路の赤錆番兵×1。逃走可。
 通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み15 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み15 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み15。
@@ -4105,6 +4108,56 @@ AIの選択順：
 
 kagaribi_torch_thief_solo：煤ネズミ（松明泥棒）×1。逃走可。
 通常遭遇候補：篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み10。
+
+<a id="monster-kagaribi_torch_prankster"></a>
+
+### 火つけ小僧 (kagaribi_torch_prankster)
+
+<img src="../../assets/images/monsters/torch_prankster.webp" width="160" alt="火つけ小僧">
+
+画像ID：monster_kagaribi_torch_prankster。実ファイル：[assets/images/monsters/torch_prankster.webp](../../assets/images/monsters/torch_prankster.webp)。
+画像共有：他の敵定義との共有なし。
+
+尾の先で松明を抱えた小さな火トカゲ。腹ばいで忍び寄り、よそを向いたまま火先だけをそっと突き出します。
+
+基礎能力：HP 56 / MP 0 / STR 11 / VIT 6 / AGI 13 / INT 6。報酬：12G / 54EXP。
+宝箱：予備灯油 1個 / 12.5％。
+属性倍率：fire 1。
+
+AIの選択順：
+
+1. 優先度1、条件なし：火遊び (torch_play)、MP0、対象は敵味方の生存者全員からランダムに1体（使用者を含む）。
+
+遭遇と参照先：
+
+kagaribi_prankster_pair：火つけ小僧×1・灯蛾×1。逃走可。
+通常遭遇候補：篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み10。
+
+<a id="monster-kagaribi_torch_ringleader"></a>
+
+### 火つけ大将 (kagaribi_torch_ringleader)
+
+<img src="../../assets/images/monsters/torch_ringleader.webp" width="160" alt="火つけ大将">
+
+画像ID：monster_kagaribi_torch_ringleader。実ファイル：[assets/images/monsters/torch_ringleader.webp](../../assets/images/monsters/torch_ringleader.webp)。
+画像共有：他の敵定義との共有なし。
+
+太い尾で松明を持ち上げる、大きな火トカゲ。喉袋を膨らませてひと声鳴くと、灯蛾が火のまわりに集まります。
+
+基礎能力：HP 124 / MP 0 / STR 18 / VIT 10 / AGI 14 / INT 10。報酬：22G / 115EXP。
+宝箱：予備灯油 1個 / 12.5％。
+属性倍率：fire 1。
+
+AIの選択順：
+
+1. 優先度3、条件なし：集合笛 (moth_whistle)、MP0、対象は自身の松明に灯蛾を2〜3体呼ぶ（各大将につき1戦1回）。
+2. 優先度2、条件なし：火祭り (torch_festival)、MP0、対象は集合笛の後、生き残った灯蛾すべて。
+3. 優先度1、条件なし：火遊び (torch_play)、MP0、対象は敵味方の生存者全員からランダムに1体（使用者を含む）。
+
+遭遇と参照先：
+
+kagaribi_ringleader：火つけ大将×1。逃走可。
+通常遭遇候補：篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み10。
 
 ## 地域の迷宮獣と守護者
 

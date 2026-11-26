@@ -8,7 +8,14 @@ export function conditionText(value) {
   return `条件式 ${JSON.stringify(value)}`;
 }
 
+export const torchTargetLabels = {
+  torch_play: '敵味方の生存者全員からランダムに1体（使用者を含む）',
+  moth_whistle: '自身の松明に灯蛾を2〜3体呼ぶ（各大将につき1戦1回）',
+  torch_festival: '集合笛の後、生き残った灯蛾すべて'
+};
+
 export function targetText(rule,skill) {
+  if (Object.hasOwn(torchTargetLabels, rule.skill)) return torchTargetLabels[rule.skill];
   if(skill.target==='all_enemies')return '探索隊の生存者全員';
   if(skill.target==='all_allies')return '敵側の生存者全員';
   if(rule.target==='self'||skill.target==='self')return '自身';
