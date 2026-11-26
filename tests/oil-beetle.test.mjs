@@ -54,25 +54,25 @@ for (const mode of ['classic', 'grid', 'frontline']) {
 }
 
 test('油は受け手だけに働き、丸めた火ダメージを倍にする。再付着・解除・持続と他属性', () => {
-  const g = start('classic'), actor = g.state.actors.ada, bug = g.state.battle.enemies[0];
-  bug.resist = {...bug.resist, fire:0.5};
+  const g = start('classic', 'kagaribi_roaming'), actor = g.state.actors.ada, rat = g.state.battle.enemies[0];
+  rat.resist = {...rat.resist, fire:0.5};
   function hit(element) {
-    return applySkill(g, actor, bug, {name:'確認', effects:[{type:'damage', amount:9, element}]}, null, false, null, false);
+    return applySkill(g, actor, rat, {name:'確認', effects:[{type:'damage', amount:9, element}]}, null, false, null, false);
   }
   applyStatus(data, g.state, actor, 'oiled');
   assert.equal(hit('fire'), 4);
   for (const level of [1, 2, 3]) {
-    applyStatus(data, g.state, bug, 'oiled', undefined, level);
+    applyStatus(data, g.state, rat, 'oiled', undefined, level);
     assert.equal(hit('fire'), 8);
-    bug.hp = bug.stats.hp;
+    rat.hp = rat.stats.hp;
   }
   assert.equal(hit('ice'), 9);
   assert.equal(hit('physical'), 9);
-  applyStatus(data, g.state, bug, 'oiled');
-  tickStatuses(data, g.state, bug, 'turns');
-  applyStatus(data, g.state, bug, 'oiled');
-  assert.deepEqual(bug.statusDurations.oiled, {turns:3});
-  for (let i = 0; i < 3; i++) tickStatuses(data, g.state, bug, 'turns');
+  applyStatus(data, g.state, rat, 'oiled');
+  tickStatuses(data, g.state, rat, 'turns');
+  applyStatus(data, g.state, rat, 'oiled');
+  assert.deepEqual(rat.statusDurations.oiled, {turns:3});
+  for (let i = 0; i < 3; i++) tickStatuses(data, g.state, rat, 'turns');
   assert.equal(hit('fire'), 4);
   g.finishBattle('escape');
   assert.ok(!actor.statuses.includes('oiled'));

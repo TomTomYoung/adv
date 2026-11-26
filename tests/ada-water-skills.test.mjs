@@ -67,6 +67,9 @@ for (const mode of ['classic','grid','frontline']) {
     assert.equal(hit(other),0);
     assert.equal(other.hp,hp);
     assert.equal(hit(other),6);
+    applyStatus(data,s,actor,'water_ward');
+    assert.equal(hit(actor),0);
+    assert.ok(actor.statuses.includes('oiled') && !actor.statuses.includes('water_ward') && !actor.statuses.includes('ablaze'));
     assert.equal(hit(actor),12);
     assert.deepEqual(actor.statuses,['ablaze']);
     assert.equal(hit(actor),6);
@@ -111,6 +114,7 @@ test('千変の迷宮3〜100Fで4通りの混成を抽選し、階層別の灯�
       const roster = db.encounters[row.encounter].enemies.map(id=>db.enemies[id]);
       assert.equal(roster.length,3);
       for(const moth of roster.filter(e=>e.name.startsWith('灯蛾'))) assert.ok(moth.habits.includes('ignition_bomb'));
+      for(const beetle of roster.filter(e=>e.name.startsWith('油虫'))) assert.deepEqual(beetle.habits,['burn_out']);
     }
   }
 });

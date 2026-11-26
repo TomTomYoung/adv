@@ -133,12 +133,13 @@ export function battleSkillPlan(engine,actorId,skillId,targetId,options={}){
 }
 // A habit is a hit reaction, not a turn. The blast uses the dead monster's
 // magic and normal damage mitigation, but spends no MP and ignores casting restrictions.
-function burstOnFatalHit(engine, monster, habit, habitImpacts) {
+function resolveFatalHit(engine, monster, habit, habitImpacts) {
   const {state, data} = engine;
   const hp = monster.hp;
   monster.hp = 0;
   state.battle.log.push(`${monster.name}の習性「${habit.name}」が発動し、燃え尽きた。`);
   recordDefeated(engine);
+  if (!habit.burstSkill) return hp;
   const living = state.members.map(id => state.actors[id]).filter(actor => battleAlive(state, actor));
   if (living.length) {
     const target = living[Math.floor(engine.random() * living.length)];
@@ -196,7 +197,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
       const habit=b && fatalHitHabit(engine.data,target,element);
       if(habit){
         if (consumeWaterWard(engine.data,s,target,'炎')) continue;
-        damageTotal+=burstOnFatalHit(engine,target,habit,habitImpacts);
+        damageTotal+=resolveFatalHit(engine,target,habit,habitImpacts);
         break;
       }
       if(critical===null){const chance=checkAccuracy?(series?.snapshot.criticalChance??criticalChance(engine.data,s,source,target)):0;critical=chance>0&&(chance>=1||engine.random()<chance);}
