@@ -207,7 +207,32 @@ function migrateSettlementGeography(original,data){
   }
   return save;
 }
+function migrateTwoHeadedOgres(original,data){
+  const isOldOgre = enemy => enemy?.breed === 'ツインヘッドオーガ';
+  const enemies = original?.state?.battle?.enemies;
+  if (!Array.isArray(enemies) || !enemies.some(isOldOgre)) return original;
+  if (enemies.some(enemy => isOldOgre(enemy) && !data.enemies[enemy.id])) {
+    data = shiftingDungeonData(data);
+  }
+  const save = clone(original);
+  for (const enemy of save.state.battle.enemies.filter(isOldOgre)) {
+    const definition = data.enemies[enemy.id];
+    if (definition?.breed !== '黄土オーガ') continue;
+    Object.assign(enemy, {name: definition.name, breed: definition.breed, role: definition.role});
+    if (definition.classSkill === 'family_ogre_20_quarrel') {
+      const rule = enemy.ai?.[0];
+      if (rule?.skill === definition.classSkill && rule.target === 'self') rule.target = 'random';
+      if (isRecord(enemy.tactics)) {
+        delete enemy.tactics.challenged;
+        delete enemy.tactics.replies;
+      }
+    }
+  }
+  return save;
+}
+
 export function migrateSave(original,data){
+  original = migrateTwoHeadedOgres(original,data);
   // The old cap allowed excess XP. Validate the previous state before applying
   // the outstanding growth, preserving current HP, MP and in-flight battles.
   if(original?.levelCap===undefined && data.system.maxLevel>30 && isRecord(original?.state?.actors) &&
