@@ -18,9 +18,9 @@ export async function applyEntityExpansion(){
     party_guard:{name:'盾の壁',mp:5,target:'all_allies',description:'次の敵一巡まで味方全員の被害を半減。重ね掛け不可。',effects:[{type:'guard'}]},
     inspire:{fieldUse:true,name:'気付けの節',mp:8,target:'ally',description:'MP8で、生存する味方1人のMPを5回復。',effects:[{type:'restore_mp',amount:5}]},
     water_tail:damage('水車の尾',3,'heavy','water'),gate_slam:damage('水門落とし',3,'heavy'),drill_thrust:damage('螺旋突進',4,'pierce'),shell_roll:damage('殻の体当たり',0),
-    wax_flame:damage('蜜蝋の火',4,'fire','fire'),saw_cut:damage('引き鋸',3,'heavy'),iris_ray:damage('虹彩光線',4,'fire','light'),glass_shards:damage('硝子の刃',3,'heavy'),type_needles:damage('活字の針',3,'heavy'),
+    wax_flame:damage('蜜蝋の火',4,'fire','fire'),saw_cut:damage('引き鋸',3,'heavy'),iris_ray:damage('虹彩光線',4,'fire','light'),glass_shards:damage('硝子の刃',3,'heavy'),type_needles:{...damage('活字の針',3,'heavy'),projectile:true},
     ink_sip:{name:'墨すすり',mp:2,target:'enemy',description:'相手1人のMPを4減らす。',effects:[{type:'drain_mp',amount:4}]},
-    vault_bite:damage('金庫の歯',0),stitch_mend:{...skills.heal,name:'縫い直し',target:'self'},bone_rain:damage('肋骨の雨',4,'spread','physical','all_enemies'),anchor_strike:damage('碇打ち',3,'heavy'),
+    vault_bite:damage('金庫の歯',0),stitch_mend:{...skills.heal,name:'縫い直し',target:'self'},bone_rain:{...damage('肋骨の雨',4,'spread','physical','all_enemies'),projectile:true},anchor_strike:damage('碇打ち',3,'heavy'),
     discharge:damage('殻の放電',4,'fire','lightning'),rail_charge:damage('列車突進',4,'heavy'),needle_lunge:damage('尾針突き',4,'pierce'),moon_sweep:damage('月輪払い',4,'spread','physical','all_enemies'),blade_pass:damage('すれ違い斬り',3,'heavy')
   });
   const round=(remainder)=>({op:'eq',left:op('mod',ref('self.round'),2),right:remainder});

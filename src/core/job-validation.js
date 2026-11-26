@@ -43,7 +43,9 @@ export function skillDefinitionErrors(data,skill){
   if(skill.effects?.some(e=>e.type==='repel')&&(skill.target!=='self'||skill.effects.length!==1||skill.selfEffects?.length||typeof skill.fireEffect!=='string'))fail('撃退技能の対象・効果が不正です');
   if(skill.fieldUse!==undefined&&(typeof skill.fieldUse!=='boolean'||skill.fieldUse&&(!['self','ally','all_allies'].includes(skill.target)||!skill.effects?.length||skill.effects.some(e=>!['heal','cleanse','restore_mp'].includes(e.type))||skill.selfEffects?.length)))fail('戦闘外使用の効果・対象不正');
   if(skill.maxTargets!==undefined&&!integer(skill.maxTargets,1,8))fail('対象数不正');
-  if(skill.selection!==undefined&&skill.selection!=='lowest_hp_ratio')fail('対象選択不正');
+  if(skill.selection!==undefined && skill.selection!=='lowest_hp_ratio' && !(skill.selection==='random_distinct' && skill.target==='all_enemies' && integer(skill.maxTargets,1,8)))fail('対象選択不正');
+  if(skill.hitCount!==undefined && !(integer(skill.hitCount,1,8) && skill.target==='enemy'))fail('攻撃回数不正');
+  if(skill.projectile!==undefined && typeof skill.projectile!=='boolean')fail('投射指定不正');
   if(skill.requiresAnalyzed!==undefined&&typeof skill.requiresAnalyzed!=='boolean')fail('解析条件不正');
   if(skill.weaponTypes!==undefined&&(!list(skill.weaponTypes)||!skill.weaponTypes.length||skill.weaponTypes.some(t=>!data.jobProfile?.equipmentTypes.weapon.includes(t))))fail('必要武器不正');
   if(skill.equippedItem!==undefined&&!data.items[skill.equippedItem]?.slot)fail('必要媒体不正');
@@ -68,7 +70,7 @@ export function validateJobs(data){
       ref(data.actors,actor,'personalSkills');
       if (!isRecord(skills)) { fail(actor,'個人技能の習得表が不正です'); continue; }
       for (const [skill, level] of Object.entries(skills)) {
-        ref(data.skills,skill,actor);
+        if (!own(data.skills,skill) && !own(data.fieldAbilities,skill)) fail(actor,'個人技能の参照不正: '+skill);
         if (!integer(level,1,data.system.maxLevel)) fail(skill,'個人技能の習得レベルが不正です');
       }
     }

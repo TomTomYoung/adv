@@ -165,7 +165,7 @@ const skillCatalogLevelLines=(data,id,spec,field=false)=>{
 };
 const battleEntry=(data,id,spec,label,rawLevels=true)=>[
   `### ${spec.name} (${id})`,'',
-  `区分：戦闘${label}。対象：${torchTargetLabels[id]??targetLabels[spec.target]??spec.target??'未指定'}。消費：${costText(data,spec)}。`,
+  `区分：戦闘${label}。対象：${(spec.selection==='random_distinct'?`ランダムな敵・最大${spec.maxTargets}体`:torchTargetLabels[id])??targetLabels[spec.target]??spec.target??'未指定'}。消費：${costText(data,spec)}。`,
   spec.description??'説明なし。',
   ...calculationLines(data,id,spec),
   ...(rawLevels?skillLevelLines(spec):[]),

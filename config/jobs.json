@@ -50,6 +50,15 @@
         "water_wall": 3,
         "water_edge": 4,
         "water_bash": 4
+      },
+      "nio": {
+        "trip": 3,
+        "ambush": 4,
+        "aegis_field": 5,
+        "white_fang": 6
+      },
+      "il": {
+        "twin_thunder": 6
       }
     }
   },
@@ -3192,7 +3201,8 @@
       "description": "MP4。弓で攻撃し、防御を25%低下。敵2巡。",
       "weaponTypes": [
         "bow"
-      ]
+      ],
+      "projectile": true
     },
     "volley": {
       "name": "一斉射撃",
@@ -3208,7 +3218,8 @@
       "description": "MP7。弓を装備して敵全体へ射撃。",
       "weaponTypes": [
         "bow"
-      ]
+      ],
+      "projectile": true
     },
     "disarm": {
       "name": "武器落とし",
@@ -3814,7 +3825,8 @@
           ],
           "mp": 8
         }
-      }
+      },
+      "projectile": true
     },
     "exp_ice_needles": {
       "name": "氷結針",
@@ -3865,7 +3877,8 @@
           ],
           "mp": 6
         }
-      }
+      },
+      "projectile": true
     },
     "exp_chain_thunder": {
       "name": "渡り雷",
@@ -4038,7 +4051,8 @@
             }
           ]
         }
-      }
+      },
+      "projectile": true
     },
     "exp_linked_ward": {
       "name": "連結護符",
@@ -4253,7 +4267,8 @@
           "element": "physical"
         }
       ],
-      "description": "MP0。敵1体へ山なりの弱い遠隔物理攻撃。前衛越しに届く。"
+      "description": "MP0。敵1体へ山なりの弱い遠隔物理攻撃。前衛越しに届く。",
+      "projectile": true
     },
     "waterway_tail_ready": {
       "name": "尾を引く構え（次は強打）",
@@ -4342,7 +4357,8 @@
           "element": "earth"
         }
       ],
-      "description": "MP4。単体の土術。装備の塩を増やさない。"
+      "description": "MP4。単体の土術。装備の塩を増やさない。",
+      "projectile": true
     },
     "mine_shard_shot": {
       "name": "細い晶片投げ",
@@ -4355,7 +4371,8 @@
           "element": "physical"
         }
       ],
-      "description": "MP0。前衛越しに届く弱い遠隔物理攻撃。塩付与・装備破壊なし。"
+      "description": "MP0。前衛越しに届く弱い遠隔物理攻撃。塩付与・装備破壊なし。",
+      "projectile": true
     },
     "mine_vein_ward": {
       "name": "鉱脈の補強",
@@ -4406,7 +4423,8 @@
           "formula": "heavy",
           "element": "physical"
         }
-      ]
+      ],
+      "projectile": true
     },
     "family_goblin_5_slinger": {
       "name": "飛礫",
@@ -4419,7 +4437,8 @@
           "formula": "physical",
           "element": "physical"
         }
-      ]
+      ],
+      "projectile": true
     },
     "family_goblin_5_trapper": {
       "name": "足くくり",
@@ -4546,7 +4565,8 @@
           "formula": "heavy",
           "element": "physical"
         }
-      ]
+      ],
+      "projectile": true
     },
     "family_ogre_5_gate": {
       "name": "扉の盾",
@@ -4795,7 +4815,8 @@
           "formula": "pierce",
           "element": "physical"
         }
-      ]
+      ],
+      "projectile": true
     },
     "family_orc_15_hound": {
       "name": "猟犬放ち",
@@ -5302,6 +5323,48 @@
         {
           "type": "status",
           "status": "water_ward"
+        }
+      ]
+    },
+    "aegis_field": {
+      "name": "イージスフィールド",
+      "mp": 5,
+      "target": "all_allies",
+      "maxTargets": 5,
+      "description": "生存する味方全員に飛び道具の結界を張ります。各自が受ける投擲・投射を1回だけ無効にします。",
+      "effects": [
+        {
+          "type": "status",
+          "status": "aegis_ward"
+        }
+      ]
+    },
+    "white_fang": {
+      "name": "ホワイトファング",
+      "mp": 4,
+      "target": "enemy",
+      "hitCount": 2,
+      "description": "敵1体を続けて2回斬りつけます。",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "physical",
+          "element": "physical"
+        }
+      ]
+    },
+    "twin_thunder": {
+      "name": "双雷",
+      "mp": 6,
+      "target": "all_enemies",
+      "maxTargets": 2,
+      "selection": "random_distinct",
+      "description": "生存中の敵からランダムに異なる2体を選び、それぞれに雷を落とします。敵が1体なら1発だけ落とします。",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "fire",
+          "element": "lightning"
         }
       ]
     }
@@ -7188,7 +7251,10 @@
     "oil_spray": "skill_tide",
     "water_wall": "skill_ward",
     "water_edge": "skill_tide",
-    "water_bash": "skill_tide"
+    "water_bash": "skill_tide",
+    "aegis_field": "skill_ward",
+    "white_fang": "skill_cleave",
+    "twin_thunder": "skill_storm"
   },
   "gridProfiles": {
     "power": {
@@ -9478,6 +9544,42 @@
         "shape": "single"
       },
       "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "aegis_field": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "white_fang": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "twin_thunder": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "trajectory": "indirect",
       "friendlyFire": false
     }
   },
@@ -14113,6 +14215,78 @@
       },
       "area": {
         "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "aegis_field": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "white_fang": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "sequential",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "twin_thunder": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "side_all"
       },
       "friendlyFire": false,
       "resolution": "simultaneous",

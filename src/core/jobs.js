@@ -68,11 +68,14 @@ export function changeJob(engine,id,jobId){
 export function baseGrantsFor(data,state,id){
   const job=actorJob(data,state,id);if(!job)return [];
   const common=data.jobProfile.commonSkills.map(skill=>({skill,level:1,api:'battle.skill',target:data.skills[skill].target,maxTargets:1,lifetime:'equipped'}));
-  const personal = Object.entries(data.jobProfile.personalSkills?.[id] ?? {}).map(([skill, level]) => ({
-    skill, level, api:'battle.skill', target:data.skills[skill].target,
-    maxTargets:data.skills[skill].maxTargets ?? 1, lifetime:'equipped'
-  }));
-  return [...common,...personal,...job.grants,...purchasedGrants(data,state,id)];
+  const personal = data.jobProfile.personalSkills?.[id] ?? {};
+  const grants = Object.entries(personal).map(([skill,level]) => {
+    const jobGrant = job.grants.find(grant => grant.skill === skill);
+    if (jobGrant) return {...jobGrant,level:Math.min(level,jobGrant.level)};
+    const spec = data.skills[skill] ?? data.fieldAbilities[skill];
+    return {skill,level,api:spec.api ?? 'battle.skill',target:spec.target,maxTargets:spec.maxTargets ?? 1,lifetime:'equipped'};
+  });
+  return [...common,...grants,...job.grants.filter(grant => !Object.hasOwn(personal,grant.skill)),...purchasedGrants(data,state,id)];
 }
 export const grantsFor=(data,state,id)=>dungeonGrants(data,state,id,baseGrantsFor(data,state,id));
 export function knownSkills(data,state,id){
