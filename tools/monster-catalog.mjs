@@ -61,6 +61,7 @@ export function monsterCatalog(data) {
       const file=data.assets.images[e.sprite],shared=imageUsers.get(file).filter(name=>name!==e.name);
       out.push(`<a id="monster-${e.id}"></a>`,'',`### ${e.name} (${e.id})`,'',`<img src="../${file}" width="160" alt="${escape(e.name)}">`,'',`画像ID：${e.sprite}。実ファイル：[${file}](../${file})。`,
         `画像共有：${shared.length?shared.join('・'):'他の敵定義との共有なし'}。`,'');
+      if(e.description)out.push(e.description,'');
       if(e.ideas)out.push(`発想：${e.ideas.join('＋')}。参照：${e.source}。地域分類：${data.regions.find(r=>r.id===e.region)?.name??e.region}。`,'');
       if(e.appearance)out.push(`外見：${e.appearance}`,'');
       if(e.family)out.push(`レベル帯：Lv${e.levelBand}　種名：${e.breed}。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/${e.family}/${e.id})。`, '');

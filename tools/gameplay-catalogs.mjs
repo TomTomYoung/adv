@@ -1,3 +1,4 @@
+import {torchTargetLabels} from '../src/application/monster-catalog.js';
 import {abilityCategory} from '../src/application/character-profile.js';
 import {guardDamageRate} from '../src/core/battle-turns.js';
 
@@ -152,7 +153,7 @@ const skillCatalogLevelLines=(data,id,spec,field=false)=>{
   const max=spec.maxSkillLevel??3,lines=['技能Lv別',''];
   for(let n=1;n<=max;n++){
     const resolved=resolvedSkillLevel(spec,n),changed=n===1||Boolean(spec.levels?.[n]);
-    lines.push(`#### 技能Lv${n}`,'',`消費：${costText(data,resolved)}。対象：${targetLabels[resolved.target]??resolved.target??'未指定'}。`);
+    lines.push(`#### 技能Lv${n}`,'',`消費：${costText(data,resolved)}。対象：${torchTargetLabels[id]??targetLabels[resolved.target]??resolved.target??'未指定'}。`);
     if(field)lines.push(changed?fieldCalculation(data,resolved):'効果：前Lvと同一。');
     else lines.push(...(changed?calculationLines(data,id,resolved):['効果：前Lvと同一。']));
     lines.push(`到達条件：${data.expedition?.products[id]?`技能教習所で宝石${data.expedition.products[id].price*(n===1?1:n===2?2:4)}を追加支払い${n>1?'、前段階の習得が必要':''}`:n===1?'習得時の初期段階':spec.levelUp?.[n]?staticGrowthText(data,id,spec.levelUp[n]):'未設定（現行では到達不可）'}。`,'');
@@ -161,7 +162,7 @@ const skillCatalogLevelLines=(data,id,spec,field=false)=>{
 };
 const battleEntry=(data,id,spec,label,rawLevels=true)=>[
   `### ${spec.name} (${id})`,'',
-  `区分：戦闘${label}。対象：${targetLabels[spec.target]??spec.target??'未指定'}。消費：${costText(data,spec)}。`,
+  `区分：戦闘${label}。対象：${torchTargetLabels[id]??targetLabels[spec.target]??spec.target??'未指定'}。消費：${costText(data,spec)}。`,
   spec.description??'説明なし。',
   ...calculationLines(data,id,spec),
   ...(rawLevels?skillLevelLines(spec):[]),

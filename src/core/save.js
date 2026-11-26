@@ -401,11 +401,11 @@ export function validateSave(save,data){
   }
   errors.push(...battleResultErrors(data,s));
   if(s.battle!==null){
-    const b=s.battle,e=data.encounters[b?.encounter],roster=reinforcementRoster(e,b?.reinforcements,b?.round);
+    const b=s.battle,e=data.encounters[b?.encounter],roster=reinforcementRoster(e,b?.reinforcements,b?.round,data.enemies);
     if(!isRecord(b)||!e||!Array.isArray(b.enemies)||!roster||b.enemies.length!==roster.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}
     else{
       if(!familySaveValid(data,s))fail('魔物職種の戦闘状態不正');
-      if(e.reinforcements&&b.enemies.filter(u=>u?.hp>0&&!b.frontline?.removed?.[`enemy:${u.instance}`]).length>5)fail('増援戦の生存数超過');
+      if(b.reinforcements&&b.enemies.filter(u=>u?.hp>0&&!b.frontline?.removed?.[`enemy:${u.instance}`]).length>5)fail('増援戦の生存数超過');
       if(b.pacedExperience!==undefined&&(b.pacedExperience!==true||!data.encounters[b.encounter]?.progression))fail('経験値設定不正');
       if(b.enemyScale!==undefined&&(!Number.isFinite(b.enemyScale)||b.enemyScale<.1||b.enemyScale>5))fail('敵の環境倍率不正');
       if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&(e.hp===0||b.mode==='frontline')))))fail('撃破記録不正');

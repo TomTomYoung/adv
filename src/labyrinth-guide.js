@@ -172,6 +172,7 @@ function drawMonster(id) {
   const header = el('div', undefined, 'card-head'), heading = el('div');
   heading.append(el('h3', enemy.name));
   if (enemy.family) heading.append(el('small', 'Lv' + enemy.levelBand + '帯　' + enemy.breed));
+  if (enemy.description) heading.append(el('p', enemy.description));
   if (enemy.role) heading.append(el('p', enemy.role));
   if (enemy.appearance) heading.append(el('p', enemy.appearance));
   header.append(image(data.assets.images[enemy.sprite]), heading);

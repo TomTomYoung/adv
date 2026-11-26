@@ -5201,6 +5201,39 @@
           "chance": 0.6
         }
       ]
+    },
+    "torch_play": {
+      "name": "火遊び",
+      "mp": 0,
+      "target": "enemy",
+      "description": "使用者を含む敵味方の生存者から1体を等確率で選び、松明で火属性ダメージを与えます。",
+      "effects": [
+        {
+          "type": "damage",
+          "amount": 8,
+          "element": "fire"
+        }
+      ]
+    },
+    "moth_whistle": {
+      "name": "集合笛",
+      "mp": 0,
+      "target": "self",
+      "description": "指笛で灯蛾を2〜3体呼びます。各大将につき1戦1回。",
+      "effects": []
+    },
+    "torch_festival": {
+      "name": "火祭り",
+      "mp": 0,
+      "target": "all_allies",
+      "description": "集合笛の後、生き残った灯蛾すべてに一斉に火をつけます。",
+      "effects": [
+        {
+          "type": "damage",
+          "amount": 12,
+          "element": "fire"
+        }
+      ]
     }
   },
   "formulas": {
@@ -7078,7 +7111,10 @@
     "family_ogre_25_greatbell": "skill_cleave",
     "family_ogre_25_mountainking": "skill_cleave",
     "stone_beetle_charge": "skill_smash",
-    "soot_beetle_dust": "skill_shadow"
+    "soot_beetle_dust": "skill_shadow",
+    "torch_play": "skill_fire",
+    "moth_whistle": "guard",
+    "torch_festival": "skill_fire"
   },
   "gridProfiles": {
     "power": {
@@ -9285,6 +9321,42 @@
       },
       "trajectory": "indirect",
       "friendlyFire": false
+    },
+    "torch_play": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": true
+    },
+    "moth_whistle": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "torch_festival": {
+      "aim": "cell",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": true
     }
   },
   "battle": {
@@ -13753,6 +13825,78 @@
         "shape": "single"
       },
       "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "torch_play": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": true,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "moth_whistle": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "torch_festival": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "friendlyFire": true,
       "resolution": "simultaneous",
       "order": "front_to_back",
       "reevaluate": "alive",

@@ -40,7 +40,7 @@ function nextLevel(engine){
 function treasure(engine){
   const r=engine.state.battleResult,counts={};
   // One independent lottery per defeated monster. A chest groups all winning items.
-  for(const id of reinforcementRoster(engine.data.encounters[r.encounter],r.reinforcements)){
+  for(const id of reinforcementRoster(engine.data.encounters[r.encounter],r.reinforcements,undefined,engine.data.enemies)){
     const drop=engine.data.enemies[id].drop;
     if(drop&&drop.chance>0&&engine.random()<drop.chance)counts[drop.item]=(counts[drop.item]??0)+1;
   }
@@ -73,7 +73,7 @@ export function battleResultErrors(data,s){
   const r=s.battleResult,fail=()=>['戦闘リザルトの保存状態不正'];
   if(r===null)return s.waiting?.type==='battle_result'?fail():[];
   if(!isRecord(r)||s.battle||s.waiting?.type!=='battle_result'||typeof s.waiting.text!=='string'||typeof s.waiting.speaker!=='string'||!Object.hasOwn(data.encounters,r.encounter)||!['result','level','chest','item'].includes(r.phase)||!Number.isInteger(r.index)||r.index<0||!Array.isArray(r.levels)||r.levels.length>data.system.maxParty*(data.system.maxLevel-1))return fail();
-  const roster=reinforcementRoster(data.encounters[r.encounter],r.reinforcements);if(!roster)return fail();
+  const roster=reinforcementRoster(data.encounters[r.encounter],r.reinforcements,undefined,data.enemies);if(!roster)return fail();
   if(r.levels.some(row=>!isRecord(row)||!s.members.includes(row.actor)||!Number.isInteger(row.level)||row.level<2||row.level>s.actors[row.actor].level||!isRecord(row.growth)||Object.entries(row.growth).some(([key,n])=>!['hp','mp','str','vit','agi','int'].includes(key)||!Number.isInteger(n))||!Array.isArray(row.skills)||row.skills.some(id=>!data.skills[id]&&!data.fieldAbilities?.[id])))return fail();
   if(['result','level'].includes(r.phase)){
     if(r.drops!==null||r.phase==='result'&&r.index!==0||r.phase==='level'&&r.index>=r.levels.length)return fail();

@@ -1,7 +1,7 @@
 import {fatalHitHabit} from './monster-habits.js';
 import {familyTurn} from './monster-family-actions.js';
 import {depth, familyAccuracy, familyAfterHit, familyAfterMove, familyIntercept, familyPower, syncFamilyBattle} from './monster-family-field.js';
-import {joinReinforcements} from './battle-reinforcements.js';
+import {EMBER_MOTH, hasWhistled, joinReinforcements, mothSummonPositions, summonMoths} from './battle-reinforcements.js';
 import {cleanseCandidates} from './status-effects.js';
 import {battleAlive,frontlinePresent,frontlineState,removeFrontline,knockbackFrontline,syncFrontlineDefeats} from './frontline-lifecycle.js';
 import {isFrontline,frontPosition,frontlineUnits,frontlineMovePlan,moveFrontline,prepareFrontlineRound,traceFrontline,frontlineRevivePosition} from './battle-frontline.js';
@@ -253,6 +253,22 @@ function misfireTargets(engine,source,targets,skill,skillId,itemId){
   b.log.push(`${source.name??d.actors[source.id].name}の${skill.name}が${d.statuses[status].name}した。`);
   return next.map(t=>t.instance?t:coveredTarget(engine,t,skill));
 }
+// A torch action chooses its own legal targets, including when confusion
+// changes which skill is used. Previewing the action never rolls the lottery.
+function torchTargets(engine, source, skillId) {
+  if (!source.instance) return null;
+  const s = engine.state, b = s.battle;
+  switch (skillId) {
+    case 'torch_play':
+      return [...s.members.map(id => s.actors[id]), ...b.enemies].filter(unit => battleAlive(s, unit));
+    case 'moth_whistle':
+      return mothSummonPositions(engine, source).length >= 2 ? [source] : [];
+    case 'torch_festival':
+      return hasWhistled(b, source) ? b.enemies.filter(unit => battleAlive(s, unit) && unit.id === EMBER_MOTH) : [];
+    default:
+      return null;
+  }
+}
 function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=null){
   const physicalPower=actionPower(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(source));
   const origin=describeTarget(engine,unitKey(source)),sourceName=source.name??engine.data.actors[source.id]?.name??'対象';
@@ -260,8 +276,18 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
     (engine.state.battle?.log??engine.state.log).push(`${sourceName}の術は濡れに阻まれて発動しなかった。`);
     wetAfterSkill(engine,source,skill);return false;
   }
-  targets=misfireTargets(engine,source,targets,skill,skillId,itemId);
-  if(spatial(engine.state)&&targets.length===1&&!targets[0].instance)targets=[coveredTarget(engine,targets[0],skill)];
+  const torchPool = torchTargets(engine, source, skillId);
+  if (torchPool) {
+    if (!torchPool.length) return false;
+    targets = skillId === 'torch_play' ? [torchPool[Math.floor(engine.random() * torchPool.length)]] : torchPool;
+    if (skillId === 'torch_play') {
+      const target = targets[0];
+      engine.state.battle.log.push(`${sourceName}の火遊び。${target.name ?? engine.data.actors[target.id].name}に松明を向けた。`);
+    } else if (skillId === 'torch_festival') {
+      engine.state.battle.log.push(`${sourceName}の火祭り。灯蛾${targets.length}体に一斉に松明をかざした。`);
+    }
+  } else targets=misfireTargets(engine,source,targets,skill,skillId,itemId);
+  if(!torchPool&&spatial(engine.state)&&targets.length===1&&!targets[0].instance)targets=[coveredTarget(engine,targets[0],skill)];
   targets=familyIntercept(engine,source,targets,skill);
   const habitImpacts=[];
   const hit=(target,context)=>{
@@ -283,6 +309,7 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
   const weapon=!enemySource&&skillId==='attack'?engine.data.items[source.equipment?.weapon]?.equipmentType:null;
   const cue=bindings?.weapons?.[weapon]??bindings?.skills[skillId];
   playBattleCue(engine,cue,origin,results,attacking,`${sourceName}・${skill.name}`);
+  if (skillId === 'moth_whistle' && torchPool && dungeonEffectActive(engine.data, engine.state, 'skill', skillId)) summonMoths(engine, source);
   for(const impact of habitImpacts)emitFeedback(engine,impact);
   familyAfterHit(engine,source,targets,skillId,skill,results,(enemy,victim)=>familyCast(engine,enemy,[victim],'attack'));
   wetAfterSkill(engine,source,skill);return true;
@@ -401,7 +428,7 @@ function enemyContext(engine,enemy){
 function availableEnemySkills(engine,enemy){
   // Confusion changes the choice and target, but cannot skip a windup or other
   // authored use condition. A shared skill is available if any rule allows it.
-  return [...new Set(enemy.ai.filter(rule=>!rule.condition||engine.value(rule.condition,enemyContext(engine,enemy))).map(rule=>rule.skill))];
+  return [...new Set(enemy.ai.filter(rule=>(!rule.condition||engine.value(rule.condition,enemyContext(engine,enemy)))&&torchTargets(engine,enemy,rule.skill)?.length!==0).map(rule=>rule.skill))];
 }
 function enemyAction(engine,enemy){
   return consumeEnemyActionBuffs(engine,enemy,()=>performEnemyAction(engine,enemy));
@@ -435,9 +462,11 @@ function performEnemyAction(engine,enemy,bonus=false){
     if(isFrontline(s)){frontlineEnemyAction(engine,enemy);return;}
     if(isGrid(s)){gridEnemyAction(engine,enemy);return;}
     const alive=s.members.filter(id=>battleAlive(s,s.actors[id]));if(!alive.length)return;
-    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&enemy.mp>=engine.data.skills[r.skill].mp&&supportTargets(engine,r)?.length!==0);
+    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&enemy.mp>=engine.data.skills[r.skill].mp&&supportTargets(engine,r)?.length!==0&&torchTargets(engine,enemy,r.skill)?.length!==0);
     if(!rule){b.log.push(`${enemy.name}は使える行動がない。`);return;}
-    const skill=engine.data.skills[rule.skill];enemy.mp-=skill.mp;
+    const skill=engine.data.skills[rule.skill], torchPool=torchTargets(engine,enemy,rule.skill);
+    if (torchPool) { performSkill(engine,enemy,{skill,skillId:rule.skill,targets:torchPool}); return; }
+    enemy.mp-=skill.mp;
     const targetId=rule.target==='weakest'?alive.reduce((a,c)=>s.actors[c].hp<s.actors[a].hp?c:a):alive[Math.floor(engine.random()*alive.length)];
     let targets;
     if(supportTargets(engine,rule))targets=supportTargets(engine,rule).slice(0,1);
@@ -565,6 +594,8 @@ export function battleAction(engine,intent){
 function gridEnemyChoices(engine,enemy,skillId,{anySide=false,origin=null}={}){
   const {data:d,state:s}=engine,skill=d.skills[skillId];
   if(!skill||enemy.mp<skill.mp||statusAbilityReason(d,s,enemy,skillId)||dungeonAbilityReason(d,s,skillId,'battle.skill')||effectsProblem(d,skill,s))return [];
+  const targets = torchTargets(engine, enemy, skillId);
+  if (targets) return targets.length ? [{ok:true, id:unitKey(targets[0]), targets, skill, skillId}] : [];
   return targetSelections(engine,enemy,skill,skillId,{limit:skill.maxTargets??(skill.target.startsWith('all_')?8:1),anySide,origin}).filter(p=>p.ok).map(p=>({...p,skillId}));
 }
 function gridConfusedAction(engine,source){
