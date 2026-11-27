@@ -1,4 +1,4 @@
-function enemyStats(catalog, template, level) {
+export function encounterEnemyStats(catalog, template, level) {
   if (typeof template !== 'string') return template;
   const {base, perLevel} = catalog.growthProfiles[template];
   return Object.fromEntries(Object.entries(base).map(([key, value]) =>
@@ -26,7 +26,7 @@ export function floorEncounterGroups(data, map) {
     if (!Object.hasOwn(weights, group)) continue;
     const enemies = [], names = [];
     for (const [species, count] of Object.entries(roster)) {
-      const base = data.enemies[species], stats = enemyStats(catalog, band.enemies[species], level);
+      const base = data.enemies[species], stats = encounterEnemyStats(catalog, band.enemies[species], level);
       if (!base || !stats || !Number.isInteger(count) || count < 1) throw Error(map.id + ': 敵編成が不正です ' + group);
       const enemy = map.id + '_lv' + level + '_' + species;
       data.enemies[enemy] ??= {...base, id: enemy, level, name: base.name + ' Lv' + level, stats, rewards: band.rewards};

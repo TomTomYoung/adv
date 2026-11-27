@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import test from 'node:test';
-import {guideActor, guideBands, guideGear, loadGuide, monsterFloorText} from '../src/application/labyrinth-guide.js';
+import {guideActor, guideBands, guideGear, loadGuide, monsterFloorText, monsterLevelRows} from '../src/application/labyrinth-guide.js';
 import {floorEncounterGroups} from '../src/core/encounter-groups.js';
+import {hasMonsterHabit} from '../src/core/monster-habits.js';
 import {canEquip} from '../src/core/jobs.js';
 import {xpThreshold} from '../src/core/progression.js';
 import {newGame} from './helpers.mjs';
@@ -41,6 +42,29 @@ test('迷宮図鑑は全階の抽選重みと敵種ごとの個体数を実際�
   const b3 = sections.find(s => s.first === 3);
   assert.deepEqual(b3.groups.filter(g => g.override).map(g => [g.base, g.weight]), [[20, 10]]);
   assert.equal(guideBands(guide, true).flatMap(s => s.groups).length, guide.encounterGroups.bands.flatMap(b => Object.keys(b.groups)).length);
+});
+
+test('同種の比較行が全階の通常遭遇個体と一致し、重み0・他種・旧編成を含まない', () => {
+  const data = {...guide, enemies: {...guide.enemies}, encounters: {}};
+  const sections = guideBands(guide, false), expected = new Map();
+  for (let level = 1; level <= guide.system.shiftingDungeonFloors; level++) {
+    const map = {id: 'test', dungeon: 'shifting_labyrinth', floor: level, recommendedLevel: level};
+    const {encounterPool} = floorEncounterGroups(data, map);
+    const ids = new Set(encounterPool.flatMap(({encounter}) => data.encounters[encounter].enemies));
+    for (const id of ids) {
+      const actual = data.enemies[id], species = id.slice(('test_lv' + level + '_').length);
+      const habits = (actual.habits ?? []).filter(h => hasMonsterHabit(data, {id, instance:'enemy_0'}, h));
+      if (!expected.has(species)) expected.set(species, []);
+      expected.get(species).push({level, stats:actual.stats, habits});
+    }
+  }
+  for (const species of Object.keys(guide.enemies)) {
+    assert.deepEqual(monsterLevelRows(guide, sections, species), expected.get(species) ?? [], species);
+  }
+  const rat = monsterLevelRows(guide, sections, 'kagaribi_soot_rat');
+  assert.deepEqual(rat.map(r => [r.level,r.stats.hp,r.habits]), [
+    [1,17,[]], [2,28,[]], [3,40,[]], [4,45,[]], [5,53,['soot_smoke']]
+  ]);
 });
 
 test('一つの帯の途中にある優先設定と、重みゼロの候補を区別する', () => {
