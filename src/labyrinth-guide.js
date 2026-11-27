@@ -196,7 +196,8 @@ function monsterLevelComparison(rows, enemy) {
   scroll.setAttribute('aria-label', 'レベル別の能力値と習性');
   const table = el('table'), header = table.createTHead().insertRow();
   const trapper = enemy.classSkill === 'family_goblin_5_trapper';
-  const columns = ['Lv', ...STAT_KEYS.map(k => data.jobProfile.statNames[k]), '有効な習性'];
+  const turnHabits = enemy.habits?.some(id => MONSTER_HABITS[id].onTurn);
+  const columns = ['Lv', ...STAT_KEYS.map(k => data.jobProfile.statNames[k]), turnHabits ? '有効な行動・習性' : '有効な習性'];
   if (trapper) columns.push('設置できる罠');
   for (const label of columns) {
     const th = el('th', label);
@@ -251,6 +252,15 @@ function drawMonster(id) {
     ? modified.map(([key, rate]) => (elements[key] ?? key) + ' ×' + rate).join(' ／ ') + '　その他 ×1'
     : '全属性 ×1'));
   const actions = block('行動と使用条件'), list = el('ol');
+  const habits = block('習性');
+  for (const id of enemy.habits ?? []) {
+    const habit = MONSTER_HABITS[id];
+    if (habit.onTurn) {
+      const item = el('li');
+      item.append(el('strong', habit.name), el('p', habit.description));
+      list.append(item);
+    } else habits.append(el('strong', habit.name), el('p', habit.description));
+  }
   for (const rule of [...enemy.ai].sort((a, b) => b.priority - a.priority)) {
     const skill = data.skills[rule.skill];
     const item = el('li');
@@ -271,13 +281,7 @@ function drawMonster(id) {
   const levels = monsterLevelRows(data, sections, id);
   if (levels.length) card.append(monsterLevelComparison(levels, enemy));
   card.append(rewards, affinity);
-  const habits = block('習性');
-  if (enemy.habits?.length) {
-    for (const id of enemy.habits) {
-      const habit = MONSTER_HABITS[id];
-      habits.append(el('strong', habit.name), el('p', habit.description));
-    }
-  } else habits.append(el('p', 'なし'));
+  if (!enemy.habits?.some(id => !MONSTER_HABITS[id].onTurn)) habits.append(el('p', 'なし'));
   card.append(actions, habits, detail);
   $('monster-sheet').replaceChildren(card);
 }

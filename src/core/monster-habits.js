@@ -2,6 +2,20 @@
 // Consult them at hit time so battles restored from older saves use the same rules.
 const sootHitChance = 0.25;
 export const MONSTER_HABITS = {
+  healing_drop: {
+    name: '命のしずく',
+    onTurn: true,
+    threshold: 0.5,
+    healRatio: 0.4,
+    description: '残りHPの割合が最も低い他の魔物が半分以下のとき、自身の命を使い、その1体の最大HPの40％を回復する。'
+  },
+  drop_division: {
+    name: '分裂',
+    onTurn: true,
+    minLevel: 8,
+    chance: 0.25,
+    description: 'Lv8から、命のしずくと準備済みのしずく鞭を優先し、空きがあるときは手番に25％で分裂する。同じLvのしずくスライムがHP・MP全快で1体増え、次の巡から行動する。'
+  },
   soot_smoke: {
     name: '煤煙',
     minLevel: 5,
