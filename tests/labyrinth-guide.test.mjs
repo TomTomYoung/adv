@@ -45,11 +45,11 @@ test('迷宮図鑑は全階の抽選重みと敵種ごとの個体数を実際�
 
 test('一つの帯の途中にある優先設定と、重みゼロの候補を区別する', () => {
   const data = {...guide, encounterGroups: structuredClone(guide.encounterGroups)};
-  const band = data.encounterGroups.bands.find(b => b.minLevel === 6);
+  const band = data.encounterGroups.bands.find(b => b.minLevel === 11);
   const id = Object.keys(band.groups)[0];
-  data.encounterGroups.dungeons.shifting_labyrinth.floors[8] = {[id]: 0};
+  data.encounterGroups.dungeons.shifting_labyrinth.floors[13] = {[id]: 0};
   const sections = guideBands(data, false).filter(s => s.band === band);
-  assert.deepEqual(sections.map(s => [s.first, s.last]), [[6, 7], [8, 8], [9, 9]]);
+  assert.deepEqual(sections.map(s => [s.first, s.last]), [[11, 12], [13, 13], [14, 14]]);
   const disabled = sections[1].groups.find(g => g.id === id);
   assert.equal(disabled.weight, 0);
   assert.equal(disabled.override, true);
@@ -85,6 +85,28 @@ test('仲間と全職の想定装備が職業条件を満たし、技能と上�
     }
     for (const grant of guideActor(guide, id, job, 100, 'auto').grants) {
       assert.ok((grant.api === 'battle.skill' ? guide.skills : guide.fieldAbilities)[grant.skill]?.name);
+    }
+  }
+});
+
+test('千変6〜9階は各階2つの専用編成を抽選し、共通候補と他の階に重みを加えない', () => {
+  const sections = guideBands(guide, false);
+  const common = guideBands(guide, true).find(s => s.first === 6);
+  assert.equal(common.last, 9);
+  const additions = [
+    ['stone_log_escort', 'shell_stone_guard'],
+    ['trapper_iron_moth', 'piper_butterflies'],
+    ['bone_shield_archer', 'bone_skull_slingers'],
+    ['torch_oil_moth_swarm', 'oil_globe_firebrand']
+  ];
+  for (const [index, ids] of additions.entries()) {
+    const floor = index + 6;
+    const section = sections.find(s => s.first === floor);
+    assert.equal(section.last, floor);
+    assert.deepEqual(section.groups.filter(g => !g.base && g.weight > 0).map(g => g.id), ids);
+    for (const id of ids) {
+      assert.ok(common.groups.some(g => g.id === id));
+      assert.deepEqual(sections.filter(s => s.groups.some(g => g.id === id && g.weight > 0)).map(s => s.first), [floor]);
     }
   }
 });

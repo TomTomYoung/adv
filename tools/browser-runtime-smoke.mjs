@@ -181,7 +181,18 @@ try{
   await guide.getByRole('link',{name:'魔物編成',exact:true}).click();
   await guide.locator('#enemies').waitFor();
   const catalog = JSON.parse(await fs.readFile(path.join(root,'data/encounter-groups.json'),'utf8'));
-  assert.equal(await guide.locator('.band').count(),catalog.bands.length);
+  assert.equal(await guide.locator('.band').count(),await guide.locator('#band option').count()-1);
+  for(const floor of [6,7,8,9]){
+    await guide.locator('#band').selectOption(String(floor));
+    assert.deepEqual(await guide.locator('.band-head small').allTextContents(),['地下'+floor+'階']);
+    const additions=guide.locator('.group').filter({hasText:'この階で追加'});
+    assert.equal(await additions.count(),2);
+    assert.equal(await additions.locator('.chance').first().isVisible(),true);
+  }
+  await guide.locator('#source').selectOption('common');
+  assert.equal(await guide.locator('#band').inputValue(),'6');
+  assert.equal(await guide.locator('.band-head h3').textContent(),'Lv6〜9');
+  await guide.locator('#source').selectOption('dungeon');
   await guide.locator('#band').selectOption('3');
   const floorWeights = {...catalog.dungeons.shifting_labyrinth.weights, ...catalog.dungeons.shifting_labyrinth.floors[3]};
   const thirdFloor = catalog.bands.find(band => band.minLevel <= 3 && band.maxLevel >= 3);
