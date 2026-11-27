@@ -59,12 +59,12 @@ test('セラだけがLv3で習得し、旧セーブのアルマジロにも習�
   g.load(JSON.stringify(old));
   assert.equal(g.state.battle.enemies[1].name,'殻甲アルマジロ');
   shellAct(g);
-  assert.equal(g.state.battle.enemies[1].rollingShellTurns,1);
+  assert.equal(g.state.battle.enemies[1].guardTurns,1);
 });
 for(const mode of ['classic','grid','frontline']){
   test(mode+' 割り込みは各巡1回。魔法は素通りし、2手番の防御後は甲羅を開く',()=>{
     const g=garden(mode),b=g.state.battle,[boss,shell]=b.enemies;
-    shellAct(g);assert.ok(shell.guard);assert.equal(shell.rollingShellTurns,1);
+    shellAct(g);assert.ok(shell.guard);assert.equal(shell.guardTurns,1);
     cast(g,'il','fire',boss);
     assert.ok(boss.hp<boss.stats.hp);assert.equal(shell.hp,shell.stats.hp);
     assert.equal(shell.rollingShellRound,undefined);
@@ -82,11 +82,11 @@ for(const mode of ['classic','grid','frontline']){
     cast(h,'sera','attack',loadedBoss);
     assert.equal(loadedShell.hp,armoredHP);assert.ok(loadedBoss.hp<loadedBoss.stats.hp);
     h.state.battle.round++;
-    shellAct(h);assert.ok(loadedShell.guard);assert.equal(loadedShell.rollingShellTurns,2);
+    shellAct(h);assert.ok(loadedShell.guard);assert.equal(loadedShell.guardTurns,2);
     const bossHP=loadedBoss.hp;
     cast(h,'sera','attack',loadedBoss);assert.equal(loadedBoss.hp,bossHP);assert.ok(loadedShell.hp<armoredHP);
-    shellAct(h);assert.equal(loadedShell.guard,false);assert.equal(loadedShell.rollingShellTurns,undefined);
-    shellAct(h);assert.ok(loadedShell.guard);assert.equal(loadedShell.rollingShellTurns,1);
+    shellAct(h);assert.equal(loadedShell.guard,false);assert.equal(loadedShell.guardTurns,undefined);
+    shellAct(h);assert.ok(loadedShell.guard);assert.equal(loadedShell.guardTurns,1);
   });
   test(mode+' 単体連撃は一度の割り込みで全段を引き受け、範囲攻撃には割り込まない',()=>{
     const g=garden(mode),b=g.state.battle,[boss,shell]=b.enemies;
@@ -137,20 +137,38 @@ for(const mode of ['classic','grid','frontline']){
     assert.equal(boss.guard,false);assert.ok(boss.hp<boss.stats.hp);assert.equal(b.stuns['enemy:enemy_0'],2);
   });
 }
-test('習性を外すと通常AIに戻り、他種に付けるとその種が防御・割り込みを行う',()=>{
-  const g=garden('classic'),b=g.state.battle,[boss,shell]=b.enemies;
-  const enemies={...g.data.enemies,
-    [shell.id]:{...g.data.enemies[shell.id],habits:[]},
-    [boss.id]:{...g.data.enemies[boss.id],habits:['rolling_shell']}};
-  g.data={...g.data,enemies};
-  shellAct(g);
-  assert.ok(shell.guard);assert.equal(shell.rollingShellTurns,undefined);
-  cast(g,'sera','attack',boss);
-  assert.ok(boss.hp<boss.stats.hp);assert.equal(shell.hp,shell.stats.hp);
-  next(g,'enemy:enemy_0');assert.ok(g.dispatch({type:'battle.step'}));assert.equal(boss.rollingShellTurns,1);
-  cast(g,'sera','attack',shell);assert.equal(shell.hp,shell.stats.hp);
-  assert.equal(boss.rollingShellRound,b.round);
-  const hp=boss.hp;
-  applySkill(g,g.state.actors.sera,boss,{name:'無属性打撃',effects:[{type:'damage',amount:12}]},null,false,null,false);
-  assert.ok(boss.hp>0&&boss.hp<hp);
+for(const mode of ['classic','grid','frontline']){
+  test(mode+' 習性を付け替えても両者の手番の行動は変わらず、防御中の個体だけが割り込む',()=>{
+    const g=garden(mode),[boss,shell]=g.state.battle.enemies;
+    const enemyDefs={...g.data.enemies,
+      [shell.id]:{...g.data.enemies[shell.id],habits:[]},
+      [boss.id]:{...g.data.enemies[boss.id],habits:['rolling_shell']}};
+    g.data={...g.data,enemies:enemyDefs};
+    shellAct(g);
+    assert.ok(shell.guard);assert.equal(shell.guardTurns,1);
+    cast(g,'sera','attack',boss);
+    assert.ok(boss.hp<boss.stats.hp);assert.equal(shell.hp,shell.stats.hp);
+    shellAct(g);assert.equal(shell.guardTurns,2);
+    shellAct(g);assert.equal(shell.guard,false);
+    assert.equal(boss.guardTurns,undefined);
+    applyGuard(g.state.battle,boss);
+    const hp=boss.hp;
+    cast(g,'sera','attack',shell);
+    assert.equal(shell.hp,shell.stats.hp);assert.ok(boss.hp<hp);
+    assert.equal(boss.rollingShellRound,g.state.battle.round);
+  });
+}
+
+test('旧版の戦闘セーブから防御2手目を再開し、次の手番で通常攻撃に移る',()=>{
+  const g=garden('classic');
+  shellAct(g);shellAct(g);
+  const old=JSON.parse(g.save()),u=old.state.battle.enemies[1];
+  u.rollingShellTurns=u.guardTurns;delete u.guardTurns;
+  u.ai[0].condition={op:'eq',left:{op:'mod',args:[{ref:'self.round'},2]},right:1};
+  g.load(JSON.stringify(old));
+  const shell=g.state.battle.enemies[1];
+  assert.equal(shell.guardTurns,2);
+  shellAct(g);assert.equal(shell.guard,false);
+  u.ai[0].condition.right=0;
+  assert.throws(()=>g.load(JSON.stringify(old)),/敵状態不正/);
 });

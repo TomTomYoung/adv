@@ -29,7 +29,7 @@ import {castValid,castCueValid,transitionDuration} from './cast.js';
 import {gearErrors} from './equipment.js';
 import {carriedErrors} from './inventory.js';
 import {voxelMapState,voxelOccupancyReason,voxelAt,voxelPoint} from './voxels.js';
-import {scaledEnemy} from './enemy.js';
+import {scaledEnemy,guardCycleLimit} from './enemy.js';
 import {freshDungeons,enterDungeon,validateDungeonState,DUNGEON_SYSTEMS,dungeonTile,dungeonBlock,dungeonWaterAccess} from './dungeons.js';
 import {storyStateErrors,storyEnding,journeyErrors} from './story.js';
 import {atWorldPlace,hasWorldConversation,savedWorldConversation,resolveStoryWorldPlace,storyArrivalEntryId,locationRoot} from './world.js';
@@ -231,8 +231,44 @@ function migrateTwoHeadedOgres(original,data){
   return save;
 }
 
+// Only replace a known, shipped action list. Other invalid rules still fail validation.
+const previousMonsterAI = {
+  garden_root_shell: [
+    {priority:10,skill:'guard',target:'self',condition:{op:'eq',left:{op:'mod',args:[{ref:'self.round'},2]},right:1}},
+    {priority:0,skill:'attack',target:'random'}
+  ],
+  slime_5_oil: [
+    {priority:20,skill:'family_slime_5_oil',target:'random'},
+    {priority:0,skill:'attack',target:'random'}
+  ]
+};
+function migrateMonsterActions(save,data){
+  const units=save?.state?.battle?.enemies;
+  if(!Array.isArray(units))return save;
+  let updated;
+  for(const [i,u] of units.entries()){
+    if(typeof u?.id!=='string')continue;
+    const id=u.id.replace(/^shifting_labyrinth_f[0-9]+_lv[0-9]+_/,'');
+    const previous=Object.hasOwn(previousMonsterAI,id) && previousMonsterAI[id];
+    const current=data.enemies[id]?.ai;
+    const oldRules=previous && current && JSON.stringify(u.ai)===JSON.stringify(previous) && JSON.stringify(current)!==JSON.stringify(previous);
+    const t=u?.tactics;
+    const oldWax=id==='slime_10_wick'&&t?.phase==='wax';
+    const flag=id==='slime_5_sticky'?'stickyUsed':id==='slime_15_molt'?'shedSkinUsed':null;
+    const oldGuard=u.rollingShellTurns!==undefined && u.guardTurns===undefined;
+    if(!oldRules && !oldGuard && !oldWax && !(flag&&t?.spent===true&&t[flag]===undefined))continue;
+    updated??=clone(save);
+    const unit=updated.state.battle.enemies[i];
+    if(oldRules)unit.ai=clone(current);
+    if(oldGuard){unit.guardTurns=unit.rollingShellTurns;delete unit.rollingShellTurns;}
+    if(oldWax){delete unit.tactics.phase;unit.tactics.meltedWax=true;}
+    if(flag&&t?.spent===true&&t[flag]===undefined){delete unit.tactics.spent;unit.tactics[flag]=true;}
+  }
+  return updated??save;
+}
+
 export function migrateSave(original,data){
-  original = migrateTwoHeadedOgres(original,data);
+  original = migrateMonsterActions(migrateTwoHeadedOgres(original,data),data);
   // The old cap allowed excess XP. Validate the previous state before applying
   // the outstanding growth, preserving current HP, MP and in-flight battles.
   if(original?.levelCap===undefined && data.system.maxLevel>30 && isRecord(original?.state?.actors) &&
@@ -442,7 +478,7 @@ export function validateSave(save,data){
              (enemy.sealed!==undefined ? enemy.sealed!==true||enemy.reviveRound!==undefined :
               !integer(enemy.reviveRound,1,b.round+3)||b.recordedKills?.includes(enemy.instance)||b.frontline?.removed?.['enemy:'+enemy.instance]))fail('仮死・鎮魂状態不正');
         }
-        if(enemy?.rollingShellTurns!==undefined && !integer(enemy.rollingShellTurns,1,2))fail('転がり甲羅の防御手番不正');
+        if(enemy?.guardTurns!==undefined && !integer(enemy.guardTurns,1,guardCycleLimit(data.enemies[enemy.id]?.ai)??2))fail('連続防御の手番数不正');
         if(enemy?.rollingShellRound!==undefined && !integer(enemy.rollingShellRound,1,b.round))fail('転がり甲羅の割り込み巡不正');
       }
       b.enemies.forEach((enemy,i)=>{if(Array.isArray(enemy?.statuses))errors.push(...statusStateErrors(data,enemy));const def=scaledEnemy(data.enemies[roster[i]],i,b.enemyScale??1);if(!isRecord(enemy)||enemy.id!==def.id||enemy.frontlineDefeat!==def.frontlineDefeat||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});

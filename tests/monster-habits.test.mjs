@@ -151,3 +151,29 @@ test('範囲魔法1回で灯蛾3匹が引火し、攻撃者自身も生きてい
   assert.equal(g.state.records.kills[moth],3);
   assert.deepEqual(g.feedback.events.filter(e=>e.action==='引火爆弾').map(e=>e.targets[0].key),Array(3).fill('actor:il'));
 });
+
+for (const mode of ['classic','grid','frontline']) {
+  test(mode+' 別種へ油膜・易燃体を付けても自爆の行動は増えない',()=>{
+    const g=game([soot,oilBeetle],mode,g=>applyMonsterHabits(g.data.enemies,{[soot]:['oil_coat','flammable_body']}));
+    const s=g.state,[unit]=s.battle.enemies,actor=s.actors.il;
+    assert.equal(s.battle.familyField,undefined);
+    assert.deepEqual(unit.ai,data.enemies[soot].ai);
+    damage(g,unit,{name:'打撃',effects:[{type:'damage',element:'physical',amount:1}]});
+    assert.ok(actor.statuses.includes('oiled'));
+    damage(g,unit,{name:'火花',effects:[hit]});
+    assert.ok(unit.statuses.includes('ablaze'));
+    assert.ok(!unit.ai.some(r=>r.skill==='slime_burst'));
+    g.load(g.save());
+    assert.ok(g.state.battle.enemies[0].statuses.includes('ablaze'));
+  });
+  test(mode+' 系列を持たない魔物に二核分裂を付けても元の行動で戦え、分裂後に保存できる',()=>{
+    const g=game([soot],mode,g=>applyMonsterHabits(g.data.enemies,{[soot]:['split_core']}));
+    const b=g.state.battle,[unit]=b.enemies;
+    damage(g,unit,{name:'光',effects:[{type:'damage',element:'light',amount:Math.ceil(unit.hp/2)}]});
+    assert.equal(b.enemies.length,2);
+    assert.ok(b.enemies.every(u=>u.id===soot));
+    assert.deepEqual(b.enemies[1].ai,data.enemies[soot].ai);
+    g.load(g.save());
+    assert.equal(g.state.battle.enemies[1].tactics.half,'rear');
+  });
+}

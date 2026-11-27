@@ -211,7 +211,7 @@ function drawMonster(id) {
   affinity.append(el('p', modified.length
     ? modified.map(([key, rate]) => (elements[key] ?? key) + ' ×' + rate).join(' ／ ') + '　その他 ×1'
     : '全属性 ×1'));
-  const actions = block(enemy.habits?.includes('rolling_shell') ? '転がり甲羅を外したときの行動' : '行動と使用条件'), list = el('ol');
+  const actions = block('行動と使用条件'), list = el('ol');
   for (const rule of [...enemy.ai].sort((a, b) => b.priority - a.priority)) {
     const skill = data.skills[rule.skill];
     const item = el('li');
@@ -226,15 +226,14 @@ function drawMonster(id) {
   if (floors) detail.append(el('p', '千変の迷宮　' + floors));
   detail.append(link);
   card.append(header, parameters, rewards, affinity);
+  const habits = block('習性');
   if (enemy.habits?.length) {
-    const habits = block('習性');
     for (const id of enemy.habits) {
       const habit = MONSTER_HABITS[id];
       habits.append(el('strong', habit.name), el('p', habit.description));
     }
-    card.append(habits);
-  }
-  card.append(actions, detail);
+  } else habits.append(el('p', 'なし'));
+  card.append(actions, habits, detail);
   $('monster-sheet').replaceChildren(card);
 }
 function drawActor(id, job, level, mode) {

@@ -132,3 +132,19 @@ test('鏡面は単体魔法を一度反射し、打撃で割れた瓶は同じ�
   hit(h,bottle,'physical',2,'power');
   assert.equal(h.state.battle.log.filter(line=>line.includes('瓶が割れた')).length,1);
 });
+
+test('油膜と易燃体を外すと被弾反応だけが消え、旧戦闘の行動表を復元して火だるまなら自爆する',()=>{
+  const g=start('classic'),u=unit(g,'oil'),a=g.state.actors.ada;
+  g.data.enemies={...g.data.enemies,[u.id]:{...g.data.enemies[u.id],habits:[]}};
+  hit(g,u);assert.ok(!a.statuses.includes('oiled'));
+  hit(g,u,'fire',1,'fire');assert.ok(!u.statuses.includes('ablaze'));
+  const old=JSON.parse(g.save());
+  const saved=old.state.battle.enemies.find(e=>e.instance===u.instance);
+  saved.ai=saved.ai.filter(r=>r.skill!=='slime_burst');
+  g.load(JSON.stringify(old));
+  const loaded=unit(g,'oil');
+  assert.ok(loaded.ai.some(r=>r.skill==='slime_burst'));
+  applyStatus(g.data,g.state,loaded,'ablaze');
+  turn(g,loaded);
+  assert.ok(g.state.battle.log.some(x=>x.includes('自爆して燃え尽きた')));
+});

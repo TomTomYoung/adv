@@ -1,3 +1,4 @@
+import {hasMonsterHabit} from './monster-habits.js';
 import {abilityCategory} from './ability-category.js';
 import {depth, living, moveTo, profession, weakest} from './monster-family-field.js';
 import {applyStun} from './battle-turns.js';
@@ -24,11 +25,11 @@ export function slimeSprite(data,u){
 }
 
 export function slimeLabels(u){
-  if(!kind(u))return u.tactics?.foam?['泡の盾']:[];
   const t=u.tactics??{};
-  const labels={stretch:'伸び上がり',flat:'跳躍準備',floor:'床に貼りつき',bare:'砂鉄を放出',wax:'蝋が溶けている',mirror:'鏡面',core:'核が露出',lean:'倒れ込み準備',puddle:'水たまり',red:'赤い攻撃薬',green:'緑の回復薬'};
+  const labels={stretch:'伸び上がり',flat:'跳躍準備',floor:'床に貼りつき',bare:'砂鉄を放出',mirror:'鏡面',core:'核が露出',lean:'倒れ込み準備',puddle:'水たまり',red:'赤い攻撃薬',green:'緑の回復薬'};
   const result=[];
   if(labels[t.phase])result.push(labels[t.phase]);
+  if(t.meltedWax)result.push('蝋が溶けている');
   if(t.relic)result.push(t.relic+'が浮上');
   if(kind(u)==='strata')result.push(hpRatio(u)>2/3?'砂の層':hpRatio(u)>1/3?'粘土の層':'水の層');
   if(t.phase==='lean')result.push(['前列狙い','中列狙い','後列狙い'][t.row]);
@@ -52,11 +53,6 @@ export function slimeTurn(engine,u,cast){
   const attack=(v=target)=>use(v,'attack');
   const step=(v,delta)=>moveTo(engine,v,Math.max(0,Math.min(2,depth(s,v)+delta)));
   switch(kind(u)){
-    case 'oil':
-      if(hasActiveStatus(engine.data,s,u,'ablaze')){
-        use(foes,'slime_burst');u.hp=0;recordDefeated(engine);say(engine,u,'自爆して燃え尽きた。');return;
-      }
-      return use(target);
     case 'drop':
       if(t.phase==='stretch'){delete t.phase;return use(target);}
       attack();return phase(engine,u,'stretch','体を細長く伸ばした。');
@@ -80,7 +76,7 @@ export function slimeTurn(engine,u,cast){
       if(t.phase==='bare'){delete t.phase;say(engine,u,'床の砂鉄を集め直した。');return;}
       phase(engine,u,'bare','針を放ち、丸裸になった。');return use(target);
     case 'wick':
-      if(t.phase==='wax'){delete t.phase;return use(frontRow);}
+      if(t.meltedWax){delete t.meltedWax;return use(frontRow);}
       return attack();
     case 'parasol':
     case 'thread': {
@@ -145,13 +141,13 @@ export function slimeDeflect(engine,source,target,skill,id,projectile,reflect){
   const s=engine.state,t=target.tactics;
   if(!target.instance||source.instance||!t||!skill.effects.some(e=>e.type==='damage'))return false;
   if(t.foam){delete t.foam;say(engine,target,'泡が一撃を受けて割れた。');return true;}
-  if(projectile&&allies(s,target).some(u=>kind(u)==='parasol'&&u.tactics.link===target.instance&&depth(s,u)<depth(s,target))){
+  if(projectile&&allies(s,target).some(u=>hasMonsterHabit(engine.data,u,'parasol_cover')&&u.tactics.link===target.instance&&depth(s,u)<depth(s,target))){
     say(engine,target,'傘が飛び道具を受け止めた。');return true;
   }
-  if(kind(target)==='molt'&&!t.spent){
-    t.spent=true;t.shellRow=depth(s,target);moveTo(engine,target,Math.min(2,t.shellRow+1));say(engine,target,'空の外皮を残して身をかわした。');return true;
+  if(hasMonsterHabit(engine.data,target,'shed_skin')&&!t.shedSkinUsed){
+    t.shedSkinUsed=true;t.shellRow=depth(s,target);moveTo(engine,target,Math.min(2,t.shellRow+1));say(engine,target,'空の外皮を残して身をかわした。');return true;
   }
-  if(kind(target)==='mirror'&&t.phase==='mirror'&&abilityCategory(id)==='magic'&&skill.target==='enemy'&&
+  if(hasMonsterHabit(engine.data,target,'mirror_skin')&&t.phase==='mirror'&&abilityCategory(id)==='magic'&&skill.target==='enemy'&&
      (skill.targeting?.area?.shape??'single')==='single'&&(skill.frontlineTargeting?.area?.shape??'single')==='single'){
     delete t.phase;say(engine,target,'鏡面に術が跳ね返った。');reflect();return true;
   }
@@ -167,62 +163,69 @@ export function slimeHitType(data,source,skill,id,physical,projectile){
   const blunt=contact&&(heavy||['fist','staff','tool'].includes(weapon)||(!weapon&&id==='attack'));
   return {contact,thrust,heavy,blunt};
 }
-export function slimePower(u,hit){
+export function slimePower(data,u,hit){
   const t=u.tactics;
-  switch(kind(u)){
-    case 'bottle':return t.open?1.5:hit.blunt?1:.5;
-    case 'iron':return t.phase==='bare'?1.5:1;
-    case 'wick':return t.phase==='wax'&&hit.blunt?2:1;
-    case 'parasol':return t.link&&hit.contact?1.75:1;
-    case 'bandage':return t.link&&hit.blunt?2:1;
-    case 'gem':return t.phase==='core'?(hit.blunt?2.5:1):.5;
-    case 'falls':return t.phase==='puddle'?2:1;
-    default:return 1;
-  }
+  let scale=1;
+  if(hasMonsterHabit(data,u,'glass_body'))scale*=t?.open?1.5:hit.blunt?1:.5;
+  if(hasMonsterHabit(data,u,'wax_wick')&&t?.meltedWax&&hit.blunt)scale*=2;
+  if(!t)return scale;
+  if(t.phase==='bare'&&hasMonsterHabit(data,u,'bare_iron'))scale*=1.5;
+  if(t.link&&hit.contact&&hasMonsterHabit(data,u,'parasol_cover'))scale*=1.75;
+  if(t.link&&hit.blunt&&hasMonsterHabit(data,u,'loose_bandage'))scale*=2;
+  if(hasMonsterHabit(data,u,'crystal_core'))scale*=t.phase==='core'?(hit.blunt?2.5:1):.5;
+  if(t.phase==='puddle'&&hasMonsterHabit(data,u,'exposed_puddle'))scale*=2;
+  return scale;
 }
 
 export function slimeAfterDamage(engine,source,target,id,element,hit,damage,cast){
   const {state:s,data}=engine, b=s.battle,t=target.tactics;
   if(!source.instance&&id==='attack'){
-    const stuck=living(s,b.enemies).find(u=>kind(u)==='sticky'&&u.tactics.stuck===source.id&&u!==target);
+    const stuck=living(s,b.enemies).find(u=>hasMonsterHabit(data,u,'sticky_hide')&&u.tactics.stuck===source.id&&u!==target);
     if(stuck){delete stuck.tactics.stuck;stuck.hp=Math.max(0,stuck.hp-damage);say(engine,stuck,'武器ごと叩きつけられた。');recordDefeated(engine);}
   }
-  if(!kind(target))return;
-  switch(kind(target)){
-    case 'oil':
-      if(element==='fire'&&target.hp>0&&!hasActiveStatus(data,s,target,'ablaze')){
-        removeStatus(target,'oiled');
-        if(applyStatus(data,s,target,'ablaze'))say(engine,target,'火だるまになった！');
-      }break;
-    case 'sticky':
-      if(!source.instance&&hit.contact&&!t.spent&&target.hp>0){t.spent=true;t.stuck=source.id;say(engine,target,'武器にくっついた。');}break;
-    case 'bottle':
-      if(hit.blunt&&!t.open){t.open=true;say(engine,target,'瓶が割れた。');cast(target,inRow(s,party(s),depth(s,source)),'slime_splash');}break;
-    case 'wick':
-      if(element==='fire'&&target.hp>0)phase(engine,target,'wax','灯芯に火がつき、蝋が溶けた。');break;
-    case 'chime':
-      if(hit.blunt){for(const e of living(s,b.enemies))removeStatus(e,'sleep');say(engine,target,'鈴の音が響いた。');}break;
-    case 'rubber':
-      if(id!=='slime_bump'&&hit.blunt&&target.hp>0&&depth(s,target)<2){
-        const row=depth(s,target)+1,v=inRow(s,allies(s,target),row)[0];
-        if(moveTo(engine,target,row)&&v){say(engine,target,v.name+'に衝突した。');cast(target,[target,v],'slime_bump');}
-      }break;
-    case 'mirror':if(hit.contact||element==='physical')delete t.phase;break;
-    case 'twins':if(!t.half&&target.hp>=2&&hpRatio(target)<=.5)splitSlime(engine,target);break;
-    case 'bandage':if(hit.blunt)delete t.link;break;
-    case 'beads':(b.familyField.beads??={})[depth(s,target)]=true;say(engine,target,'足元に粒が転がった。');break;
-    case 'balloon':
-      if(hit.thrust&&t.air){t.air=0;const rear=allies(s,target).filter(v=>depth(s,v)>depth(s,target));
-        const v=nearest(s,rear,target);say(engine,target,'背後へ空気が抜けた。');if(v)cast(target,[v],'slime_bump');}break;
-    case 'porter':
-      if(!target.hp&&!t.spent&&t.link){t.spent=true;delete t.link;
-        say(engine,target,'回復壺が割れた。');cast(target,inRow(s,[...party(s),...allies(s,target)],depth(s,target)),'slime_cure');}break;
-    case 'gem':if(hit.blunt&&t.phase==='core'){delete t.phase;say(engine,target,'核を打たれ、詠唱が途切れた。');}break;
-    case 'pot':
-      if(hit.blunt&&t.phase&&target.hp>0){const potion=t.phase;delete t.phase;say(engine,target,'釜がひっくり返った。');
-        cast(target,[target],potion==='red'?target.classSkill:'slime_cure');}break;
-    case 'abyss':
-      if(hit.heavy&&t.relic){(t.lost??=[]).push(t.relic);say(engine,target,t.relic+'が体外へ弾き出された。');delete t.relic;}break;
+  if(!target.instance)return;
+  const has=id=>hasMonsterHabit(data,target,id);
+  if(has('sticky_hide')&&!source.instance&&hit.contact&&!t.stickyUsed&&target.hp>0){
+    t.stickyUsed=true;t.stuck=source.id;say(engine,target,'武器にくっついた。');
+  }
+  if(has('glass_body')&&hit.blunt&&!t.open){
+    t.open=true;say(engine,target,'瓶が割れた。');cast(target,inRow(s,party(s),depth(s,source)),'slime_splash');
+  }
+  if(has('wax_wick')&&element==='fire'&&target.hp>0){
+    t.meltedWax=true;say(engine,target,'灯芯に火がつき、蝋が溶けた。');
+  }
+  if(has('waking_chime')&&hit.blunt){
+    for(const e of living(s,b.enemies))removeStatus(e,'sleep');
+    say(engine,target,'鈴の音が響いた。');
+  }
+  if(has('elastic_body')&&id!=='slime_bump'&&hit.blunt&&target.hp>0&&depth(s,target)<2){
+    const row=depth(s,target)+1,v=inRow(s,allies(s,target),row)[0];
+    if(moveTo(engine,target,row)&&v){say(engine,target,v.name+'に衝突した。');cast(target,[target,v],'slime_bump');}
+  }
+  if(has('split_core')&&!t.half&&target.hp>=2&&hpRatio(target)<=.5)splitSlime(engine,target);
+  if(has('scatter_beads')){
+    (b.familyField.beads??={})[depth(s,target)]=true;say(engine,target,'足元に粒が転がった。');
+  }
+  if(has('mirror_skin')&&(hit.contact||element==='physical')&&t.phase==='mirror')delete t.phase;
+  if(has('loose_bandage')&&hit.blunt)delete t.link;
+  if(has('air_leak')&&hit.thrust&&t.air){
+    t.air=0;
+    const v=nearest(s,allies(s,target).filter(u=>depth(s,u)>depth(s,target)),target);
+    say(engine,target,'背後へ空気が抜けた。');if(v)cast(target,[v],'slime_bump');
+  }
+  if(has('fragile_cargo')&&!target.hp&&!t.spent&&t.link){
+    t.spent=true;delete t.link;say(engine,target,'回復壺が割れた。');
+    cast(target,inRow(s,[...party(s),...allies(s,target)],depth(s,target)),'slime_cure');
+  }
+  if(has('crystal_core')&&hit.blunt&&t.phase==='core'){
+    delete t.phase;say(engine,target,'核を打たれ、詠唱が途切れた。');
+  }
+  if(has('spilled_brew')&&hit.blunt&&['red','green'].includes(t.phase)&&target.hp>0){
+    const potion=t.phase;delete t.phase;say(engine,target,'釜がひっくり返った。');
+    cast(target,[target],potion==='red'?'family_slime_25_pot':'slime_cure');
+  }
+  if(has('loose_relic')&&hit.heavy&&t.relic){
+    (t.lost??=[]).push(t.relic);say(engine,target,t.relic+'が体外へ弾き出された。');delete t.relic;
   }
 }
 
@@ -232,17 +235,18 @@ export function slimeMoved(engine,unit,old,row){
   if(f.beads?.[row]){delete f.beads[row];applyStun(engine,unit,{count:1});s.battle.log.push('足元の粒で滑った。');}
   if(!unit.instance||row>=old)return;
   for(const u of allies(s,unit)){
-    if(kind(u)!=='thread'||u.tactics?.link!==unit.instance)continue;
+    if(!hasMonsterHabit(engine.data,u,'thread_tether')||u.tactics?.link!==unit.instance)continue;
     delete u.tactics.link;moveTo(engine,u,Math.max(0,depth(s,u)+row-old));
   }
 }
-export function slimeInitiative(s,u){
+export function slimeInitiative(engine,u){
+  const {data,state:s}=engine;
   if(!s.battle?.familyField)return 0;
   if(kind(u)==='stones')return (u.tactics.shots??0)*3;
-  return !u.instance&&s.battle.enemies.some(e=>e.hp>0&&kind(e)==='sticky'&&e.tactics?.stuck===u.id)?-1000:0;
+  return !u.instance&&s.battle.enemies.some(e=>e.hp>0&&hasMonsterHabit(data,e,'sticky_hide')&&e.tactics?.stuck===u.id)?-1000:0;
 }
 export function oilBurnout(engine,u){
-  if(!isOil(u)||!hasActiveStatus(engine.data,engine.state,u,'ablaze'))return;
+  if(!hasMonsterHabit(engine.data,u,'flammable_body')||!hasActiveStatus(engine.data,engine.state,u,'ablaze'))return;
   u.hp=0;say(engine,u,'巡の終わりに燃え尽きた。');recordDefeated(engine);
 }
 
@@ -251,16 +255,16 @@ export function slimeSaveValid(state,u,field){
   const sameBattle=id=>units.some(e=>e?.instance===id&&e!==u);
   const inRange=(n,max)=>Number.isInteger(n)&&n>=0&&n<=max;
   if(t.foam!==undefined&&typeof t.foam!=='boolean')return false;
-  if(!kind(u))return true;
+  if(['stickyUsed','shedSkinUsed','meltedWax'].some(k=>t[k]!==undefined&&typeof t[k]!=='boolean'))return false;
   if(['open','spent','nextGreen'].some(k=>t[k]!==undefined&&typeof t[k]!=='boolean'))return false;
   if(t.link!==undefined&&!sameBattle(t.link)||t.stuck!==undefined&&!state.members.includes(t.stuck))return false;
   const phases={drop:['stretch'],mochi:['flat','floor'],iron:['bare'],wick:['wax'],mirror:['mirror'],gem:['core'],pot:['red','green'],falls:['lean','puddle']};
-  if(t.phase!==undefined&&!phases[kind(u)]?.includes(t.phase))return false;
+  if(kind(u)&&t.phase!==undefined&&!phases[kind(u)]?.includes(t.phase))return false;
   for(const [key,max] of [['shots',3],['air',2],['row',2],['shellRow',2],['cycle',2]])if(t[key]!==undefined&&!inRange(t[key],max))return false;
   if(t.relic!==undefined&&!relics.includes(t.relic))return false;
   if(t.lost!==undefined&&(!Array.isArray(t.lost)||new Set(t.lost).size!==t.lost.length||t.lost.some(x=>!relics.includes(x)||x===t.relic)))return false;
   if(t.half!==undefined||t.twin!==undefined){
-    if(kind(u)!=='twins'||!['front','rear'].includes(t.half))return false;
+    if(!['front','rear'].includes(t.half))return false;
     const other=units.find(v=>v?.instance===t.twin&&v!==u);
     if(!other||other.id!==u.id||other.tactics?.twin!==u.instance||other.tactics.half===t.half)return false;
     const parent=t.half==='front'?u:other,child=t.half==='rear'?u:other;

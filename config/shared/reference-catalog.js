@@ -23949,7 +23949,7 @@ export const referenceData={
         "skill"
       ],
       "kind": "skills",
-      "id": "family_slime_5_oil"
+      "id": "slime_burst"
     },
     {
       "file": "dungeon-content.json",
@@ -23958,6 +23958,18 @@ export const referenceData={
         "slime_5_oil",
         "ai",
         1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_5_oil"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_oil",
+        "ai",
+        2,
         "skill"
       ],
       "kind": "skills",
@@ -51206,7 +51218,7 @@ export const referenceData={
         "name": "鉈おろし"
       },
       "family_orc_5_hunter": {
-        "name": "狩人の追撃"
+        "name": "狩人の一撃"
       },
       "family_orc_5_drummer": {
         "name": "骨太鼓"
@@ -51515,7 +51527,7 @@ export const referenceData={
         "name": "双頭詠唱"
       },
       "family_skeleton_25_royalguard": {
-        "name": "王冠守護"
+        "name": "近衛の構え"
       },
       "family_skeleton_25_standard": {
         "name": "弔旗進軍"
@@ -51527,7 +51539,7 @@ export const referenceData={
         "name": "処刑の印"
       },
       "family_skeleton_25_crowned": {
-        "name": "王冠渡り"
+        "name": "王杖打ち"
       },
       "lay_to_rest": {
         "name": "鎮魂"
@@ -51539,7 +51551,7 @@ export const referenceData={
         "name": "もち跳び"
       },
       "family_slime_5_sticky": {
-        "name": "ねばつく体"
+        "name": "粘液体当たり"
       },
       "family_slime_5_berry": {
         "name": "木の実の消化"
@@ -51563,13 +51575,13 @@ export const referenceData={
         "name": "熱蝋まき"
       },
       "family_slime_10_chime": {
-        "name": "目覚まし鈴"
+        "name": "鈴打ち"
       },
       "family_slime_15_parasol": {
         "name": "傘開き"
       },
       "family_slime_15_rubber": {
-        "name": "跳ね返り"
+        "name": "弾み打ち"
       },
       "family_slime_15_thread": {
         "name": "糸つなぎ"
@@ -51578,16 +51590,16 @@ export const referenceData={
         "name": "鏡張り"
       },
       "family_slime_15_molt": {
-        "name": "脱皮逃れ"
+        "name": "滑り込み"
       },
       "family_slime_20_twins": {
-        "name": "二核分裂"
+        "name": "双核打ち"
       },
       "family_slime_20_bandage": {
         "name": "包帯巻き"
       },
       "family_slime_20_beads": {
-        "name": "こぼれ玉"
+        "name": "玉打ち"
       },
       "family_slime_20_balloon": {
         "name": "破裂風"

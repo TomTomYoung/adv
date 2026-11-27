@@ -1,3 +1,4 @@
+import {hasMonsterHabit} from './monster-habits.js';
 import {battleAlive} from './frontline-lifecycle.js';
 import {depth,moveTo,profession,tactics,living} from './monster-family-field.js';
 import {feigning,reviveBones,sealBones} from './feigned-death.js';
@@ -19,33 +20,30 @@ export function skeletonInterrupted(u){
   for(const k of ['hook','holding','mark','ready','notes'])delete t[k];
 }
 export function skeletonGuardBroken(engine,u){
-  if(!skeleton(u))return;
-  const t=tactics(u),role=profession(u);
-  if(role==='buckler')t.lostShield=true;
-  if(role==='rustwall'){
+  if(hasMonsterHabit(engine.data,u,'shield_arm'))tactics(u).lostShield=true;
+  if(hasMonsterHabit(engine.data,u,'shield_trip')){
     const mate=engine.state.battle.enemies.find(e=>e.hp>0&&depth(engine.state,e)>depth(engine.state,u));
     if(mate&&applyStun(engine,mate,{count:1}))engine.state.battle.log.push(mate.name+'も錆盾につまずいた。');
   }
   skeletonInterrupted(u);
 }
-export function skeletonCover(s,target,skill){
+export function skeletonCover(engine,target,skill){
+  const s=engine.state;
   if(target?.hp<=0||skill.target!=='enemy'||!skill.effects.some(e=>e.type==='damage'))return;
   const front=s.battle.mode==='frontline'?skill.frontlineTargeting:skill.targeting;
   if(front&&front.area.shape!=='single')return;
-  return s.battle.enemies.find(u=>skeleton(u)&&u!==target&&battleAlive(s,u)&&u.guard&&
+  return s.battle.enemies.find(u=>u!==target&&battleAlive(s,u)&&u.guard&&
     !(s.battle.stuns?.[unitKey(u)]>0)&&
-    (profession(u)==='royalguard'?target.tactics?.wearsCrown:
-    ['rustwall','bullshield'].includes(profession(u))&&depth(s,u)<=depth(s,target)));
+    ((hasMonsterHabit(engine.data,u,'crown_intercept')&&target.tactics?.wearsCrown)||
+    (hasMonsterHabit(engine.data,u,'shield_intercept')&&depth(s,u)<=depth(s,target))));
 }
 export function skeletonAfterDamage(engine,target){
-  if(!skeleton(target))return;
-  const t=tactics(target);
-  if(profession(target)==='musician')delete t.notes;
+  if(hasMonsterHabit(engine.data,target,'lost_rhythm'))delete tactics(target).notes;
   if(target.hp>0)return;
   skeletonInterrupted(target);
 }
 export function settleSkeletonCrown(engine){
-  const b=engine.state.battle,target=b.enemies.find(u=>feigning(u)&&u.tactics?.wearsCrown);
+  const b=engine.state.battle,target=b.enemies.find(u=>feigning(u)&&u.tactics?.wearsCrown&&hasMonsterHabit(engine.data,u,'bone_crown'));
   if(!target)return;
   const t=tactics(target);
   // Never transfer the crown when the whole formation has fallen.

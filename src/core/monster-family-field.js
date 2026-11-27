@@ -1,3 +1,4 @@
+import {hasMonsterHabit,usesMonsterFormation} from './monster-habits.js';
 import {slimeLabels,slimeMoved,slimeSaveValid} from './slime-actions.js';
 import {skeletonCover} from './skeleton-actions.js';
 import {battleAlive} from './frontline-lifecycle.js';
@@ -41,16 +42,16 @@ export function moveTo(engine, u, row) {
 
 export function syncFamilyBattle(engine) {
   const s=engine.state,b=s.battle;
-  if (!b.enemies.some(e=>e.family)) return;
+  if (!b.enemies.some(e=>usesMonsterFormation(engine.data.enemies[e.id]))) return;
   const field=b.familyField??={depths:{}, deaths:[], broken:{}, mud:{}};
   for (const [i,e] of b.enemies.entries()) field.depths[unitKey(e)]??=engine.data.encounters[b.encounter]?.frontlinePositions?.[i]?.depth ?? e.combatRow ?? 0;
   for (const id of s.members) field.depths['actor:'+id]??=s.partyFormation?.[id]?.y??0;
   for (const e of b.enemies) {
     if (e.tactics?.home!==undefined) continue;
     tactics(e).home=depth(s,e);
-    if (profession(e)==='crowned') tactics(e).wearsCrown=true;
+    if (hasMonsterHabit(engine.data,e,'bone_crown')) tactics(e).wearsCrown=true;
     if (profession(e)==='king') field.crown=e.instance;
-    if (profession(e)==='chief') {
+    if (hasMonsterHabit(engine.data,e,'axe_bequest')) {
       const heir=b.enemies.find(v=>v!==e&&v.family==='orc');
       if (heir) { tactics(e).heir=heir.instance; b.log.push(e.name+'は'+heir.name+'を後継者に指名した。'); }
     }
@@ -94,7 +95,7 @@ export function familyAccuracy(engine,source,target,initial) {
   const s=engine.state,b=s.battle,f=b?.familyField;
   if (!f) return initial;
   if (source.instance&&target.id===f.firefly) return 1;
-  const dark=f.darkUntil>=b.round&&!(source.family==='goblin'&&source.levelBand===15);
+  const dark=f.darkUntil>=b.round&&!hasMonsterHabit(engine.data,source,'night_vision');
   const smoke=target.instance&&f.smokeUntil>=b.round&&depth(s,target)>0;
   return Math.max(0,initial-(source.tactics?.lostHead?0.45:0)-(dark?0.35:0)-(smoke?0.35:0));
 }
@@ -110,7 +111,7 @@ export function familyIntercept(engine,source,targets,skill) {
   const royal=(f.falseUntil>=b.round&&active.some(e=>e.instance===f.falseCrown))?f.falseCrown:f.crown;
   const cover=active.find(e=>e!==target&&((profession(e)==='guard'&&royal===target.instance)||e.tactics?.cover===target.instance));
   if (!cover) {
-    const shell=skeletonCover(s,target,skill);
+    const shell=skeletonCover(engine,target,skill);
     if(shell)b.log.push(shell.name+'が'+target.name+'をかばった。');
     return [shell??target];
   }
@@ -126,7 +127,7 @@ export function recordFamilyDeaths(engine) {
     if (dead.hp>0||f.deaths.includes(dead.instance)) continue;
     f.deaths.push(dead.instance);
     const heir=b.enemies.find(e=>e.instance===dead.tactics?.heir&&e.hp>0);
-    if (heir) { tactics(heir).inheritedAxe=true; b.log.push(heir.name+'は族長の大斧を継いだ。'); }
+    if (heir && hasMonsterHabit(engine.data,dead,'axe_bequest')) { tactics(heir).inheritedAxe=true; b.log.push(heir.name+'は族長の大斧を継いだ。'); }
   }
 }
 
@@ -148,17 +149,18 @@ export function familyAfterHit(engine,source,targets,skillId,skill,results,react
   }
   for (const target of targets) {
     if (!target.instance||!results.some(r=>r.key===unitKey(target)&&r.damage>0)) continue;
-    const t=tactics(target),role=profession(target);
-    if (target.family==='ogre'&&target.levelBand===15) {
-      t.rage=role==='firewalker'&&skill.effects.some(e=>e.element==='fire')?3:Math.min(3,(t.rage??0)+1);
+    const t=tactics(target);
+    const fireRage=hasMonsterHabit(engine.data,target,'fire_rage') && skill.effects.some(e=>e.element==='fire');
+    if (fireRage || hasMonsterHabit(engine.data,target,'red_horn')) {
+      t.rage=fireRage?3:Math.min(3,(t.rage??0)+1);
       b.log.push(target.name+'の角が'+['','赤みを帯びた','赤く染まった','真紅に染まった'][t.rage]+'。');
     }
-    if (role==='mountainking'&&t.windup&&target.hp>0) {
+    if (hasMonsterHabit(engine.data,target,'unsteady_foot')&&t.windup&&target.hp>0) {
       delete t.windup; applyStun(engine,target,{count:1}); b.log.push(target.name+'は軸足を崩され転倒した。');
     }
     if (source.instance||!battleAlive(s,source)||!battleAlive(s,target)) continue;
-    if (role==='hex'&&t.windup) react(target,source);
-    const statue=living(s,b.enemies).find(e=>e!==target&&e.tactics?.watching);
+    if (hasMonsterHabit(engine.data,target,'windup_counter')&&t.windup) react(target,source);
+    const statue=living(s,b.enemies).find(e=>e!==target&&e.tactics?.watching&&hasMonsterHabit(engine.data,e,'watch_counter'));
     if (statue) { delete statue.tactics.watching; react(statue,source); }
   }
   recordFamilyDeaths(engine);
@@ -173,7 +175,7 @@ export function familyAfterMove(engine,unit,old,react) {
     if (other) moveTo(engine,other,row);
   }
   if (!unit.instance&&old<row) {
-    const hunter=living(s,b.enemies).find(e=>profession(e)==='hunter');
+    const hunter=living(s,b.enemies).find(e=>hasMonsterHabit(engine.data,e,'retreat_pursuit'));
     if (hunter) react(hunter,unit);
   }
 }
@@ -184,8 +186,9 @@ export function familySaveValid(data,state) {
   const tier=v=>Number.isInteger(v)&&v>=0&&v<=2;
   const units=b.enemies, enemies=new Set(units.map(e=>e?.instance)), actors=new Set(state.members);
   const keys=new Set([...state.members.map(id=>'actor:'+id),...units.filter(Boolean).map(unitKey)]);
-  const hasFamily=units.some(e=>data.enemies[e?.id]?.family);
-  if(!hasFamily)return f===undefined&&units.every(e=>!e?.classSkill&&!e?.family&&!e?.tactics);
+  // Older battles without a family have no formation until a newly assigned habit needs one.
+  if(f===undefined)return units.every(e=>!data.enemies[e?.id]?.family&&!e?.classSkill&&!e?.family&&!e?.tactics);
+  if(!units.some(e=>usesMonsterFormation(data.enemies[e?.id])||usesMonsterFormation(e)))return false;
   if(!record(f)||!record(f.depths)||!record(f.mud)||!record(f.broken)||!Array.isArray(f.deaths))return false;
   if(Object.entries(f.depths).some(([key,v])=>!keys.has(key)||!tier(v))||
     Object.entries(f.mud).some(([k,v])=>!['0','1','2'].includes(k)||!Number.isInteger(v))||
