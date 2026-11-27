@@ -1,6 +1,6 @@
 import {GameAudio} from './application/audio.js';
 import {loadContent} from './core/loader.js';
-import {createTesterEngine,testerPreset} from './application/battle-tester-model.js';
+import {createSkeletonTrial,createTesterEngine,testerPreset} from './application/battle-tester-model.js';
 import {projectGame} from './application/projection.js';
 import {SceneView} from './view/scene-view.js';
 import {GameView} from './view/view.js';
@@ -42,7 +42,7 @@ function setLayout(next){
 }
 function load(next,nextLayout=layout){
   try{
-    const candidate=structuredClone(next),nextEngine=createTesterEngine(base,candidate,{manualTurns:false});
+    const candidate=structuredClone(next),nextEngine=candidate.example==='skeleton'?createSkeletonTrial(base,candidate.mode):createTesterEngine(base,candidate,{manualTurns:false});
     config=candidate;engine=nextEngine;setLayout(nextLayout);
     const message=`${config.mode}を本編の画面へロードしました。敵は自動で行動します。`;
     status(message);reply('loaded',message);return true;
@@ -65,5 +65,9 @@ try{
     if(m?.type==='adv:battle-tester:load'){request=m.request;load(m.config,m.layout);}
     else if(m?.type==='adv:battle-tester:layout')setLayout(m.layout);
   });
-  if(embedded)reply('ready');else load(testerPreset(base));
+  if(embedded)reply('ready');
+  else{
+    const params=new URLSearchParams(location.search);
+    load(params.get('preset')==='skeleton'?{example:'skeleton',mode:params.get('mode')??'frontline'}:testerPreset(base));
+  }
 }catch(error){status(error.message);reply('error',error.message);}

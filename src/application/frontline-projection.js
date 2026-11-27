@@ -7,7 +7,7 @@ import {battleSkillPlan,battleItemPlan} from '../core/battle.js';
 export function projectFrontFormation(engine){return clone(startingFrontFormation(engine.state));}
 function choiceView(engine,choice,p){
  const u=frontlineUnits(engine.state).find(u=>unitKey(u)===choice.id),position=u?frontPosition(engine.state,u):p.aim;
- return {id:choice.id,name:p.skill?.selection==='random_distinct'?`ランダムな敵・最大${p.skill.maxTargets}体`:u?`${u.name??engine.data.actors[u.id].name}・${depthNames[position.depth]}${frontlineState(engine.state,u)==='down'?'・戦闘不能':''} HP ${u.hp}`:position?`${position.side==='allies'?'味方':'敵'}${depthNames[position.depth]}の地点`:'対象',enabled:p.ok,reason:p.reason??'',aim:p.aim??null,targets:p.targets?.map(unitKey)??[],targetNames:p.targets?.map(u=>u.name??engine.data.actors[u.id].name)??[],requiredRange:p.requiredRange??null,cells:p.cells??[]};
+ return {id:choice.id,name:p.skill?.selection==='random_distinct'?`ランダムな敵・最大${p.skill.maxTargets}体`:u?`${u.name??engine.data.actors[u.id].name}・${depthNames[position.depth]}${u.reviveRound?'・仮死':frontlineState(engine.state,u)==='down'?'・戦闘不能':''} HP ${u.hp}`:position?`${position.side==='allies'?'味方':'敵'}${depthNames[position.depth]}の地点`:'対象',enabled:p.ok,reason:p.reason??'',aim:p.aim??null,targets:p.targets?.map(unitKey)??[],targetNames:p.targets?.map(u=>u.name??engine.data.actors[u.id].name)??[],requiredRange:p.requiredRange??null,cells:p.cells??[]};
 }
 export function frontlineSkillView(engine,id,skillId,skill){
  return {profile:clone(frontlineProfile(engine.data,engine.state.actors[id],skill,skillId)),choices:frontlineSelections(engine,engine.state.actors[id],skill,skillId).map(c=>choiceView(engine,c,battleSkillPlan(engine,id,skillId,c.id)))};

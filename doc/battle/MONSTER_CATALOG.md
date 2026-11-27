@@ -2,12 +2,12 @@
 
 [ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)
 
-作品版1.34.0。配布中の敵は174定義、遭遇編成は123定義、敵が参照する画像ファイルは114点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.34.0。配布中の敵は199定義、遭遇編成は123定義、敵が参照する画像ファイルは139点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
-[個別デザインの通常魔物](#個別デザインの通常魔物)：100定義。
+[個別デザインの通常魔物](#個別デザインの通常魔物)：125定義。
 [依頼に追加した敵](#依頼に追加した敵)：48定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
@@ -2931,6 +2931,706 @@ AIの選択順：
 
 千変の迷宮の通常遭遇：地下4〜9階。
 
+<a id="monster-skeleton_5_blades"></a>
+
+### スケルトン剣士 (skeleton_5_blades)
+
+<img src="../../assets/images/monsters/families/skeleton_5_blades.webp" width="160" alt="スケルトン剣士">
+
+画像ID：monster_skeleton_5_blades。実ファイル：[assets/images/monsters/families/skeleton_5_blades.webp](../../assets/images/monsters/families/skeleton_5_blades.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：スケルトン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_5_blades)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：ときどき剣腕が外れ、次の手番に逆手で剣腕ごと強打する。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 腕ごと強打 (family_skeleton_5_blades)：ときどき剣腕が外れ、次の手番に逆手で剣腕ごと強打する。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-skeleton_5_buckler"></a>
+
+### スケルトン盾兵 (skeleton_5_buckler)
+
+<img src="../../assets/images/monsters/families/skeleton_5_buckler.webp" width="160" alt="スケルトン盾兵">
+
+画像ID：monster_skeleton_5_buckler。実ファイル：[assets/images/monsters/families/skeleton_5_buckler.webp](../../assets/images/monsters/families/skeleton_5_buckler.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：スケルトン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_5_buckler)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：盾腕で防御する。ガードを崩されると骨拾いに直してもらうまで盾を使えない。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 盾腕の構え (family_skeleton_5_buckler)：盾腕で防御する。ガードを崩されると骨拾いに直してもらうまで盾を使えない。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-skeleton_5_ribbow"></a>
+
+### スケルトン弓兵 (skeleton_5_ribbow)
+
+<img src="../../assets/images/monsters/families/skeleton_5_ribbow.webp" width="160" alt="スケルトン弓兵">
+
+画像ID：monster_skeleton_5_ribbow。実ファイル：[assets/images/monsters/families/skeleton_5_ribbow.webp](../../assets/images/monsters/families/skeleton_5_ribbow.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：スケルトン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_5_ribbow)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：後列へ肋骨を射る。三本までは射るたびに物理防御が落ちる。
+
+基礎能力：HP 53 / MP 3 / STR 13 / VIT 6 / AGI 8 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 肋骨矢 (family_skeleton_5_ribbow)：後列へ肋骨を射る。三本までは射るたびに物理防御が落ちる。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-skeleton_5_skullshot"></a>
+
+### 髑髏投げ (skeleton_5_skullshot)
+
+<img src="../../assets/images/monsters/families/skeleton_5_skullshot.webp" width="160" alt="髑髏投げ">
+
+画像ID：monster_skeleton_5_skullshot。実ファイル：[assets/images/monsters/families/skeleton_5_skullshot.webp](../../assets/images/monsters/families/skeleton_5_skullshot.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：スケルトン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_5_skullshot)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：自分の頭を後衛へ投げる。頭を拾い直すまで命中が下がる。
+
+基礎能力：HP 53 / MP 3 / STR 13 / VIT 6 / AGI 8 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 髑髏投げ (family_skeleton_5_skullshot)：自分の頭を後衛へ投げる。頭を拾い直すまで命中が下がる。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-skeleton_5_collector"></a>
+
+### 骨拾い (skeleton_5_collector)
+
+<img src="../../assets/images/monsters/families/skeleton_5_collector.webp" width="160" alt="骨拾い">
+
+画像ID：monster_skeleton_5_collector。実ファイル：[assets/images/monsters/families/skeleton_5_collector.webp](../../assets/images/monsters/families/skeleton_5_collector.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：スケルトン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_5_collector)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：外れた骨を回収し、仲間の盾腕、頭、肋骨を修理する。
+
+基礎能力：HP 53 / MP 3 / STR 13 / VIT 6 / AGI 8 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 骨拾い (family_skeleton_5_collector)：外れた骨を回収し、仲間の盾腕、頭、肋骨を修理する。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-skeleton_10_rustwall"></a>
+
+### 赤錆番兵 (skeleton_10_rustwall)
+
+<img src="../../assets/images/monsters/families/skeleton_10_rustwall.webp" width="160" alt="赤錆番兵">
+
+画像ID：monster_skeleton_10_rustwall。実ファイル：[assets/images/monsters/families/skeleton_10_rustwall.webp](../../assets/images/monsters/families/skeleton_10_rustwall.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ラストボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_10_rustwall)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：盾を構えて仲間を守る。ガードを崩されると後ろの仲間も一度よろける。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 錆盾の構え (family_skeleton_10_rustwall)：盾を構えて仲間を守る。ガードを崩されると後ろの仲間も一度よろける。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-skeleton_10_chainpull"></a>
+
+### 鎖引き骸骨 (skeleton_10_chainpull)
+
+<img src="../../assets/images/monsters/families/skeleton_10_chainpull.webp" width="160" alt="鎖引き骸骨">
+
+画像ID：monster_skeleton_10_chainpull。実ファイル：[assets/images/monsters/families/skeleton_10_chainpull.webp](../../assets/images/monsters/families/skeleton_10_chainpull.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ラストボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_10_chainpull)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：後列に鎖をかけ、次の手番で前列へ引く。スタンすると鎖が外れる。
+
+基礎能力：HP 93 / MP 3 / STR 20 / VIT 10 / AGI 9 / INT 10。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 鎖の引き寄せ (family_skeleton_10_chainpull)：後列に鎖をかけ、次の手番で前列へ引く。スタンすると鎖が外れる。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-skeleton_10_rustpike"></a>
+
+### 錆槍兵 (skeleton_10_rustpike)
+
+<img src="../../assets/images/monsters/families/skeleton_10_rustpike.webp" width="160" alt="錆槍兵">
+
+画像ID：monster_skeleton_10_rustpike。実ファイル：[assets/images/monsters/families/skeleton_10_rustpike.webp](../../assets/images/monsters/families/skeleton_10_rustpike.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ラストボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_10_rustpike)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：自分より前に防御中の仲間がいると、その後ろから強打する。
+
+基礎能力：HP 93 / MP 3 / STR 20 / VIT 10 / AGI 9 / INT 10。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 盾越し突き (family_skeleton_10_rustpike)：自分より前に防御中の仲間がいると、その後ろから強打する。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-skeleton_10_headless"></a>
+
+### 首なし斧兵 (skeleton_10_headless)
+
+<img src="../../assets/images/monsters/families/skeleton_10_headless.webp" width="160" alt="首なし斧兵">
+
+画像ID：monster_skeleton_10_headless。実ファイル：[assets/images/monsters/families/skeleton_10_headless.webp](../../assets/images/monsters/families/skeleton_10_headless.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ラストボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_10_headless)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：最後に移動した相手を優先して斧を振るう。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 足音割り (family_skeleton_10_headless)：最後に移動した相手を優先して斧を振るう。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-skeleton_10_keyring"></a>
+
+### 鍵束番兵 (skeleton_10_keyring)
+
+<img src="../../assets/images/monsters/families/skeleton_10_keyring.webp" width="160" alt="鍵束番兵">
+
+画像ID：monster_skeleton_10_keyring。実ファイル：[assets/images/monsters/families/skeleton_10_keyring.webp](../../assets/images/monsters/families/skeleton_10_keyring.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ラストボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_10_keyring)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：一戦に一度、鍵束を鳴らして赤錆番兵を一体呼ぶ。その後は持ち場で防御する。
+
+基礎能力：HP 93 / MP 3 / STR 20 / VIT 10 / AGI 9 / INT 10。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 巡回兵招集 (family_skeleton_10_keyring)：一戦に一度、鍵束を鳴らして赤錆番兵を一体呼ぶ。その後は持ち場で防御する。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-skeleton_15_remnant"></a>
+
+### 納骨堂残骸兵 (skeleton_15_remnant)
+
+<img src="../../assets/images/monsters/families/skeleton_15_remnant.webp" width="160" alt="納骨堂残骸兵">
+
+画像ID：monster_skeleton_15_remnant。実ファイル：[assets/images/monsters/families/skeleton_15_remnant.webp](../../assets/images/monsters/families/skeleton_15_remnant.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：グレイブボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_15_remnant)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：弱った相手を打ち、倒されると仮死になる。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 骨打ち (family_skeleton_15_remnant)：弱った相手を打ち、倒されると仮死になる。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-skeleton_15_coffin"></a>
+
+### 棺担ぎ (skeleton_15_coffin)
+
+<img src="../../assets/images/monsters/families/skeleton_15_coffin.webp" width="160" alt="棺担ぎ">
+
+画像ID：monster_skeleton_15_coffin。実ファイル：[assets/images/monsters/families/skeleton_15_coffin.webp](../../assets/images/monsters/families/skeleton_15_coffin.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：グレイブボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_15_coffin)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：仮死の骨を棺に収め、次の手番に組み直す。棺を閉じる前に倒すか鎮魂すれば阻止できる。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 棺収め (family_skeleton_15_coffin)：仮死の骨を棺に収め、次の手番に組み直す。棺を閉じる前に倒すか鎮魂すれば阻止できる。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-skeleton_15_stitcher"></a>
+
+### 骨継ぎ師 (skeleton_15_stitcher)
+
+<img src="../../assets/images/monsters/families/skeleton_15_stitcher.webp" width="160" alt="骨継ぎ師">
+
+画像ID：monster_skeleton_15_stitcher。実ファイル：[assets/images/monsters/families/skeleton_15_stitcher.webp](../../assets/images/monsters/families/skeleton_15_stitcher.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：グレイブボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_15_stitcher)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：仮死の仲間二体を一体に継ぐ。片方が全快して強くなり、もう片方は復活を失う。
+
+基礎能力：HP 85 / MP 8 / STR 19 / VIT 10 / AGI 11 / INT 22。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 骨継ぎ (family_skeleton_15_stitcher)：仮死の仲間二体を一体に継ぐ。片方が全快して強くなり、もう片方は復活を失う。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-skeleton_15_bell"></a>
+
+### 墓鐘打ち (skeleton_15_bell)
+
+<img src="../../assets/images/monsters/families/skeleton_15_bell.webp" width="160" alt="墓鐘打ち">
+
+画像ID：monster_skeleton_15_bell。実ファイル：[assets/images/monsters/families/skeleton_15_bell.webp](../../assets/images/monsters/families/skeleton_15_bell.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：グレイブボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_15_bell)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：一回の仮死につき一度、残骸の腕を動かす。弓なら射撃、鎖なら引き寄せを行う。
+
+基礎能力：HP 85 / MP 8 / STR 19 / VIT 10 / AGI 11 / INT 22。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 墓鐘 (family_skeleton_15_bell)：一回の仮死につき一度、残骸の腕を動かす。弓なら射撃、鎖なら引き寄せを行う。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-skeleton_15_lantern"></a>
+
+### 墓守灯兵 (skeleton_15_lantern)
+
+<img src="../../assets/images/monsters/families/skeleton_15_lantern.webp" width="160" alt="墓守灯兵">
+
+画像ID：monster_skeleton_15_lantern。実ファイル：[assets/images/monsters/families/skeleton_15_lantern.webp](../../assets/images/monsters/families/skeleton_15_lantern.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：グレイブボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_15_lantern)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：仮死の仲間を照らす。灯兵が次に動くと、その仲間を早く復活させる。
+
+基礎能力：HP 85 / MP 8 / STR 19 / VIT 10 / AGI 11 / INT 22。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 墓守灯 (family_skeleton_15_lantern)：仮死の仲間を照らす。灯兵が次に動くと、その仲間を早く復活させる。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-skeleton_20_fourarms"></a>
+
+### 四腕剣士 (skeleton_20_fourarms)
+
+<img src="../../assets/images/monsters/families/skeleton_20_fourarms.webp" width="160" alt="四腕剣士">
+
+画像ID：monster_skeleton_20_fourarms。実ファイル：[assets/images/monsters/families/skeleton_20_fourarms.webp](../../assets/images/monsters/families/skeleton_20_fourarms.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：キメラボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_20_fourarms)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：四本の腕で連撃する。HPが四分の一減るたびに攻撃回数が減る。
+
+基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 四腕連斬 (family_skeleton_20_fourarms)：四本の腕で連撃する。HPが四分の一減るたびに攻撃回数が減る。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-skeleton_20_centipede"></a>
+
+### 百足槍兵 (skeleton_20_centipede)
+
+<img src="../../assets/images/monsters/families/skeleton_20_centipede.webp" width="160" alt="百足槍兵">
+
+画像ID：monster_skeleton_20_centipede。実ファイル：[assets/images/monsters/families/skeleton_20_centipede.webp](../../assets/images/monsters/families/skeleton_20_centipede.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：キメラボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_20_centipede)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：胴を縮めた次の手番に、前列から後列まで各列一人を槍で貫く。
+
+基礎能力：HP 173 / MP 3 / STR 33 / VIT 17 / AGI 12 / INT 18。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 百足貫き (family_skeleton_20_centipede)：胴を縮めた次の手番に、前列から後列まで各列一人を槍で貫く。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-skeleton_20_bullshield"></a>
+
+### 角盾獣 (skeleton_20_bullshield)
+
+<img src="../../assets/images/monsters/families/skeleton_20_bullshield.webp" width="160" alt="角盾獣">
+
+画像ID：monster_skeleton_20_bullshield。実ファイル：[assets/images/monsters/families/skeleton_20_bullshield.webp](../../assets/images/monsters/families/skeleton_20_bullshield.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：キメラボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_20_bullshield)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：牛の頭骨で仲間をかばい、次の手番に角で相手を一列押し戻す。
+
+基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 角盾の構え (family_skeleton_20_bullshield)：牛の頭骨で仲間をかばい、次の手番に角で相手を一列押し戻す。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-skeleton_20_wingbow"></a>
+
+### 翼骨射手 (skeleton_20_wingbow)
+
+<img src="../../assets/images/monsters/families/skeleton_20_wingbow.webp" width="160" alt="翼骨射手">
+
+画像ID：monster_skeleton_20_wingbow。実ファイル：[assets/images/monsters/families/skeleton_20_wingbow.webp](../../assets/images/monsters/families/skeleton_20_wingbow.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：キメラボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_20_wingbow)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：翼で矢を射ち、翼を組み直して前列と後列を行き来する。
+
+基礎能力：HP 173 / MP 3 / STR 33 / VIT 17 / AGI 12 / INT 18。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 翼骨矢 (family_skeleton_20_wingbow)：翼で矢を射ち、翼を組み直して前列と後列を行き来する。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-skeleton_20_twoheads"></a>
+
+### 双頭呪術師 (skeleton_20_twoheads)
+
+<img src="../../assets/images/monsters/families/skeleton_20_twoheads.webp" width="160" alt="双頭呪術師">
+
+画像ID：monster_skeleton_20_twoheads。実ファイル：[assets/images/monsters/families/skeleton_20_twoheads.webp](../../assets/images/monsters/families/skeleton_20_twoheads.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：キメラボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_20_twoheads)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：光った頭が次の手番に火か氷を放つ。HP半分以下で氷の頭が落ちる。
+
+基礎能力：HP 173 / MP 3 / STR 33 / VIT 17 / AGI 12 / INT 18。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 双頭詠唱 (family_skeleton_20_twoheads)：光った頭が次の手番に火か氷を放つ。HP半分以下で氷の頭が落ちる。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-skeleton_25_royalguard"></a>
+
+### 白骨近衛 (skeleton_25_royalguard)
+
+<img src="../../assets/images/monsters/families/skeleton_25_royalguard.webp" width="160" alt="白骨近衛">
+
+画像ID：monster_skeleton_25_royalguard。実ファイル：[assets/images/monsters/families/skeleton_25_royalguard.webp](../../assets/images/monsters/families/skeleton_25_royalguard.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：ロイヤルボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_25_royalguard)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：王冠をかぶった個体への単体攻撃に割り込む。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 王冠守護 (family_skeleton_25_royalguard)：王冠をかぶった個体への単体攻撃に割り込む。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-skeleton_25_standard"></a>
+
+### 弔旗騎士 (skeleton_25_standard)
+
+<img src="../../assets/images/monsters/families/skeleton_25_standard.webp" width="160" alt="弔旗騎士">
+
+画像ID：monster_skeleton_25_standard。実ファイル：[assets/images/monsters/families/skeleton_25_standard.webp](../../assets/images/monsters/families/skeleton_25_standard.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：ロイヤルボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_25_standard)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：黒旗を掲げ、次の手番に同じ列の骸骨を一列前進させる。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 弔旗進軍 (family_skeleton_25_standard)：黒旗を掲げ、次の手番に同じ列の骸骨を一列前進させる。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-skeleton_25_musician"></a>
+
+### 宮廷骨楽師 (skeleton_25_musician)
+
+<img src="../../assets/images/monsters/families/skeleton_25_musician.webp" width="160" alt="宮廷骨楽師">
+
+画像ID：monster_skeleton_25_musician。実ファイル：[assets/images/monsters/families/skeleton_25_musician.webp](../../assets/images/monsters/families/skeleton_25_musician.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：ロイヤルボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_25_musician)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：肋骨を三音鳴らすと近衛が追撃する。途中で攻撃を受けると最初から弾き直す。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 肋骨三重奏 (family_skeleton_25_musician)：肋骨を三音鳴らすと近衛が追撃する。途中で攻撃を受けると最初から弾き直す。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-skeleton_25_headsman"></a>
+
+### 骸骨処刑人 (skeleton_25_headsman)
+
+<img src="../../assets/images/monsters/families/skeleton_25_headsman.webp" width="160" alt="骸骨処刑人">
+
+画像ID：monster_skeleton_25_headsman。実ファイル：[assets/images/monsters/families/skeleton_25_headsman.webp](../../assets/images/monsters/families/skeleton_25_headsman.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：ロイヤルボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_25_headsman)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：一人の位置に印を刻み、次の手番にその位置へ大剣を振り下ろす。移動するとかわせる。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 処刑の印 (family_skeleton_25_headsman)：一人の位置に印を刻み、次の手番にその位置へ大剣を振り下ろす。移動するとかわせる。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-skeleton_25_crowned"></a>
+
+### 骸骨王 (skeleton_25_crowned)
+
+<img src="../../assets/images/monsters/families/skeleton_25_crowned.webp" width="160" alt="骸骨王">
+
+画像ID：monster_skeleton_25_crowned。実ファイル：[assets/images/monsters/families/skeleton_25_crowned.webp](../../assets/images/monsters/families/skeleton_25_crowned.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：ロイヤルボーン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/skeleton/skeleton_25_crowned)。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
+設計上の役割：戦闘中一度、倒れると他の仮死の骸骨へ王冠が移る。全員が倒れるとそのまま勝利する。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 王冠渡り (family_skeleton_25_crowned)：戦闘中一度、倒れると他の仮死の骸骨へ王冠が移る。全員が倒れるとそのまま勝利する。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
 ## 依頼に追加した敵
 
 <a id="monster-moor_wolf"></a>
@@ -3240,6 +3940,8 @@ story_175：鏡牙獣×1。逃走可。
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
 
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
 基礎能力：HP 103 / MP 8 / STR 26 / VIT 12 / AGI 14 / INT 24。報酬：23G / 35EXP。
 宝箱：旅の槍 1個 / 3.125％。
 属性倍率：fire 1 / physical 1。
@@ -3363,6 +4065,8 @@ kagaribi_oil_beetle_moth：油虫×1・灯蛾×1。逃走可。
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
 
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
 基礎能力：HP 57 / MP 0 / STR 13 / VIT 8 / AGI 5 / INT 5。報酬：10G / 21EXP。
 宝箱：野営糧食 1個 / 12.5％。
 属性倍率：physical 1 / fire 1 / light 1 / dark 1。
@@ -3412,6 +4116,8 @@ kagaribi_deep_pair：鎖引き骸骨×1・灰積みゴーレム×1。逃走可�
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
 基礎能力：HP 68 / MP 0 / STR 15 / VIT 9 / AGI 7 / INT 7。報酬：12G / 26EXP。
 宝箱：補修用の縄 1個 / 12.5％。
@@ -3567,6 +4273,8 @@ kagaribi_shallow_manifold_pair：油染みの煤ネズミ×1・煤けた灯蛾×
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・納骨堂の鎖引き・納骨堂の残骸兵。
 
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
 基礎能力：HP 125 / MP 0 / STR 18 / VIT 10 / AGI 5 / INT 5。報酬：22G / 110EXP。
 宝箱：野営糧食 1個 / 12.5％。
 属性倍率：physical 1 / fire 1 / light 1 / dark 1。
@@ -3620,6 +4328,8 @@ kagaribi_ossuary_deep_pair：納骨堂の残骸兵×1・炭焼き場の灰積み
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の残骸兵。
 
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
 基礎能力：HP 150 / MP 0 / STR 23 / VIT 11 / AGI 11 / INT 7。報酬：26G / 140EXP。
 宝箱：補修用の縄 1個 / 12.5％。
 属性倍率：physical 1 / fire 1 / light 1 / dark 1。
@@ -3644,6 +4354,8 @@ kagaribi_shallow_deep_pair：納骨堂の鎖引き×1・炭焼き場の灰積み
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
 基礎能力：HP 150 / MP 0 / STR 23 / VIT 11 / AGI 11 / INT 7。報酬：26G / 140EXP。
 宝箱：補修用の縄 1個 / 12.5％。
@@ -4264,6 +4976,8 @@ boss_1：灯守の地下水道の守護者×1・灯守の地下水道の迷宮�
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
 
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
+
 基礎能力：HP 40 / MP 8 / STR 12 / VIT 5 / AGI 7 / INT 10。報酬：9G / 14EXP。
 宝箱：傷薬 1個 / 12.5％。
 属性倍率：fire 1 / physical 1。
@@ -4293,6 +5007,8 @@ boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1�
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の迷宮獣・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
+
+習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
 基礎能力：HP 96 / MP 20 / STR 15 / VIT 5 / AGI 7 / INT 10。報酬：9G / 14EXP。
 宝箱：野営糧食 1個 / 12.5％。

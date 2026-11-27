@@ -207,7 +207,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 成長/Lv：HP 6.5 / MP 2.8 / STR 1 / VIT 1 / AGI 0.2 / INT 2.5。現在職の加算：なし。
 装備：weapon＝staff・tool / armor＝robe・light / charm＝charm。
-習得：Lv1 手当の祈り (battle.skill) / Lv1 解毒 (battle.skill) / Lv5 救護の祈り (battle.skill) / Lv10 清浄の祈り (battle.skill) / Lv1 旅の回復祈祷 (party.heal)。
+習得：Lv1 手当の祈り (battle.skill) / Lv1 解毒 (battle.skill) / Lv5 救護の祈り (battle.skill) / Lv10 清浄の祈り (battle.skill) / Lv1 旅の回復祈祷 (party.heal) / Lv8 鎮魂 (battle.skill)。
 特性：{"healingPower":1.08}。戦闘中の蘇生には対応しません。
 
 ### 聖騎士 (paladin)

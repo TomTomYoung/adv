@@ -1,3 +1,4 @@
+import {feigning,finishOnly} from './feigned-death.js';
 import {unitKey} from './buffs.js';
 import {isRecord} from './expression.js';
 import {sameCell,validCell} from './battle-formation.js';
@@ -51,9 +52,10 @@ export function gridTargetPlan(engine,source,skill,skillId,selection,{limit=skil
   const d=distance(from,aim);
   if(d<profile.range.min||d>profile.range.max)return fail(`射程外です（距離${d}／射程${profile.range.min}–${profile.range.max}）。`);
   const same=u=>Boolean(u.instance)===Boolean(source.instance),allowed=u=>skill.target==='self'?u===source:anySide||profile.friendlyFire||(['ally','all_allies'].includes(skill.target)?same(u):!same(u));
-  if(profile.aim==='unit'&&profile.area.shape!=='side_all'&&(!selected||selected.hp<=0||!allowed(selected)))return fail('生存する合法な対象を選んでください。');
+  const canTarget=u=>feigning(u)?!source.instance&&skill.target==='enemy'&&profile.area.shape==='single':u.hp>0&&!finishOnly(skill);
+  if(profile.aim==='unit'&&profile.area.shape!=='side_all'&&(!selected||!canTarget(selected)||!allowed(selected)))return fail('生存する合法な対象を選んでください。');
   if(profile.trajectory==='direct'&&rayCells(from,aim).some(p=>units.some(u=>u!==source&&u.hp>0&&sameCell(position(s,u),p))))return fail('途中のユニットに遮られています。');
-  const cells=areaCells(from,aim,profile.area);let targets=units.filter(u=>u.hp>0&&allowed(u)&&cells.some(p=>sameCell(position(s,u),p)));
+  const cells=areaCells(from,aim,profile.area);let targets=units.filter(u=>canTarget(u)&&(!selected||profile.area.shape!=='single'||u===selected)&&allowed(u)&&cells.some(p=>sameCell(position(s,u),p)));
   if(profile.area.shape==='side_all'&&anySide&&selected)targets=targets.filter(u=>Boolean(u.instance)===Boolean(selected.instance));
   if(skill.effects.some(e=>e.type==='cover'))targets=targets.filter(u=>u!==source&&!u.instance&&distance(from,position(s,u))<=1);
   if(skill.effects.some(e=>e.type==='analyze'))targets=targets.filter(u=>u.instance);
@@ -65,7 +67,7 @@ export function gridTargetPlan(engine,source,skill,skillId,selection,{limit=skil
 }
 export function gridSelections(engine,source,skill,skillId,options){
   const profile=targetingProfile(engine.data,source,skill,skillId);
-  const units=battleUnits(engine.state).filter(u=>u.hp>0&&(options?.anySide||profile.friendlyFire||(Boolean(u.instance)===Boolean(source.instance))===['ally','all_allies'].includes(skill.target)));
+  const units=battleUnits(engine.state).filter(u=>(u.hp>0&&!finishOnly(skill)||feigning(u)&&!source.instance&&skill.target==='enemy'&&profile.area.shape==='single')&&(options?.anySide||profile.friendlyFire||(Boolean(u.instance)===Boolean(source.instance))===['ally','all_allies'].includes(skill.target)));
   const ids=skill.target==='self'?[unitKey(source)]:profile.aim==='cell'?gridCells().map(cellId):profile.area.shape==='side_all'&&!options?.anySide?[unitKey(source)]:units.map(unitKey);
   return ids.map(id=>({id,...gridTargetPlan(engine,source,skill,skillId,id,options)}));
 }

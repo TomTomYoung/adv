@@ -33,6 +33,12 @@ export function reinforcementRoster(encounter, records, round = 1e6, enemies = {
     if (row.caller !== undefined) {
       if (typeof row.caller !== 'string' || !/^enemy_(0|[1-9]\d*)$/.test(row.caller)) return null;
       const caller = roster[Number(row.caller.slice(6))];
+      if(enemies[caller]?.classSkill==='family_skeleton_10_keyring'){
+        const species=caller.replace(/keyring$/,'rustwall');
+        if(callers.has(row.caller)||!enemies[species]||Object.keys(row).some(k=>!['caller','round','eventId'].includes(k))||
+          row.eventId!==undefined&&!integer(row.eventId,1,1e9))return null;
+        callers.add(row.caller);roster.push(species);continue;
+      }
       if (!enemies[caller]?.ai.some(r => r.skill === 'moth_whistle') ||
           callers.has(row.caller) || !enemies[EMBER_MOTH]) return null;
       callers.add(row.caller);
@@ -79,9 +85,21 @@ export function mothSummonPositions(engine, caller) {
   if (hasWhistled(b, caller) || !engine.data.enemies[caller.id]?.ai.some(r => r.skill === 'moth_whistle')) return [];
   const scheduled = engine.data.encounters[b.encounter].reinforcements?.length ?? 0;
   const pending = scheduled - (b.reinforcements?.filter(r => r.id).length ?? 0);
-  const capacity = Math.min(3, 5 - b.enemies.filter(u => battleAlive(s,u)).length, 15 - b.enemies.length - pending);
+  const capacity = Math.min(3, 5 - b.enemies.filter(u => battleAlive(s,u)||u.reviveRound).length, 15 - b.enemies.length - pending);
   return capacity < 2 ? [] : freePositions(s).slice(0, capacity);
 }
+export function summonPatrol(engine,caller){
+  const b=engine.state.battle,id=caller.id.replace(/keyring$/,'rustwall');
+  const pending=(engine.data.encounters[b.encounter].reinforcements?.length??0)-(b.reinforcements?.filter(r=>r.id).length??0);
+  if(hasWhistled(b,caller)||!engine.data.enemies[id]||b.enemies.length+pending>=15||
+     b.enemies.filter(e=>e.hp>0||e.reviveRound).length>=5)return false;
+  const cell=freePositions(engine.state)[0];if(!cell)return false;
+  const row={caller:caller.instance};if(b.frontline)row.eventId=b.frontline.eventSerial+1;
+  const mate=appendReinforcement(engine,id,cell,row);
+  syncFamilyBattle(engine);traceFrontline(engine,'reinforcements',{units:[unitKey(mate)]});
+  b.log.push(caller.name+'が鍵束を鳴らし、'+mate.name+'を呼んだ。');return true;
+}
+
 export function summonMoths(engine, caller) {
   const b = engine.state.battle, cells = mothSummonPositions(engine, caller);
   if (cells.length < 2) return;
@@ -102,7 +120,7 @@ export function joinReinforcements(engine){
  let scheduled=b.reinforcements.filter(r=>r.id).length;
  while(scheduled<defs.length){
   const row=defs[scheduled],unit=id=>b.enemies.find(e=>e.instance===id);
-  if(b.round<row.round||!b.enemies.some(e=>battleAlive(s,e))||b.enemies.filter(e=>battleAlive(s,e)).length>=5||row.afterDefeat&&unit(row.afterDefeat).hp>0||row.whileAlive&&!battleAlive(s,unit(row.whileAlive)))break;
+  if(b.round<row.round||!b.enemies.some(e=>battleAlive(s,e))||b.enemies.filter(e=>battleAlive(s,e)||e.reviveRound).length>=5||row.afterDefeat&&unit(row.afterDefeat).hp>0||row.whileAlive&&!battleAlive(s,unit(row.whileAlive)))break;
   const p=freePositions(s,row.position)[0];if(!p)break;
   const enemy=appendReinforcement(engine,row.enemy,p,{id:row.id});
   scheduled++;joined.push(unitKey(enemy));b.log.push(`${enemy.name}が増援として現れた。`);

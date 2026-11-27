@@ -1,3 +1,5 @@
+import {settleSkeletonCrown,skeletonAfterDamage,skeletonGuardBroken,skeletonInterrupted,skeletonTurn} from './skeleton-actions.js';
+import {feigning,finishOnly,reviveBones,sealBones} from './feigned-death.js';
 import {abilityCategory} from './ability-category.js';
 import {fatalHitHabit} from './monster-habits.js';
 import {familyTurn} from './monster-family-actions.js';
@@ -73,6 +75,7 @@ export function activeActor(engine){
 }
 export function enemyStats(engine,enemy) {
   const stats=buffStats(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(enemy),statusStats(engine.data,engine.state,enemy,enemy.stats));
+  if(enemy.tactics?.ribs)stats.vit=Math.max(0,stats.vit-2*enemy.tactics.ribs);
   if (enemy.classSkill==='family_ogre_5_rock' && enemy.tactics?.spent) stats.agi+=4;
   return stats;
 }
@@ -121,12 +124,12 @@ export function battleSkillPlan(engine,actorId,skillId,targetId,options={}){
   else if(skill.target==='all_allies')targets=s.members.map(id=>s.actors[id]).filter(a=>battleAlive(s,a));
   else if(skill.target==='self')targets=[s.actors[actorId]];
   else if(skill.target==='ally')targets=s.members.includes(targetId)&&battleAlive(s,s.actors[targetId])?[s.actors[targetId]]:[];
-  else if(skill.target==='enemy')targets=b.enemies.filter(e=>e.instance===targetId&&battleAlive(s,e));
+  else if(skill.target==='enemy')targets=b.enemies.filter(e=>e.instance===targetId&&(feigning(e)||!finishOnly(skill)&&battleAlive(s,e)));
   else return fail('対象種別が未対応です。');
   if(skill.selection==='lowest_hp_ratio')targets.sort((a,c)=>a.hp/engine.stats(a.id).hp-c.hp/engine.stats(c.id).hp);
   if(!Number.isInteger(grant.maxTargets)||grant.maxTargets<1)return fail('対象数の許可が不正です。');
   if (skill.selection !== 'random_distinct') targets=targets.slice(0,Math.min(grant.maxTargets,skill.maxTargets??grant.maxTargets));
-  if(!targets.length)return fail('生存する対象を選んでください。');
+  if(!targets.length)return fail(finishOnly(skill)?'仮死の敵を選んでください。':'生存する対象を選んでください。');
   if(skill.effects.some(e=>e.type==='cover')&&targets.some(t=>t.id===actorId||t.instance))return fail('かばう相手は自分以外の味方です。');
   if(skill.effects.some(e=>e.type==='analyze')&&targets.some(t=>!t.instance))return fail('解析の対象は敵です。');
   if(skill.requiresAnalyzed&&targets.some(t=>!b.analyzed.includes(t.instance)))return fail('先にこの敵を魔物解析してください。');
@@ -178,6 +181,14 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   const targetStats=series?.snapshot.targetStats??(target.instance?enemyStats(engine,target):engine.stats(target.id));
   const powers=enemySource?{}:passives(engine.data,s,source.id),targetName=target.name??engine.data.actors[target.id]?.name;
   if(skillId!==null&&!dungeonEffectActive(engine.data,s,'skill',skillId)){(b?.log??s.log).push(`${skill.name}の効果は境界に遮られました。`);return;}
+  if(feigning(target)){
+    if(skill.effects.some(e=>e.type==='lay_to_rest'||e.type==='purge_undead')){
+      sealBones(engine,target);
+      recordDefeated(engine);
+    }else b.log.push(target.name+'は仮死で、'+skill.name+'は効かなかった。');
+    return 0;
+  }
+  if(finishOnly(skill))return 0;
   if(target.hp<=0&&skill.effects.some(e=>e.type==='purge_undead')){
     if(isFrontline(s)&&target.instance&&engine.data.enemies[target.id]?.undead&&frontlineState(s,target)==='down'){removeFrontline(engine,target);b.log.push(`${target.name}の残骸を祓った。`);}
     return 0;
@@ -199,8 +210,10 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     if(effect.type==='stun'){
       if(effect.breakGuard && !guardLevel(b,target))continue;
       if(applyStun(engine,target,effect)){
+        skeletonInterrupted(target);
         if(effect.breakGuard){
           clearGuard(b,target);
+          skeletonGuardBroken(engine,target);
           brokeGuard=true;
           if(target.rollingShellTurns)target.rollingShellTurns=2;
           b.log.push(`${targetName}の防御が崩れた。`);
@@ -249,7 +262,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
       }
       if (fireRate !== 1) damage = Math.floor(damage * fireRate);
       if(physical)damage=takePhysicalHit(engine.data,b,unitKey(target),damage,dungeonBuffs(engine.data,s));
-      target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
+      target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);if(damage>0)skeletonAfterDamage(engine,target);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
       if (damage > 0 && element === 'fire') igniteOil(engine,target);
       if(damage>0&&!wakeChecked){wakeOnDamage(engine,target);wakeChecked=true;}
     }
@@ -397,6 +410,7 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
   } else playBattleCue(engine,cue,origin,results,attacking,`${sourceName}・${skill.name}`);
   if (skillId === 'moth_whistle' && torchPool && dungeonEffectActive(engine.data, engine.state, 'skill', skillId)) summonMoths(engine, source);
   for(const impact of habitImpacts)emitFeedback(engine,impact);
+  if(engine.state.battle.familyField)settleSkeletonCrown(engine);
   familyAfterHit(engine,source,targets,skillId,skill,results,(enemy,victim)=>familyCast(engine,enemy,[victim],'attack'));
   if (ignitesSource && dungeonEffectActive(engine.data,engine.state,'skill',skillId)) igniteOil(engine,source);
   wetAfterSkill(engine,source,skill);
@@ -554,6 +568,7 @@ function performEnemyAction(engine,enemy,bonus=false){
         if(victim)familyCast(engine,enemy,[victim],'attack');
         return;
       }
+      if(enemy.family==='skeleton'){skeletonTurn(engine,enemy,(source,targets,id)=>familyCast(engine,source,targets,id));return;}
       familyTurn(engine,enemy,{
         cast:(source,targets,id)=>familyCast(engine,source,targets,id),
         order:unit=>consumeEnemyActionBuffs(engine,unit,()=>performEnemyAction(engine,unit,true))
@@ -608,6 +623,8 @@ function finishRound(engine){
   if(s.members.every(id=>!battleAlive(engine.state,s.actors[id]))){endBattle(engine,'lose');return;}
   for(const unit of [...s.members.map(id=>s.actors[id]),...b.enemies])if(battleAlive(s,unit)){tickStatuses(engine.data,s,unit,'turns');recoverStatuses(engine,unit);}
   tickBuffs(b,engine.data);b.acted=[];for(const id of [...b.guards])clearGuard(b,s.actors[id]);b.turnQueue=null;b.turnIndex=0;b.round++;b.log=b.log.slice(-30);
+  if(b.familyField)settleSkeletonCrown(engine);
+  for(const enemy of b.enemies)if(feigning(enemy)&&enemy.reviveRound<=b.round)reviveBones(engine,enemy);
   joinReinforcements(engine);
   prepareFrontlineRound(engine,(u,on,attacker)=>frontlineReact(engine,u,on,attacker));
   tickBuffs(b,engine.data,'after_advance');
@@ -688,6 +705,7 @@ export function battleAction(engine,intent){
   if(intent.action==='move'&&isFrontline(s))moveFrontline(engine,actor,selection.to);
   else if(intent.action==='move'){b.grid.positions[unitKey(actor)]=selection.to;b.log.push(`${engine.data.actors[actorId].name}は移動した。`);}
   else performSkill(engine,actor,selection);
+  if(intent.action==='move'&&b.familyField)b.familyField.lastMover=actor.id;
   if(oldDepth!==null)familyAfterMove(engine,actor,oldDepth,(enemy,victim)=>familyCast(engine,enemy,[victim],'attack'));
   if(s.battle===b)finishAction(engine,actorId,consumed);
   return true;

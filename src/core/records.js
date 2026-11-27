@@ -9,15 +9,15 @@ export function recordCount(records,{metric,id,sinceQuest}){
   const count=r=>['kills','encounters'].includes(metric)?(r?.[metric]?.[id]??0):(r?.[metric]??0);
   return count(records)-count(base);
 }
-export function recordDefeated(engine){
+export function recordDefeated(engine,victory=false){
   const b=engine.state.battle,r=engine.state.records;
   syncFrontlineDefeats(engine);b.recordedKills??=[];
-  for(const enemy of b.enemies)if((enemy.hp===0||b.mode==='frontline'&&frontlineState(engine.state,enemy)==='removed')&&!b.recordedKills.includes(enemy.instance)){
+  for(const enemy of b.enemies)if((victory||!enemy.reviveRound)&&(enemy.hp===0||b.mode==='frontline'&&frontlineState(engine.state,enemy)==='removed')&&!b.recordedKills.includes(enemy.instance)){
     b.recordedKills.push(enemy.instance);r.kills[enemy.id]=(r.kills[enemy.id]??0)+1;
   }
 }
 export function recordResult(engine,result){
-  recordDefeated(engine);
+  recordDefeated(engine,result==='win');
   const r=engine.state.records;
   const key={win:'wins',escape:'escapes',lose:'losses',repel:'repels',interrupted:'interruptions'}[result];r[key]=(r[key]??0)+1;
   if(result==='win'){const id=engine.state.battle.encounter;r.encounters[id]=(r.encounters[id]??0)+1;}

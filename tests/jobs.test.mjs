@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {data,newGame,drain,goTownLocation} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {actorStats,jobChangePlan,fieldActionPlan,canEquip,partyEffect} from '../src/core/jobs.js';
-import {activeActor,battleSkillPlan} from '../src/core/battle.js';
+import {activeActor,applySkill,battleSkillPlan} from '../src/core/battle.js';
 import {addBuff,buffStats,buffResistance,tickBuffs} from '../src/core/buffs.js';
 import {validateContent} from '../src/core/validation.js';
 import {validateSave} from '../src/core/save.js';
@@ -25,8 +25,14 @@ for(const job of Object.values(data.jobs))test(`30職実行 ${job.name}: Lv1/5/1
     for(const [item,spec] of Object.entries(data.items))if(spec.slot)assert.equal(canEquip(data,g.state,'ada',item),job.equipment[spec.slot].includes(spec.equipmentType));
     const checkpoint=g.save();g.load(checkpoint);assert.equal(g.save(),checkpoint);
     for(const grant of job.grants.filter(grant=>grant.api==='battle.skill'&&grant.level<=level)){
-      const run=setup(job.id,level);equipSkill(run,grant.skill);run.healAll();start(run);
-      const spec=data.skills[grant.skill];
+      const run=setup(job.id,level);equipSkill(run,grant.skill);run.healAll();
+      const spec=data.skills[grant.skill],finisher=spec.effects.some(e=>e.type==='lay_to_rest');
+      start(run,finisher?'kagaribi_deep_pair':'wild_pair_10');
+      if(finisher){
+        const skeleton=run.state.battle.enemies[0];
+        assert.equal(battleSkillPlan(run,'ada',grant.skill,skeleton.instance).ok,false);
+        applySkill(run,run.state.actors.ada,skeleton,{name:'試験打撃',effects:[{type:'damage',amount:99999,element:'light'}]},null,false,null,false);
+      }
       if(spec.effects.some(e=>e.type==='repel')){
         assert.equal(battleSkillPlan(run,'ada',grant.skill,'ada').ok,false);
         run.state.battle=null;run.state.waiting=null;run.returnTown();run.dispatch({type:'travel',dungeon:'kagaribi'});run.startBattle('kuragari_hunt',{win:[],lose:[],escape:[]});actAs(run,'ada');

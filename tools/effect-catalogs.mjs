@@ -93,5 +93,7 @@ export function statusCatalog(data,{date}={}){
   for(let level=1;level<=3;level++)lines.push(`#### Lv${level}`,'',`効果：1ターン、防御状態。受けるダメージ×${guardDamageRate(data,level)}。`,'');
   lines.push(
     `### ${stun.name} (${stun.id})`,'','分類：不利な戦闘限定状態。戦闘終了時に消える。','','#### Lv1','','効果：次の行動機会を1回失う。','','#### Lv2','','効果：次の行動機会を2回失う。','','#### Lv3','','効果：次の行動機会を3回失う。','');
+  const feign=BATTLE_STATUS_DEFINITIONS.feigned_death;
+  lines.push('### '+feign.name+' ('+feign.id+')','','習性「骨の再生」を持つ魔物はHPが0になると姿が消え、対象として残ります。通常は'+feign.rounds+'巡後に最大HPの半分で復活します。セラと祈祷師はLv8の鎮魂でとどめを刺せます。全員が死亡・仮死なら直ちに勝利します。','');
   return lines.join('\n').trimEnd()+'\n';
 }

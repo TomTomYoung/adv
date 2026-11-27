@@ -8,11 +8,11 @@ import {validateSave} from '../src/core/save.js';
 import {guideBands,monsterFloorText} from '../src/application/labyrinth-guide.js';
 
 const playable=shiftingDungeonData(data), classes=Object.values(data.enemies).filter(e=>e.family);
-test('three bestiary families contain 25 illustrated classes each, five per level tier',()=>{
-  assert.equal(classes.length,75);
-  assert.equal(new Set(classes.map(e=>data.assets.images[e.sprite])).size,75);
+test('four bestiary families contain 25 illustrated classes each, five per level tier',()=>{
+  assert.equal(classes.length,100);
+  assert.equal(new Set(classes.map(e=>data.assets.images[e.sprite])).size,100);
   const sections=guideBands(data,false);
-  for(const family of ['goblin','orc','ogre'])for(const lv of [5,10,15,20,25]){
+  for(const family of ['goblin','orc','ogre','skeleton'])for(const lv of [5,10,15,20,25]){
     const entries=classes.filter(e=>e.family===family&&e.levelBand===lv);
     assert.equal(entries.length,5);
     for(const e of entries){
@@ -52,7 +52,7 @@ for(const mode of ['classic','grid','frontline'])test(mode+' runs each class in 
       g.load(checkpoint);
     }
   }
-  assert.equal(encountered.size,75);
+  assert.equal(encountered.size,100);
 });
 
 function stage(lv, group) {

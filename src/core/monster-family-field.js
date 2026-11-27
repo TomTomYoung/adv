@@ -1,3 +1,4 @@
+import {skeletonCover} from './skeleton-actions.js';
 import {battleAlive} from './frontline-lifecycle.js';
 import {frontPosition, frontlineMovePlan, moveFrontline} from './battle-frontline.js';
 import {unitKey, movementBlockReason} from './buffs.js';
@@ -44,6 +45,7 @@ export function syncFamilyBattle(engine) {
   for (const e of b.enemies) {
     if (e.tactics?.home!==undefined) continue;
     tactics(e).home=depth(s,e);
+    if (profession(e)==='crowned') tactics(e).wearsCrown=true;
     if (profession(e)==='king') field.crown=e.instance;
     if (profession(e)==='chief') {
       const heir=b.enemies.find(v=>v!==e&&v.family==='orc');
@@ -57,6 +59,12 @@ export function familyBattleLabels(s,u) {
   if (!f) return [];
   const t=u.tactics, labels=[];
   if (b.mode==='classic') labels.push(['前列','中列','後列'][depth(s,u)]);
+  if(t?.wearsCrown)labels.push('王冠');
+  if(t?.lostHead)labels.push('頭なし');
+  if(t?.lostShield)labels.push('盾腕欠損');
+  if(t?.holding)labels.push('骨を回収中');
+  if(t?.mark)labels.push('処刑準備');
+  if(t?.ready)labels.push('構え中');
   if (t?.windup) labels.push('構え中');
   if (u.instance&&f.crown===u.instance) labels.push('王冠');
   if (t?.rage>0) labels.push(['','赤角','深紅角','真紅角'][t.rage]);
@@ -75,7 +83,7 @@ export function familyPower(engine,source,target) {
   const b=engine.state.battle,f=b?.familyField;
   if (!f) return 1;
   const flag=target.instance&&b.enemies.some(e=>battleAlive(engine.state,e)&&e.tactics?.flag);
-  return (1+(source.tactics?.rage??0)*0.18+(source.tactics?.inheritedAxe?0.45:0))*
+  return (source.tactics?.stitched?1.5:1)*(1+(source.tactics?.rage??0)*0.18+(source.tactics?.inheritedAxe?0.45:0))*
     (flag?0.75:1)*((f.broken[unitKey(target)]??0)>=b.round?1.2:1);
 }
 
@@ -85,12 +93,12 @@ export function familyAccuracy(engine,source,target,initial) {
   if (source.instance&&target.id===f.firefly) return 1;
   const dark=f.darkUntil>=b.round&&!(source.family==='goblin'&&source.levelBand===15);
   const smoke=target.instance&&f.smokeUntil>=b.round&&depth(s,target)>0;
-  return Math.max(0,initial-(dark?0.35:0)-(smoke?0.35:0));
+  return Math.max(0,initial-(source.tactics?.lostHead?0.45:0)-(dark?0.35:0)-(smoke?0.35:0));
 }
 
 export function familyIntercept(engine,source,targets,skill) {
   const s=engine.state,b=s.battle,f=b.familyField;
-  if (!f||source.instance||targets.length!==1||!targets[0].instance||!skill.effects.some(e=>e.type==='damage')) return targets;
+  if (!f||source.instance||targets.length!==1||!targets[0].instance||targets[0].hp<=0||!skill.effects.some(e=>e.type==='damage')) return targets;
   const active=living(s,b.enemies);
   const [target]=targets;
   const wall=active.find(e=>e.tactics?.wall===depth(s,target));
@@ -98,7 +106,11 @@ export function familyIntercept(engine,source,targets,skill) {
   if (f.owl===target.instance) { delete f.owl; b.log.push('梟の声で'+target.name+'は一撃をかわした。'); return []; }
   const royal=(f.falseUntil>=b.round&&active.some(e=>e.instance===f.falseCrown))?f.falseCrown:f.crown;
   const cover=active.find(e=>e!==target&&((profession(e)==='guard'&&royal===target.instance)||e.tactics?.cover===target.instance));
-  if (!cover) return [target];
+  if (!cover) {
+    const shell=skeletonCover(s,target,skill);
+    if(shell)b.log.push(shell.name+'が'+target.name+'をかばった。');
+    return [shell??target];
+  }
   delete tactics(cover).cover;
   b.log.push(cover.name+'が'+target.name+'をかばった。');
   return [cover];
@@ -178,10 +190,17 @@ export function familySaveValid(data,state) {
     f.deaths.some(id=>!enemies.has(id))||new Set(f.deaths).size!==f.deaths.length)return false;
   if(f.chain!==undefined&&(!Array.isArray(f.chain)||f.chain.length!==2||f.chain.some(k=>!keys.has(k))))return false;
   for(const k of ['crown','piper','owl','ordered','falseCrown','bridge'])if(f[k]!==undefined&&!enemies.has(f[k]))return false;
-  for(const k of ['focus','omen','lastVictim','firefly'])if(f[k]!==undefined&&!actors.has(f[k]))return false;
+  for(const k of ['lastMover','focus','omen','lastVictim','firefly'])if(f[k]!==undefined&&!actors.has(f[k]))return false;
   for(const e of units) {
     const def=data.enemies[e?.id],t=e?.tactics;
     if(!def||e.classSkill!==def.classSkill||e.family!==def.family||e.levelBand!==def.levelBand||!record(t)||!tier(t.home))return false;
+    if(e.family==='skeleton'){
+      for(const k of ['looseArm','lostShield','lostHead','ready','stitched','iceHead','wearsCrown','passedCrown'])if(t[k]!==undefined&&typeof t[k]!=='boolean')return false;
+      if(t.ribs!==undefined&&(!Number.isInteger(t.ribs)||t.ribs<0||t.ribs>3))return false;
+      if(t.notes!==undefined&&(!Number.isInteger(t.notes)||t.notes<1||t.notes>2))return false;
+      if(t.holding!==undefined&&!enemies.has(t.holding)||t.hook!==undefined&&!actors.has(t.hook))return false;
+      if(t.mark!==undefined&&(!record(t.mark)||!actors.has(t.mark.actor)||typeof t.mark.place!=='string'))return false;
+    }
     if(t.windup!==undefined&&(!record(t.windup)||!tier(t.windup.row)||!tier(t.windup.left)))return false;
     for(const k of ['lastAttack','lastSpecial'])if(t[k]!==undefined&&!Object.hasOwn(data.skills,t[k]))return false;
     if(t.honored!==undefined&&(!Array.isArray(t.honored)||t.honored.some(id=>!enemies.has(id))))return false;

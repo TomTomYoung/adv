@@ -18,7 +18,7 @@ export function layoutFrontlineSprites(entries,width,height,{rowScale=[1,.85,.7]
 export function renderFrontlineSprites(parent,enemies,positions,options={}){
  const stage=make('div','frontline-stage');stage.setAttribute('aria-label','前衛・中衛・後衛の敵');parent.append(stage);
  for(const depth of [2,1,0]){const row=make('span','frontline-row-label',depths[depth]);row.style.top=`${[87,63,37][depth]}%`;stage.append(row);}
- const entries=enemies.filter(e=>e.state?e.state!=='removed':e.hp>0).map(e=>({...e,...positions[`enemy:${e.id}`]})),canvases=new Map();
+ const entries=enemies.filter(e=>!e.feign&&(e.state?e.state!=='removed':e.hp>0)).map(e=>({...e,...positions[`enemy:${e.id}`]})),canvases=new Map();
  for(const e of entries){const c=make('canvas','frontline-sprite');c.dataset.fx=`enemy:${e.id}`;c.dataset.unit=`enemy:${e.id}`;if(e.state==='down')c.classList.add('frontline-down');c.setAttribute('role','img');c.setAttribute('aria-label',`${e.name}・${depths[e.depth]}${e.state==='down'?'・戦闘不能':''}`);if(options.targets?.includes(`enemy:${e.id}`))c.classList.add('affected');stage.append(c);canvases.set(e.id,c);}
  if(typeof Image==='undefined'){stage.ready=Promise.resolve(stage);return stage;}
  const ready=Promise.all(entries.map(async e=>({...e,bounds:await spritePixels(e.sprite)}))).then(loaded=>{

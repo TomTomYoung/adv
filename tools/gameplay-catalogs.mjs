@@ -72,7 +72,8 @@ function effectCalculation(data,skillId,effect,prefix='計算式',priorEffects=[
     const element=elementLabels[effect.element]??effect.element??'未指定';
     return `${prefix}：基礎値 = ${base}。最終ダメージ = max(1, floor(floor(基礎値) × 威力補正 × ガード補正 × 属性補正 × 被ダメージ補正 × クリティカル補正))。${guardNote}属性：${element}。`;
   }
-  if(effect.type==='purge_undead')return `${prefix}：Frontlineで戦闘不能のまま残る不死者の敵だけを除去。生存者には後続の光攻撃を適用し、味方は除去しません。`;
+  if(effect.type==='lay_to_rest')return `${prefix}：仮死の敵1体を完全に倒し、復活を封じる。`;
+  if(effect.type==='purge_undead')return `${prefix}：仮死の敵の復活を封じる。Frontlineでは戦闘不能のまま残る不死者も除去。生存者には後続の光攻撃を適用し、味方は除去しません。`;
   if(effect.type==='heal'){
     const multiplier=(effect.itemHealing||skillId==='potion')?'アイテム回復補正':'回復威力補正';
     const scale=effect.scale??1;

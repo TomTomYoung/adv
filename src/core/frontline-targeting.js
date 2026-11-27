@@ -1,3 +1,4 @@
+import {feigning,finishOnly} from './feigned-death.js';
 import {battleAlive,frontlineRows,frontlineTargetState} from './frontline-lifecycle.js';
 import {unitKey} from './buffs.js';
 import {isRecord} from './expression.js';
@@ -21,6 +22,10 @@ export function frontlineAreaCells(aim,shape){
 export function orderFrontlineTargets(s,units,order='front_to_back'){
  return units.slice().sort((a,b)=>{const p=frontPosition(s,a),q=frontPosition(s,b);return (order==='left_to_right'?p.lane-q.lane||p.depth-q.depth:order==='right_to_left'?q.lane-p.lane||p.depth-q.depth:order==='back_to_front'?q.depth-p.depth||p.lane-q.lane:p.depth-q.depth||p.lane-q.lane)||Number(Boolean(a.instance))-Number(Boolean(b.instance))||unitKey(a).localeCompare(unitKey(b));});
 }
+function acceptsTarget(state,source,skill,profile,unit){
+ if(feigning(unit))return !source.instance&&skill.target==='enemy'&&profile.area.shape==='single';
+ return !finishOnly(skill)&&frontlineTargetState(state,unit,profile);
+}
 export function frontlineTargetPlan(engine,source,skill,id,selection,{limit=skill.maxTargets??1,anySide=false,origin=null}={}){
  const s=engine.state,profile=frontlineProfile(engine.data,source,skill,id),units=frontlineUnits(s),from=origin??frontPosition(s,source),fail=(reason,extra={})=>({ok:false,reason,profile,...extra});
  if(!battleAlive(s,source)||!from)return fail('行動者がいません。');
@@ -28,14 +33,14 @@ export function frontlineTargetPlan(engine,source,skill,id,selection,{limit=skil
  if(skill.target==='self')selected=source;
  if(selected){aim=frontPosition(s,selected);enemy=Boolean(selected.instance);}
  else if(profile.aim==='cell'&&typeof selection==='string'&&/^front:(allies|enemies):[0-2],[0-4]$/.test(selection)){const [_,side,p]=selection.split(':'),[depth,lane]=p.split(',').map(Number);aim={depth,lane};enemy=side==='enemies';}
- if(profile.area.shape==='side_all'&&!aim){selected=units.find(u=>frontlineTargetState(s,u,profile)&&(Boolean(u.instance)===Boolean(source.instance))===['ally','all_allies'].includes(skill.target));aim=selected?frontPosition(s,selected):from;enemy=Boolean(selected?.instance);}
+ if(profile.area.shape==='side_all'&&!aim){selected=units.find(u=>acceptsTarget(s,source,skill,profile,u)&&(Boolean(u.instance)===Boolean(source.instance))===['ally','all_allies'].includes(skill.target));aim=selected?frontPosition(s,selected):from;enemy=Boolean(selected?.instance);}
  if(!validFrontPosition(aim)||aim.depth>=frontlineRows(s,enemy))return fail('対象を選んでください。');
  const same=u=>Boolean(u.instance)===Boolean(source.instance),allowed=u=>skill.target==='self'?u===source:anySide||profile.friendlyFire||(['ally','all_allies'].includes(skill.target)?same(u):!same(u));
  const point=areaPoint(aim,enemy),cells=frontlineAreaCells(point,profile.area.shape);
- let targets=units.filter(u=>frontlineTargetState(s,u,profile)&&allowed(u)&&cells.some(p=>{const q=areaPoint(frontPosition(s,u),Boolean(u.instance));return p.x===q.x&&p.y===q.y;}));
+ let targets=units.filter(u=>acceptsTarget(s,source,skill,profile,u)&&allowed(u)&&cells.some(p=>{const q=areaPoint(frontPosition(s,u),Boolean(u.instance));return p.x===q.x&&p.y===q.y;}));
  if(profile.area.shape==='side_all')targets=targets.filter(u=>Boolean(u.instance)===enemy);
  if(skill.effects.some(e=>e.type==='cover'))targets=targets.filter(u=>u!==source&&!u.instance&&Math.abs(frontPosition(s,u).depth-from.depth)+Math.abs(frontPosition(s,u).lane-from.lane)<=1);
- if(skill.effects.some(e=>e.type==='purge_undead'))targets=targets.filter(u=>u.hp>0||u.instance&&engine.data.enemies[u.id]?.undead);
+ if(skill.effects.some(e=>e.type==='purge_undead'))targets=targets.filter(u=>u.hp>0||feigning(u)||u.instance&&engine.data.enemies[u.id]?.undead);
  if(skill.effects.some(e=>e.type==='analyze'))targets=targets.filter(u=>u.instance);
  if(skill.requiresAnalyzed)targets=targets.filter(u=>u.instance&&s.battle.analyzed.includes(u.instance));
  targets=orderFrontlineTargets(s,targets,profile.order);
@@ -43,12 +48,12 @@ export function frontlineTargetPlan(engine,source,skill,id,selection,{limit=skil
  if (skill.selection !== 'random_distinct') targets=targets.slice(0,profile.maxAffected??limit);
  const sameSide=enemy===Boolean(source.instance),range=sameSide?(profile.allyRange??{min:0,max:2}):profile.range,d=skill.target==='self'?0:requiredFrontlineRange(from,aim,sameSide),details={skill,targets,aim:{...aim,side:enemy?'enemies':'allies'},cells,profile,requiredRange:d,range};
  if(d<range.min||d>range.max)return fail(`射程外です（必要レンジ${d}／レンジ${range.min}–${range.max}）。`,details);
- if(profile.aim==='unit'&&(!selected||!frontlineTargetState(s,selected,profile)||!allowed(selected)))return fail('技能の対象状態に合う相手を選んでください。',details);
+ if(profile.aim==='unit'&&(!selected||!acceptsTarget(s,source,skill,profile,selected)||!allowed(selected)))return fail('技能の対象状態に合う相手を選んでください。',details);
  if(!targets.length)return fail('範囲内に有効な対象がいません。',details);
  return {ok:true,...details};
 }
 export function frontlineSelections(engine,source,skill,id,options={}){
- const p=frontlineProfile(engine.data,source,skill,id),units=frontlineUnits(engine.state).filter(u=>frontlineTargetState(engine.state,u,p)&&(options.anySide||p.friendlyFire||(Boolean(u.instance)===Boolean(source.instance))===['ally','all_allies'].includes(skill.target)));
+ const p=frontlineProfile(engine.data,source,skill,id),units=frontlineUnits(engine.state).filter(u=>acceptsTarget(engine.state,source,skill,p,u)&&(options.anySide||p.friendlyFire||(Boolean(u.instance)===Boolean(source.instance))===['ally','all_allies'].includes(skill.target)));
  if(skill.selection==='random_distinct'&&!options?.anySide){
    const plan=frontlineTargetPlan(engine,source,skill,id,undefined,options);
    return [{id:'random',...plan}];
