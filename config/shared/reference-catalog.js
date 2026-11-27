@@ -19564,7 +19564,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "slime"
+      "id": "monster_water_darter"
     },
     {
       "file": "dungeon-content.json",
@@ -19586,7 +19586,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "slime"
+      "id": "monster_water_predator"
     },
     {
       "file": "dungeon-content.json",
@@ -19608,7 +19608,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "slime"
+      "id": "monster_water_giant"
     },
     {
       "file": "dungeon-content.json",
@@ -19630,7 +19630,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "slime"
+      "id": "monster_salt_eater"
     },
     {
       "file": "dungeon-content.json",
@@ -19891,7 +19891,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "slime"
+      "id": "monster_waterway_young_eel"
     },
     {
       "file": "dungeon-content.json",
@@ -19993,7 +19993,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "slime"
+      "id": "monster_waterway_low_eel"
     },
     {
       "file": "dungeon-content.json",
@@ -20027,7 +20027,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "slime"
+      "id": "monster_waterway_low_clam"
     },
     {
       "file": "dungeon-content.json",
@@ -36040,7 +36040,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "slime"
+      "id": "monster_kagaribi_wax_slime"
     },
     {
       "file": "kagaribi-content.json",
@@ -36264,7 +36264,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "slime"
+      "id": "monster_kagaribi_oil_wax"
     },
     {
       "file": "kagaribi-content.json",
@@ -51857,7 +51857,7 @@ export const referenceData={
       },
       "guard_1_elite": {
         "name": "灯守の地下水道の守護者",
-        "sprite": "slime"
+        "sprite": "monster_guard_1_elite"
       },
       "guard_2": {
         "name": "塩哭きの廃坑の迷宮獣",
@@ -51869,11 +51869,11 @@ export const referenceData={
       },
       "guard_3": {
         "name": "根喰みの地下庭園の迷宮獣",
-        "sprite": "slime"
+        "sprite": "monster_guard_3"
       },
       "guard_3_elite": {
         "name": "根喰みの地下庭園の守護者",
-        "sprite": "slime"
+        "sprite": "monster_guard_3_elite"
       },
       "guard_4": {
         "name": "鏡沈みの礼拝堂の迷宮獣",
@@ -52041,7 +52041,7 @@ export const referenceData={
       },
       "moss_crawler": {
         "name": "苔冠の小魔",
-        "sprite": "slime"
+        "sprite": "monster_moss_crawler"
       },
       "watchbox_mimic": {
         "name": "詰所の擬態箱",
@@ -52073,19 +52073,19 @@ export const referenceData={
       },
       "water_darter": {
         "name": "水路の小魚",
-        "sprite": "slime"
+        "sprite": "monster_water_darter"
       },
       "water_predator": {
         "name": "水路の牙魚",
-        "sprite": "slime"
+        "sprite": "monster_water_predator"
       },
       "water_giant": {
         "name": "大水喰い",
-        "sprite": "slime"
+        "sprite": "monster_water_giant"
       },
       "salt_eater": {
         "name": "ソルトイーター",
-        "sprite": "slime"
+        "sprite": "monster_salt_eater"
       },
       "kagaribi_soot_rat": {
         "name": "煤ネズミ",
@@ -52093,7 +52093,7 @@ export const referenceData={
       },
       "kagaribi_wax_slime": {
         "name": "燭蝋スライム",
-        "sprite": "slime"
+        "sprite": "monster_kagaribi_wax_slime"
       },
       "kagaribi_ember_moth": {
         "name": "灯蛾",
@@ -52125,7 +52125,7 @@ export const referenceData={
       },
       "kagaribi_oil_wax": {
         "name": "油蔵の燭蝋スライム",
-        "sprite": "slime"
+        "sprite": "monster_kagaribi_oil_wax"
       },
       "kagaribi_soot_moth": {
         "name": "煤けた灯蛾",
@@ -52169,7 +52169,7 @@ export const referenceData={
       },
       "waterway_young_eel": {
         "name": "通電ウナギの幼体",
-        "sprite": "slime"
+        "sprite": "monster_waterway_young_eel"
       },
       "waterway_low_crocodile": {
         "name": "深水門ワニ（低位）",
@@ -52181,11 +52181,11 @@ export const referenceData={
       },
       "waterway_low_eel": {
         "name": "通電ウナギ（低位）",
-        "sprite": "slime"
+        "sprite": "monster_waterway_low_eel"
       },
       "waterway_low_clam": {
         "name": "泥濾し貝（低位）",
-        "sprite": "slime"
+        "sprite": "monster_waterway_low_clam"
       },
       "mine_low_armadillo": {
         "name": "厚殻アルマジロ（低位）",
@@ -89033,7 +89033,20 @@ export const referenceData={
       "monster_kagaribi_chain_bone": "assets/images/monsters/kagaribi_chain_bone.webp",
       "monster_kagaribi_patrol_guard": "assets/images/monsters/kagaribi_patrol_guard.webp",
       "monster_kagaribi_ossuary_bone": "assets/images/monsters/kagaribi_ossuary_bone.webp",
-      "monster_kagaribi_ossuary_remnant": "assets/images/monsters/kagaribi_ossuary_remnant.webp"
+      "monster_kagaribi_ossuary_remnant": "assets/images/monsters/kagaribi_ossuary_remnant.webp",
+      "monster_guard_1_elite": "assets/images/monsters/guard_1_elite.webp",
+      "monster_guard_3": "assets/images/monsters/guard_3.webp",
+      "monster_guard_3_elite": "assets/images/monsters/guard_3_elite.webp",
+      "monster_moss_crawler": "assets/images/monsters/moss_crawler.webp",
+      "monster_water_darter": "assets/images/monsters/water_darter.webp",
+      "monster_water_predator": "assets/images/monsters/water_predator.webp",
+      "monster_water_giant": "assets/images/monsters/water_giant.webp",
+      "monster_salt_eater": "assets/images/monsters/salt_eater.webp",
+      "monster_kagaribi_wax_slime": "assets/images/monsters/kagaribi_wax_slime.webp",
+      "monster_kagaribi_oil_wax": "assets/images/monsters/kagaribi_oil_wax.webp",
+      "monster_waterway_young_eel": "assets/images/monsters/waterway_young_eel.webp",
+      "monster_waterway_low_eel": "assets/images/monsters/waterway_low_eel.webp",
+      "monster_waterway_low_clam": "assets/images/monsters/waterway_low_clam.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

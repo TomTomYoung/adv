@@ -2,7 +2,7 @@
 
 [ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)
 
-作品版1.34.0。配布中の敵は225定義、遭遇編成は123定義、敵が参照する画像ファイルは172点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.34.0。配布中の敵は225定義、遭遇編成は123定義、敵が参照する画像ファイルは185点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
@@ -94,10 +94,10 @@ valley_roamers：境渡りの呪詠み×1。逃走可。
 
 ### 水路の小魚 (water_darter)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="水路の小魚">
+<img src="../../assets/images/monsters/water_darter.webp" width="160" alt="水路の小魚">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_water_darter。実ファイル：[assets/images/monsters/water_darter.webp](../../assets/images/monsters/water_darter.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -120,10 +120,10 @@ water_small：水路の小魚×1。逃走可。
 
 ### 水路の牙魚 (water_predator)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="水路の牙魚">
+<img src="../../assets/images/monsters/water_predator.webp" width="160" alt="水路の牙魚">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_water_predator。実ファイル：[assets/images/monsters/water_predator.webp](../../assets/images/monsters/water_predator.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -146,10 +146,10 @@ water_predator：水路の牙魚×1。逃走可。
 
 ### 大水喰い (water_giant)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="大水喰い">
+<img src="../../assets/images/monsters/water_giant.webp" width="160" alt="大水喰い">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_water_giant。実ファイル：[assets/images/monsters/water_giant.webp](../../assets/images/monsters/water_giant.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -172,10 +172,10 @@ water_giant：大水喰い×1。逃走可。
 
 ### ソルトイーター (salt_eater)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="ソルトイーター">
+<img src="../../assets/images/monsters/salt_eater.webp" width="160" alt="ソルトイーター">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_salt_eater。実ファイル：[assets/images/monsters/salt_eater.webp](../../assets/images/monsters/salt_eater.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -4784,10 +4784,10 @@ story_129：砦の守護獣×1。逃走可。
 
 ### 苔冠の小魔 (moss_crawler)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="苔冠の小魔">
+<img src="../../assets/images/monsters/moss_crawler.webp" width="160" alt="苔冠の小魔">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_moss_crawler。実ファイル：[assets/images/monsters/moss_crawler.webp](../../assets/images/monsters/moss_crawler.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -4979,10 +4979,10 @@ kagaribi_manifold_pair：煤ネズミ×1・灯蛾×1。逃走可。
 
 ### 燭蝋スライム (kagaribi_wax_slime)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="燭蝋スライム">
+<img src="../../assets/images/monsters/kagaribi_wax_slime.webp" width="160" alt="燭蝋スライム">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_kagaribi_wax_slime。実ファイル：[assets/images/monsters/kagaribi_wax_slime.webp](../../assets/images/monsters/kagaribi_wax_slime.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -5209,10 +5209,10 @@ kagaribi_shallow_manifold_pair：油染みの煤ネズミ×1・煤けた灯蛾×
 
 ### 油蔵の燭蝋スライム (kagaribi_oil_wax)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="油蔵の燭蝋スライム">
+<img src="../../assets/images/monsters/kagaribi_oil_wax.webp" width="160" alt="油蔵の燭蝋スライム">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_kagaribi_oil_wax。実ファイル：[assets/images/monsters/kagaribi_oil_wax.webp](../../assets/images/monsters/kagaribi_oil_wax.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -5484,10 +5484,10 @@ garden_root_guardian：大剪定虫×1・殻甲アルマジロ×1。逃走可。
 
 ### 通電ウナギの幼体 (waterway_young_eel)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="通電ウナギの幼体">
+<img src="../../assets/images/monsters/waterway_young_eel.webp" width="160" alt="通電ウナギの幼体">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_waterway_young_eel。実ファイル：[assets/images/monsters/waterway_young_eel.webp](../../assets/images/monsters/waterway_young_eel.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -5571,10 +5571,10 @@ waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（�
 
 ### 通電ウナギ（低位） (waterway_low_eel)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="通電ウナギ（低位）">
+<img src="../../assets/images/monsters/waterway_low_eel.webp" width="160" alt="通電ウナギ（低位）">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・泥濾し貝（低位）。
+画像ID：monster_waterway_low_eel。実ファイル：[assets/images/monsters/waterway_low_eel.webp](../../assets/images/monsters/waterway_low_eel.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -5601,10 +5601,10 @@ waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（�
 
 ### 泥濾し貝（低位） (waterway_low_clam)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="泥濾し貝（低位）">
+<img src="../../assets/images/monsters/waterway_low_clam.webp" width="160" alt="泥濾し貝（低位）">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）。
+画像ID：monster_waterway_low_clam。実ファイル：[assets/images/monsters/waterway_low_clam.webp](../../assets/images/monsters/waterway_low_clam.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -5956,7 +5956,7 @@ kagaribi_oil_beetle_moth：油虫×1・灯蛾×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="灯守の地下水道の迷宮獣">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -5985,10 +5985,10 @@ boss_1：灯守の地下水道の守護者×1・灯守の地下水道の迷宮�
 
 ### 灯守の地下水道の守護者 (guard_1_elite)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="灯守の地下水道の守護者">
+<img src="../../assets/images/monsters/guard_1_elite.webp" width="160" alt="灯守の地下水道の守護者">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_guard_1_elite。実ファイル：[assets/images/monsters/guard_1_elite.webp](../../assets/images/monsters/guard_1_elite.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -6071,10 +6071,10 @@ boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1�
 
 ### 根喰みの地下庭園の迷宮獣 (guard_3)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="根喰みの地下庭園の迷宮獣">
+<img src="../../assets/images/monsters/guard_3.webp" width="160" alt="根喰みの地下庭園の迷宮獣">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_guard_3。実ファイル：[assets/images/monsters/guard_3.webp](../../assets/images/monsters/guard_3.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 
@@ -6103,10 +6103,10 @@ boss_3：根喰みの地下庭園の守護者×1・根喰みの地下庭園の�
 
 ### 根喰みの地下庭園の守護者 (guard_3_elite)
 
-<img src="../../assets/images/monsters/slime.webp" width="160" alt="根喰みの地下庭園の守護者">
+<img src="../../assets/images/monsters/guard_3_elite.webp" width="160" alt="根喰みの地下庭園の守護者">
 
-画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
+画像ID：monster_guard_3_elite。実ファイル：[assets/images/monsters/guard_3_elite.webp](../../assets/images/monsters/guard_3_elite.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：なし。
 

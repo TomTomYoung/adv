@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {data} from './helpers.mjs';
+import {createHash} from 'node:crypto';
+import {readFile} from 'node:fs/promises';
 import {monsterCatalog,encounterReferences} from '../tools/monster-catalog.mjs';
 
 const catalog=monsterCatalog(data);
@@ -26,6 +28,27 @@ test('灯蛾・煤けた灯蛾・鉄喰い蛾・虹彩チョウをそれぞれ�
     const file='assets/images/monsters/'+id+'.webp';
     assert.equal(data.assets.images[data.enemies[id].sprite],file);
     assert.ok(entry(id).includes(file));
+  }
+});
+
+test('緑スライムを共有していた14種とスライム系の全種に、ほかの魔物と重複しない画像を掲載する',async()=>{
+  const former=['guard_1','guard_1_elite','guard_3','guard_3_elite','moss_crawler','water_darter','water_predator','water_giant',
+    'salt_eater','kagaribi_wax_slime','kagaribi_oil_wax','waterway_young_eel','waterway_low_eel','waterway_low_clam'];
+  const enemies=Object.values(data.enemies);
+  const files=[...new Set(enemies.map(e=>data.assets.images[e.sprite]))];
+  const hashes=new Map(await Promise.all(files.map(async file=>{
+    const bytes=await readFile(new URL('../'+file,import.meta.url));
+    return [file,createHash('sha256').update(bytes).digest('hex')];
+  })));
+  const users=new Map();
+  for(const e of enemies){
+    const hash=hashes.get(data.assets.images[e.sprite]);
+    users.set(hash,[...(users.get(hash)??[]),e.id]);
+  }
+  for(const id of [...former,...enemies.filter(e=>e.family==='slime').map(e=>e.id)]){
+    const file=data.assets.images[data.enemies[id].sprite];
+    assert.deepEqual(users.get(hashes.get(file)),[id],id);
+    assert.ok(entry(id).includes(file),id);
   }
 });
 
