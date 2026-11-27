@@ -3,7 +3,10 @@ import assert from 'node:assert/strict';
 import {data,drain} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {activeActor,applySkill} from '../src/core/battle.js';
-import {applyStatus} from '../src/core/status-effects.js';
+import {applyStatus,applyStatusClock,removeStatus,statusAccuracy,statusLevel} from '../src/core/status-effects.js';
+import {applyGuard} from '../src/core/battle-turns.js';
+import {recordDefeated} from '../src/core/records.js';
+import {hasMonsterHabit} from '../src/core/monster-habits.js';
 import {applyMonsterHabits} from '../tools/build-monster-habits.mjs';
 import {xpThreshold} from '../src/core/progression.js';
 import {floorEncounterGroups} from '../src/core/encounter-groups.js';
@@ -177,3 +180,85 @@ for (const mode of ['classic','grid','frontline']) {
     assert.equal(g.state.battle.enemies[1].tactics.half,'rear');
   });
 }
+
+const sootRat='kagaribi_soot_rat';
+function sootGame(level,mode='classic') {
+  return game([sootRat,sootRat],mode,g=>{g.data.enemies[sootRat].level=level;});
+}
+function strike(g,source,target,amount=1,checkAccuracy=false) {
+  const skill={name:'打撃',effects:[{type:'damage',element:'physical',amount}]};
+  return applySkill(g,source,target,skill,'attack',Boolean(source.instance),null,checkAccuracy);
+}
+
+test('千変の煤ネズミは個体のLv5から煤煙が有効になり、種から外せば発動しない',()=>{
+  const d={...data,enemies:{...data.enemies},encounters:{}};
+  for(const level of [4,5]){
+    floorEncounterGroups(d,{dungeon:'shifting_labyrinth',id:'floor',floor:level,recommendedLevel:level});
+    const id='floor_lv'+level+'_'+sootRat;
+    assert.equal(d.enemies[id].level,level);
+    assert.equal(hasMonsterHabit(d,{instance:'enemy_0',id},'soot_smoke'),level===5);
+  }
+  const g=sootGame(4),[rat]=g.state.battle.enemies,ada=g.state.actors.ada;
+  strike(g,rat,ada);strike(g,ada,rat);strike(g,ada,rat,999);
+  assert.deepEqual(ada.statuses,[]);
+  const second=g.state.battle.enemies[1];
+  g.data.enemies[sootRat].level=5;applyMonsterHabits(g.data.enemies,{});
+  strike(g,second,ada);strike(g,ada,second,999);
+  assert.deepEqual(ada.statuses,[]);
+});
+
+for(const mode of ['classic','grid','frontline'])test(mode+' 煤煙は攻撃・被弾の各25%で相手1体にかかり、他のくらやみと重なりLv3で止まる',()=>{
+  const g=sootGame(5,mode),[rat]=g.state.battle.enemies,{ada,il}=g.state.actors;
+  g.random=()=>0.25;
+  strike(g,rat,ada);strike(g,ada,rat);
+  assert.deepEqual(ada.statuses,[]);
+  g.random=()=>0.2499;
+  strike(g,rat,ada);
+  assert.deepEqual(ada.statuses,['blindness']);
+  assert.equal(statusAccuracy(g.data,g.state,ada),0.5);
+  assert.ok(applyStatus(g.data,g.state,ada,'blindness'));
+  assert.equal(statusAccuracy(g.data,g.state,ada),0.25);
+  strike(g,ada,rat);
+  assert.equal(statusAccuracy(g.data,g.state,ada),0.1);
+  strike(g,rat,ada);
+  assert.equal(statusLevel(ada,'blindness'),3);
+  assert.deepEqual(il.statuses,[]);assert.deepEqual(rat.statuses,[]);
+  removeStatus(ada,'blindness');strike(g,ada,rat);
+  assert.equal(statusAccuracy(g.data,g.state,ada),0.5);
+});
+
+test('煤煙は外れ・無効化で飛ばず、くらやみ耐性を尊重する',()=>{
+  const g=sootGame(5),[rat]=g.state.battle.enemies,{ada,il}=g.state.actors;
+  applyStatus(g.data,g.state,rat,'blindness');g.random=()=>0.99;
+  assert.equal(strike(g,rat,ada,1,true),0);
+  g.random=()=>0;applyGuard(g.state.battle,ada,3);
+  assert.equal(strike(g,rat,ada),0);
+  assert.deepEqual(ada.statuses,[]);
+  il.statusImmune=['blindness'];
+  strike(g,il,rat,999);
+  assert.deepEqual(il.statuses,[]);
+});
+
+for(const mode of ['classic','grid','frontline'])test(mode+' とどめの煤煙は必ず攻撃者に1段階だけかかり、再開や勝利で二重発動しない',()=>{
+  const g=sootGame(5,mode),{ada,il}=g.state.actors;
+  g.random=()=>0;strike(g,il,g.state.battle.enemies[0],999);
+  assert.deepEqual(il.statuses,['blindness']);assert.equal(statusLevel(il,'blindness'),1);
+  assert.deepEqual(ada.statuses,[]);
+  g.load(g.save());recordDefeated(g);g.random=()=>0.99;
+  const caster=g.state.actors.il;
+  strike(g,caster,g.state.battle.enemies[1],999);
+  assert.equal(statusLevel(caster,'blindness'),2);
+  g.finishBattle('win');
+  assert.equal(statusLevel(caster,'blindness'),2);
+  assert.equal(g.state.records.kills[sootRat],2);
+});
+
+test('毒で煤ネズミが倒れると生きている探索隊員1人だけに煤煙がかかる',()=>{
+  const g=sootGame(5),s=g.state,[rat]=s.battle.enemies;
+  rat.hp=1;applyStatus(g.data,s,rat,'poison');
+  applyStatusClock(g.data,s,rat,'poison','turns',rat.stats);assert.equal(rat.hp,0);
+  g.random=()=>0.999;recordDefeated(g);
+  const alive=s.members.map(id=>s.actors[id]).filter(unit=>unit.hp>0);
+  assert.deepEqual(s.members.filter(id=>s.actors[id].statuses.includes('blindness')),[alive.at(-1).id]);
+  assert.equal(statusLevel(alive.at(-1),'blindness'),1);
+});

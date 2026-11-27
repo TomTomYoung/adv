@@ -158,6 +158,7 @@ try{
   await families.getByRole('link',{name:'すべて',exact:true}).click();
   await guide.waitForFunction(total => document.querySelectorAll('#monster-index .guide-entry').length===total,Object.keys(enemies).length);
   for(const [id,actions,habits] of [
+    ['kagaribi_soot_rat',['攻撃'],['煤煙']],
     ['garden_root_shell',['防御','攻撃'],['転がり甲羅']],
     ['slime_5_oil',['油玉の自爆','油まみれ体当たり'],['油膜','易燃体']],
     ['kagaribi_torch_prankster',['火遊び'],[]]
@@ -167,6 +168,7 @@ try{
     const moves=sheet.locator('.block').filter({has:guide.getByText('行動と使用条件',{exact:true})});
     const traits=sheet.locator('.block').filter({has:guide.getByText('習性',{exact:true})});
     for(const action of actions)await moves.getByText(action,{exact:true}).first().waitFor();
+    if(id==='kagaribi_soot_rat')assert.match(await traits.innerText(),/Lv5.*25%.*最大Lv3/);
     if(id==='garden_root_shell')assert.match(await moves.innerText(),/受けるダメージを50%/);
     if(id==='slime_5_oil')assert.match(await moves.innerText(),/命中時100%で油状態Lv1/);
     for(const habit of habits){

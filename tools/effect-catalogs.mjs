@@ -84,8 +84,10 @@ export function statusCatalog(data,{date}={}){
     '## 共通管理の状態',''];
   for(const [id,def] of entries){
     const sources=[...statusSkillSources(data,id),...(trapSources[id]??[]).map(v=>`標準トラップ：${v}`)];
+    if (id === 'blindness') sources.push('魔物の習性「煤煙」（Lv5以上）');
     if (id === 'ablaze') sources.push('油状態で火属性ダメージを受けたとき');
     lines.push(`### ${def.name} (${id})`,'',`分類：${categoryLabels[def.category]??'身体・環境状態'}${def.beneficial?'・有利な状態':''}${def.battleOnly?'・戦闘限定':''}。`,`持続：${def.battleOnly?'各Lvの持続、または戦闘終了まで':durationText(def.duration)}。`,`付与元：${sources.join(' / ')||'環境・スクリプト'}。`,'');
+    if(def.stackOnReapply)lines.push('再付与が成功すると1段階上昇し、最大Lv3。解除後は初回の付与Lvから始まります。','');
     for(let level=1;level<=3;level++)lines.push(`#### Lv${level}`,'',def.levels?.[level]||level===1?`効果：${statusLevelText(id,def,level)}。`:'効果：未設定。','');
   }
   const guard=BATTLE_STATUS_DEFINITIONS.guarded,stun=BATTLE_STATUS_DEFINITIONS.stun;

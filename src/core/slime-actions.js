@@ -181,7 +181,7 @@ export function slimeAfterDamage(engine,source,target,id,element,hit,damage,cast
   const {state:s,data}=engine, b=s.battle,t=target.tactics;
   if(!source.instance&&id==='attack'){
     const stuck=living(s,b.enemies).find(u=>hasMonsterHabit(data,u,'sticky_hide')&&u.tactics.stuck===source.id&&u!==target);
-    if(stuck){delete stuck.tactics.stuck;stuck.hp=Math.max(0,stuck.hp-damage);say(engine,stuck,'武器ごと叩きつけられた。');recordDefeated(engine);}
+    if(stuck){delete stuck.tactics.stuck;stuck.hp=Math.max(0,stuck.hp-damage);say(engine,stuck,'武器ごと叩きつけられた。');recordDefeated(engine,false,source);}
   }
   if(!target.instance)return;
   const has=id=>hasMonsterHabit(data,target,id);

@@ -30,6 +30,7 @@ function statusText(data, effect) {
   if (status.stepDamage) details.push('移動1歩でHP−' + status.stepDamage);
   if (status.stepMpDamage) details.push('移動1歩でMP−' + status.stepMpDamage);
   if (status.accuracyRate) details.push('命中率×' + status.accuracyRate);
+  if (status.stackOnReapply) details.push('再付与で1段階上昇、最大Lv3');
   if (status.description) details.push(status.description.trim());
   const chance = Math.round((effect.chance ?? 1) * 100);
   return '命中時' + chance + '%で' + status.name + 'Lv' + level + 'を付与' +

@@ -1,6 +1,13 @@
 // Species definitions own the assignments, including the floor-scaled copies.
 // Consult them at hit time so battles restored from older saves use the same rules.
+const sootHitChance = 0.25;
 export const MONSTER_HABITS = {
+  soot_smoke: {
+    name: '煤煙',
+    minLevel: 5,
+    hitChance: sootHitChance,
+    description: `Lv5から、攻撃でダメージを与えた相手、または自身にダメージを与えた相手に${sootHitChance * 100}%でくらやみを1段階付与する。致命傷では被弾時の抽選に代わり、とどめを刺した相手に必ず1段階付与する。毒などで倒れた時は生存中の探索隊員からランダムに1人。最大Lv3。`
+  },
   bone_revival: {
     name: '骨の再生',
     description: 'HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。'
@@ -196,7 +203,9 @@ export const MONSTER_HABITS = {
 };
 
 export function hasMonsterHabit(data, unit, id) {
-  return Boolean(unit?.instance && data.enemies[unit.id]?.habits?.includes(id));
+  const definition = unit?.instance && data.enemies[unit.id];
+  if (!definition?.habits?.includes(id)) return false;
+  return (definition.level ?? definition.levelBand ?? 1) >= (MONSTER_HABITS[id]?.minLevel ?? 1);
 }
 
 export function usesMonsterFormation(definition) {

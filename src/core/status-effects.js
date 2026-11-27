@@ -68,7 +68,9 @@ export function applyStatus(data,state,target,id,duration,level=1){
       return false;
     }
   }
-  const fresh=!target.statuses.includes(id),prior=fresh?1:statusLevel(target,id),nextLevel=fresh?level:Math.max(prior,level);
+  const fresh=!target.statuses.includes(id),prior=fresh?0:statusLevel(target,id);
+  const nextLevel = !fresh && data.statuses[id].stackOnReapply
+    ? Math.max(level, Math.min(STATUS_LEVEL_MAX, prior + 1)) : Math.max(prior, level);
   if(fresh)target.statuses.push(id);
   if(nextLevel>1)(target.statusLevels??={})[id]=nextLevel;
   else if(target.statusLevels)delete target.statusLevels[id];
@@ -177,7 +179,7 @@ function effectErrors(e){
 export function statusDefinitionsErrors(data){
   const errors=[];
   for(const [id,s] of Object.entries(data.statuses??{})){
-    if(!record(s)||typeof s.name!=='string'||!s.name||s.category!==undefined&&!['parameter','magic','physical'].includes(s.category)||effectErrors(s)){errors.push(`状態異常定義不正: ${id}`);continue;}
+    if(!record(s)||s.stackOnReapply!==undefined&&typeof s.stackOnReapply!=='boolean'||typeof s.name!=='string'||!s.name||s.category!==undefined&&!['parameter','magic','physical'].includes(s.category)||effectErrors(s)){errors.push(`状態異常定義不正: ${id}`);continue;}
     if(s.levels!==undefined&&(!record(s.levels)||Object.keys(s.levels).some(k=>!['1','2','3'].includes(k))||Object.entries(s.levels).some(([k,v])=>!statusLevelValid(Number(k))||effectErrors(v))))errors.push(`状態異常Lv定義不正: ${id}`);
   }
   return errors;

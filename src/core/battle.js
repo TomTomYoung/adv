@@ -1,3 +1,4 @@
+import {sootOnHit} from './soot-smoke.js';
 import {oilBurnout,slimeAfterDamage,slimeDeflect,slimeHitType,slimeInitiative,slimeMoved,slimePower,slimeTurn} from './slime-actions.js';
 import {settleSkeletonCrown,skeletonAfterDamage,skeletonGuardBroken,skeletonInterrupted,skeletonTurn} from './skeleton-actions.js';
 import {feigning,finishOnly,reviveBones,sealBones} from './feigned-death.js';
@@ -6,7 +7,7 @@ import {fatalHitHabit,hasMonsterHabit} from './monster-habits.js';
 import {familyTurn} from './monster-family-actions.js';
 import {depth, familyAccuracy, familyAfterHit, familyAfterMove, familyIntercept, familyPower, syncFamilyBattle} from './monster-family-field.js';
 import {EMBER_MOTH, hasWhistled, joinReinforcements, mothSummonPositions, summonMoths} from './battle-reinforcements.js';
-import {cleanseCandidates, consumeWaterWard, hasActiveStatus} from './status-effects.js';
+import {cleanseCandidates, consumeWaterWard, hasActiveStatus, statusLevel} from './status-effects.js';
 import {battleAlive,frontlinePresent,frontlineState,removeFrontline,knockbackFrontline,syncFrontlineDefeats} from './frontline-lifecycle.js';
 import {isFrontline,frontPosition,frontlineUnits,frontlineMovePlan,moveFrontline,prepareFrontlineRound,traceFrontline,frontlineRevivePosition} from './battle-frontline.js';
 import {frontlineTargetPlan,frontlineSelections,frontlineProfile} from './frontline-targeting.js';
@@ -138,12 +139,12 @@ export function battleSkillPlan(engine,actorId,skillId,targetId,options={}){
 }
 // A habit is a hit reaction, not a turn. The blast uses the dead monster's
 // magic and normal damage mitigation, but spends no MP and ignores casting restrictions.
-function resolveFatalHit(engine, monster, habit, habitImpacts) {
+function resolveFatalHit(engine, source, monster, habit, habitImpacts) {
   const {state, data} = engine;
   const hp = monster.hp;
   monster.hp = 0;
   state.battle.log.push(`${monster.name}の習性「${habit.name}」が発動し、燃え尽きた。`);
-  recordDefeated(engine);
+  recordDefeated(engine,false,source);
   if (!habit.burstSkill) return hp;
   const living = state.members.map(id => state.actors[id]).filter(actor => battleAlive(state, actor));
   if (living.length) {
@@ -185,7 +186,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   if(feigning(target)){
     if(skill.effects.some(e=>e.type==='lay_to_rest'||e.type==='purge_undead')){
       sealBones(engine,target);
-      recordDefeated(engine);
+      recordDefeated(engine,false,source);
     }else b.log.push(target.name+'は仮死で、'+skill.name+'は効かなかった。');
     return 0;
   }
@@ -214,7 +215,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   let brokeGuard=false;
   for(const effect of skill.effects){
     if(effect.type==='frontline_remove'){removeFrontline(engine,target);break;}
-    if(effect.type==='frontline_knockback'){const loss=knockbackFrontline(engine,target,effect);damageTotal+=loss;if(loss)wakeOnDamage(engine,target);recordDefeated(engine);continue;}
+    if(effect.type==='frontline_knockback'){const loss=knockbackFrontline(engine,target,effect);damageTotal+=loss;if(loss){wakeOnDamage(engine,target);sootOnHit(engine,source,target);}recordDefeated(engine,false,source);continue;}
     if(effect.type==='stun'){
       if(effect.breakGuard && !guardLevel(b,target))continue;
       if(applyStun(engine,target,effect)){
@@ -250,7 +251,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
       const habit=b && fatalHitHabit(engine.data,target,element);
       if(habit){
         if (consumeWaterWard(engine.data,s,target,'炎')) continue;
-        damageTotal+=resolveFatalHit(engine,target,habit,habitImpacts);
+        damageTotal+=resolveFatalHit(engine,source,target,habit,habitImpacts);
         break;
       }
       if(critical===null){const chance=checkAccuracy?(series?.snapshot.criticalChance??criticalChance(engine.data,s,source,target)):0;critical=chance>0&&(chance>=1||engine.random()<chance);}
@@ -272,12 +273,16 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
       }
       if (fireRate !== 1) damage = Math.floor(damage * fireRate);
       if(physical)damage=takePhysicalHit(engine.data,b,unitKey(target),damage,dungeonBuffs(engine.data,s));
-      target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);if(damage>0)skeletonAfterDamage(engine,target);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
+      target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;
+      (b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
+      recordDefeated(engine,false,source);
+      if(damage>0)skeletonAfterDamage(engine,target);
       if (damage > 0 && element === 'fire') igniteOil(engine,target);
       if(oilCoat && slimeHit.contact && !source.instance && applyStatus(engine.data,s,source,'oiled')){
         b.log.push(target.name+'に触れた'+engine.data.actors[source.id].name+'に油が付いた。');
       }
       if(damage>0 && target.hp>0){
+        if(b)sootOnHit(engine,source,target);
         if(element==='fire' && hasMonsterHabit(engine.data,target,'flammable_body') &&
            !hasActiveStatus(engine.data,s,target,'ablaze') && applyStatus(engine.data,s,target,'ablaze')) {
           b.log.push(target.name+'は火だるまになった！');
@@ -297,7 +302,9 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     if(effect.type==='drain_mp'){const spent=Math.min(target.mp,Math.floor(raw));target.mp-=spent;(b?.log??s.log).push(`${targetName}のMPが${spent}減少。`);}
     if(effect.type==='restore_mp'){const restored=Math.min(targetStats.mp-target.mp,Math.floor(raw));target.mp+=restored;(b?.log??s.log).push(`${targetName}のMPが${restored}回復。`);}
     if(effect.type==='status'&&dungeonEffectActive(engine.data,s,'status',effect.status)&&(target.hp>0||isFrontline(s)&&frontlineState(s,target)==='down')&&engine.random()<(effect.chance??1)&&applyStatus(engine.data,s,target,effect.status,effect.duration,effect.level??1)){
-      (b?.log??s.log).push(`${targetName}は${engine.data.statuses[effect.status].name}になりました。`);
+      const status=engine.data.statuses[effect.status];
+      const label=status.stackOnReapply ? status.name+'Lv'+statusLevel(target,effect.status) : status.name;
+      (b?.log??s.log).push(`${targetName}は${label}になりました。`);
     }
     if(effect.type==='cleanse'){
       if(effect.statuses){for(const id of cleanseCandidates(target,effect)){removeStatus(target,id);(b?.log??s.log).push(`${targetName}：${skill.name}で${engine.data.statuses[id].name}を解除した。`);}}
