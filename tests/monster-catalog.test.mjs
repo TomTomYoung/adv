@@ -84,6 +84,8 @@ test('各行動に命中時の効果と自己効果を掲載し、召喚・休�
   assert.match(entry('slime_5_oil'),/自爆.*倒れます。.*炎ダメージ/);
   assert.match(entry('slime_25_pot'),/赤い薬：炎ダメージ.*緑の薬：HPを回復/s);
   assert.match(entry('orc_5_drummer'),/物理威力 ×1.3/);
+  assert.match(entry('goblin_10_standard'),/魔物側全員.*75%/);
+  assert.match(entry('orc_10_charcoal'),/中列・後列.*35ポイント/);
   assert.match(catalog,/行動後、自身に.*防御 ×0.7/);
   assert.match(catalog,/灯蛾を2〜3体呼びます/);
   assert.match(catalog,/息継ぎで、この手番は休む/);
