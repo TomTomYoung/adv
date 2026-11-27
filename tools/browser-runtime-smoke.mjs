@@ -159,9 +159,10 @@ try{
   await guide.waitForFunction(total => document.querySelectorAll('#monster-index .guide-entry').length===total,Object.keys(enemies).length);
   for(const [id,actions,habits] of [
     ['goblin_5_trapper',['足くくり'],[]],
-    ['goblin_5_slinger',['飛礫'],[]],
+    ['goblin_5_slinger',['飛礫','爆弾岩投げ'],[]],
     ['kagaribi_soot_rat',['攻撃'],['煤煙']],
-    ['garden_root_shell',['防御','攻撃'],['転がり甲羅']],
+    ['garden_root_shell',['防御','攻撃','乱転がり'],['転がり甲羅']],
+    ['soot_beetle',['煤の自爆突撃'],[]],
     ['slime_5_oil',['油玉の自爆','油まみれ体当たり'],['油膜','易燃体']],
     ['kagaribi_torch_prankster',['火遊び'],[]]
   ]){
@@ -231,7 +232,9 @@ try{
     assert.equal(await additions.locator('.chance').first().isVisible(),true);
     const species=await guide.locator('.group .member').evaluateAll(links=>links.map(link=>link.hash.split('/').at(-1)));
     const families=new Set(species.map(id=>enemies[id].family).filter(f=>['goblin','orc','ogre'].includes(f)));
-    assert.deepEqual([...families],[[5,6].includes(floor)?'goblin':floor<9?'orc':'ogre']);
+    const regional = floor<=6?'goblin':floor<=8?'orc':'ogre';
+    assert.deepEqual(families,new Set(floor===8?[regional,'goblin']:[regional]));
+    if (floor===8) assert.deepEqual(species.filter(id=>enemies[id].family==='goblin'),['goblin_5_slinger']);
     assert.ok(species.some(id=>enemies[id].family==='slime'));
   }
   await guide.locator('#band').selectOption('9');

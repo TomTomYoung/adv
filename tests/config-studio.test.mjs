@@ -98,6 +98,7 @@ test('魔物の習性を未設定の種に付け、元の種から外して割�
  await change('kagaribi_soot_rat','転がり甲羅',true);
  await app.reviewChanges();
  assert.deepEqual(app.workspace.output.map(o=>o.file),['monster-habits.json']);
- for(const id of ['kagaribi_ember_moth','kagaribi_oil_beetle','garden_root_shell'])delete original[id];
+ for(const id of ['kagaribi_ember_moth','kagaribi_oil_beetle'])delete original[id];
+ original.garden_root_shell=original.garden_root_shell.filter(id=>id!=='rolling_shell');
  assert.deepEqual(JSON.parse(app.workspace.output[0].text),{assignments:{...original,kagaribi_soot_moth:['ignition_bomb'],kagaribi_soot_rat:[...original.kagaribi_soot_rat,'burn_out','rolling_shell']}});
 });
