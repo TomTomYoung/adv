@@ -25,7 +25,7 @@ export function reinforcementRoster(encounter, records, round = 1e6, enemies = {
   if (records === undefined) return schedule ? null : roster;
   if (!Array.isArray(records) || (!schedule && !records.length) || roster.length + records.length > 15) return null;
   let previousRound = 1, scheduled = 0;
-  const callers = new Set(), splitChildren = new Set();
+  const callers = new Set(), splitParents = new Set(), splitChildren = new Set();
   for (let i = 0; i < records.length; i++) {
     const row = records[i];
     if (!isRecord(row) || !integer(row.round, previousRound, round)) return null;
@@ -34,19 +34,22 @@ export function reinforcementRoster(encounter, records, round = 1e6, enemies = {
       if (typeof row.caller !== 'string' || !/^enemy_(0|[1-9]\d*)$/.test(row.caller)) return null;
       const caller = roster[Number(row.caller.slice(6))];
       const callerSkill=enemies[caller]?.classSkill;
-      if(callerSkill==='family_skeleton_10_keyring'||callerSkill==='family_slime_20_twins'){
-        if(splitChildren.has(row.caller))return null;
-        if(callerSkill==='family_slime_20_twins')splitChildren.add('enemy_'+roster.length);
-        const species=callerSkill==='family_slime_20_twins'?caller:caller.replace(/keyring$/,'rustwall');
-        if(callers.has(row.caller)||!enemies[species]||Object.keys(row).some(k=>!['caller','round','eventId'].includes(k))||
+      const split=row.kind==='split'||(row.kind===undefined&&callerSkill==='family_slime_20_twins');
+      if(row.kind!==undefined && (!split||row.kind!=='split'||!enemies[caller]?.habits?.includes('split_core')))return null;
+      if(callerSkill==='family_skeleton_10_keyring'||split){
+        if(split && splitChildren.has(row.caller))return null;
+        if(split)splitChildren.add('enemy_'+roster.length);
+        const species=split?caller:caller.replace(/keyring$/,'rustwall');
+        const used=split?splitParents:callers;
+        if(used.has(row.caller)||!enemies[species]||Object.keys(row).some(k=>!['caller','round','eventId','kind'].includes(k))||
           row.eventId!==undefined&&!integer(row.eventId,1,1e9))return null;
-        callers.add(row.caller);roster.push(species);continue;
+        used.add(row.caller);roster.push(species);continue;
       }
       if (!enemies[caller]?.ai.some(r => r.skill === 'moth_whistle') ||
           callers.has(row.caller) || !enemies[EMBER_MOTH]) return null;
       callers.add(row.caller);
       let count = 0;
-      while (i + count < records.length && records[i + count]?.caller === row.caller) {
+      while (i + count < records.length && records[i + count]?.caller === row.caller && !records[i + count]?.kind) {
         const join = records[i + count];
         if (join.round !== row.round || join.eventId !== row.eventId ||
             Object.keys(join).some(k => !['caller', 'round', 'eventId'].includes(k)) ||
@@ -82,7 +85,7 @@ function appendReinforcement(engine, species, position, record) {
   (b.reinforcements ??= []).push({...record, round:b.round});
   return unit;
 }
-export const hasWhistled = (battle, caller) => battle.reinforcements?.some(r => r.caller === caller.instance) ?? false;
+export const hasWhistled = (battle, caller) => battle.reinforcements?.some(r => r.caller === caller.instance && r.kind!=='split') ?? false;
 export function mothSummonPositions(engine, caller) {
   const s = engine.state, b = s.battle;
   if (hasWhistled(b, caller) || !engine.data.enemies[caller.id]?.ai.some(r => r.skill === 'moth_whistle')) return [];
@@ -94,9 +97,9 @@ export function mothSummonPositions(engine, caller) {
 export function splitSlime(engine,parent){
   const s=engine.state,b=s.battle;
   const reserved=(engine.data.encounters[b.encounter].reinforcements?.length??0)-(b.reinforcements?.filter(r=>r.id).length??0);
-  if(parent.tactics.half||parent.hp<2||hasWhistled(b,parent)||b.enemies.length+reserved>=15||b.enemies.filter(e=>battleAlive(s,e)||e.reviveRound).length>=5)return;
+  if(parent.tactics.half||parent.hp<2||b.enemies.length+reserved>=15||b.enemies.filter(e=>battleAlive(s,e)||e.reviveRound).length>=5)return;
   const cell=freePositions(s,{x:2,y:0})[0];if(!cell)return;
-  const record={caller:parent.instance};if(b.frontline)record.eventId=b.frontline.eventSerial+1;
+  const record={caller:parent.instance,kind:'split'};if(b.frontline)record.eventId=b.frontline.eventSerial+1;
   const child=appendReinforcement(engine,parent.id,cell,record);
   child.hp=Math.floor(parent.hp/2);parent.hp-=child.hp;
   syncFamilyBattle(engine);

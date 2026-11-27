@@ -5,6 +5,7 @@ import {acceptedRouteSource,acceptedStoryRouteData} from './accepted-story-route
 import {freshExpedition,expeditionAction,buySkill,travelCheckpoint,campSafe,addGems} from './expedition.js';
 import {rememberOil,restoreOil,balanceOil,managesOil} from './expedition-oil.js';
 import {setFrontFormation,syncFrontFormation} from './battle-frontline.js';
+import {syncFamilyBattle} from './monster-family-field.js';
 import {stepBattle} from './battle.js';
 import {nextFormation,setFormation} from './battle-formation.js';
 import {syncSkillGrowth} from './skill-levels.js';
@@ -455,6 +456,7 @@ export class GameEngine {
     const catalog=seed || source.shiftingLayoutSeed!==undefined ? shiftingDungeonData(source,seed) : source;
     this.data=acceptedStoryRouteData(catalog,save.state);
     this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();restoreWorldConversations(this);
+    if(this.state.battle && !this.state.battle.familyField)syncFamilyBattle(this);
     for (const enemy of this.state.battle?.enemies ?? []) {
       const currentName = this.data.enemies[enemy.id].name;
       if (currentName.startsWith('殻甲アルマジロ') && enemy.name === currentName.replace('殻甲アルマジロ','根殻甲')) enemy.name = currentName;

@@ -157,6 +157,24 @@ try{
   }
   await families.getByRole('link',{name:'すべて',exact:true}).click();
   await guide.waitForFunction(total => document.querySelectorAll('#monster-index .guide-entry').length===total,Object.keys(enemies).length);
+  for(const [id,actions,habits] of [
+    ['garden_root_shell',['防御','攻撃'],['転がり甲羅']],
+    ['slime_5_oil',['油玉の自爆','油まみれ体当たり'],['油膜','易燃体']],
+    ['kagaribi_torch_prankster',['火遊び'],[]]
+  ]){
+    await guide.locator('#monster-index a[href="#monsters/' + id + '"]').click();
+    const sheet=guide.locator('#monster-sheet');
+    const moves=sheet.locator('.block').filter({has:guide.getByText('行動と使用条件',{exact:true})});
+    const traits=sheet.locator('.block').filter({has:guide.getByText('習性',{exact:true})});
+    for(const action of actions)await moves.getByText(action,{exact:true}).first().waitFor();
+    for(const habit of habits){
+      await traits.getByText(habit,{exact:true}).waitFor();
+      assert.equal(await moves.getByText(habit,{exact:true}).count(),0);
+    }
+    if(!habits.length)await traits.getByText('なし',{exact:true}).waitFor();
+    await guide.locator('#monsters-back').click();
+    await guide.locator('#monster-index').waitFor();
+  }
   const search = guide.getByRole('searchbox',{name:'名前で絞り込み'});
   await search.fill('該当なし');
   assert.ok(await guide.locator('#monster-empty').isVisible());

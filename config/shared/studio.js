@@ -109,6 +109,8 @@ export class ConfigStudio {
   if(group.kind==='cell'){const source=this.workspace.value(this.entry.file);let count=0,maps=0;for(const p of Object.values(source.maps)){let n=0;for(const line of p.rows)for(const symbol of line)if(p.legend[symbol]===row.key)n++;if(n)maps++;count+=n;}this.detail.append(el('p',`共有セル種を編集中：${maps} マップ・${count} セルで使用。変更は全使用地点に反映され、地点ごとの上書きが優先されます。`,'cost-warning'));}
   this.detail.append(el('h2',this.recordName()),el('p',`出力先：config/${this.entry.file}${value?.id?' / ID: '+value.id:''}`,'source-caption'));
   if(group.kind==='monsterHabits'){
+   const actions=el('a','図鑑でこの魔物の行動を確認');actions.href='../labyrinth-guide.html#monsters/'+row.key;
+   this.detail.append(actions);
    for(const [id,habit] of Object.entries(MONSTER_HABITS)){
     const label=el('label'), input=el('input');input.type='checkbox';input.checked=value.includes(id);
     input.addEventListener('change',()=>{
