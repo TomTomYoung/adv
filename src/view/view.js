@@ -339,6 +339,7 @@ export class GameView {
       if(this.battleMenu){const back=button('戻る',()=>this.cancel());back.dataset.focus='battle:back';actions.append(back);}commands.append(actions);
     }
     const log=node('section','battle-log');log.setAttribute('aria-label','戦闘メッセージ');log.setAttribute('role','log');log.setAttribute('aria-live','polite');
+    if(m.battle.traps?.length)log.append(node('p','', '設置中の罠　'+m.battle.traps.join(' ／ ')));
     for(const line of m.battle.log.slice(-6))log.append(node('p','',line));
     const selected=m.battle.enemies.find(e=>e.id===this.selectedTarget);
     if(selected?.analysis){const a=selected.analysis;log.append(node('p','analysis-result',`${selected.name} 解析：攻${a.stats.str} 防${a.stats.vit} 速${a.stats.agi} 知${a.stats.int} MP${a.mp}/${a.stats.mp} ／ 耐性倍率 ${Object.entries(a.resist).map(([key,n])=>key+' ×'+n).join(' / ')||'すべて ×1'}`));}

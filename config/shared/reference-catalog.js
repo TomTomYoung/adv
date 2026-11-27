@@ -33810,6 +33810,18 @@ export const referenceData={
     {
       "file": "jobs.json",
       "path": [
+        "skills",
+        "stone_beetle_throw",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "stone_beetle_throw"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
         "shopGoods",
         0,
         "item"
@@ -50875,6 +50887,9 @@ export const referenceData={
       },
       "mine_crystal_claw": {
         "name": "mine_crystal_claw"
+      },
+      "stone_beetle_throw": {
+        "name": "stone_beetle_throw"
       }
     },
     "skills": {
@@ -51648,6 +51663,48 @@ export const referenceData={
       },
       "slime_press": {
         "name": "のしかかり"
+      },
+      "trap_barb": {
+        "name": "返し針"
+      },
+      "trap_net": {
+        "name": "矢絡み糸"
+      },
+      "trap_siphon": {
+        "name": "吸魔札"
+      },
+      "trap_soot": {
+        "name": "煤かぶせ袋"
+      },
+      "trap_snare": {
+        "name": "追い足縄"
+      },
+      "trap_bell_fire": {
+        "name": "逆巻き鈴・炎"
+      },
+      "trap_bell_ice": {
+        "name": "逆巻き鈴・氷"
+      },
+      "trap_bell_water": {
+        "name": "逆巻き鈴・水"
+      },
+      "trap_bell_lightning": {
+        "name": "逆巻き鈴・雷"
+      },
+      "trap_ceiling": {
+        "name": "吊り天井"
+      },
+      "trap_fireline": {
+        "name": "火走り溝"
+      },
+      "trap_vise": {
+        "name": "甲割り万力"
+      },
+      "trap_coffin": {
+        "name": "骨封じ棺"
+      },
+      "stone_beetle_throw": {
+        "name": "石虫投げ"
       }
     },
     "items": {
@@ -82110,6 +82167,104 @@ export const referenceData={
       "path": [
         "skills",
         "slime_press"
+      ]
+    },
+    "skills/trap_barb": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_barb"
+      ]
+    },
+    "skills/trap_net": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_net"
+      ]
+    },
+    "skills/trap_siphon": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_siphon"
+      ]
+    },
+    "skills/trap_soot": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_soot"
+      ]
+    },
+    "skills/trap_snare": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_snare"
+      ]
+    },
+    "skills/trap_bell_fire": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_bell_fire"
+      ]
+    },
+    "skills/trap_bell_ice": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_bell_ice"
+      ]
+    },
+    "skills/trap_bell_water": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_bell_water"
+      ]
+    },
+    "skills/trap_bell_lightning": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_bell_lightning"
+      ]
+    },
+    "skills/trap_ceiling": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_ceiling"
+      ]
+    },
+    "skills/trap_fireline": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_fireline"
+      ]
+    },
+    "skills/trap_vise": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_vise"
+      ]
+    },
+    "skills/trap_coffin": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_coffin"
+      ]
+    },
+    "skills/stone_beetle_throw": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "stone_beetle_throw"
       ]
     },
     "fieldAbilities/survey": {

@@ -5,6 +5,7 @@ const str={type:'string',minLength:1},num={type:'number'},uint={type:'integer',m
 const stats=obj(Object.fromEntries(['hp','mp','str','vit','agi','int'].map(k=>[k,{type:'number',minimum:0}]))),target={enum:['enemy','all_enemies','ally','all_allies','self','party']};
 const expression={$ref:'#/$defs/value'};
 export const effectSchema={oneOf:[
+ obj({type:{const:'set_trap'},trap:{enum:['barb','net','siphon','soot','snare','bell','ceiling','fireline','vise','coffin']},element:{enum:['fire','ice','water','lightning']}},['type','trap']),
  obj({type:{const:'lay_to_rest'}},['type']),
  obj({type:{const:'purge_undead'}},['type']),
  obj({type:{const:'frontline_remove'}}),

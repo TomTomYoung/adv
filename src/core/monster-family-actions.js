@@ -1,3 +1,4 @@
+import {goblinTrap} from './battle-traps.js';
 import {applyGuard,guarded} from './battle-turns.js';
 import {unitKey} from './buffs.js';
 import {breakDefense,depth,familyAfterMove,label,living,moveTo,profession,recordFamilyDeaths,tactics,weakest} from './monster-family-field.js';
@@ -60,11 +61,14 @@ export function familyTurn(engine,e,{cast,order},bonus=false) {
   }
   if (t.rest) {delete t.rest;say('起き上がった。');return;}
   if (f.bridge&&f.bridge!==e.instance) {delete f.bridge;attack(back);return;}
-  if (focuser&&e.instance!==f.piper) {delete f.focus;attack(focuser);return;}
+  if (focuser&&e.instance!==f.piper) {delete f.focus;if(job==='slinger')use(focuser);else attack(focuser);return;}
   if (f.crown===e.instance&&job!=='king'&&!bonus&&b.round%2===1) return command(nominate());
   switch(job) {
     case 'slinger': return use(back);
-    case 'trapper': return use(target);
+    case 'trapper': {
+      const trap=goblinTrap(engine,e,all,foes);
+      return trap?use(trap.target,trap.id):use(target);
+    }
     case 'dagger': return use(enemyById(f.lastVictim)??target);
     case 'herbalist':
     case 'cook': {

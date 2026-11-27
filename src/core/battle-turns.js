@@ -14,7 +14,12 @@ export function guardDamageRate(data,level=1){
   const rate=BATTLE_STATUS_DEFINITIONS.guarded.levels[level]?.damageTaken;
   return rate==='system.guardRate'?data.system?.guardRate??0.5:rate;
 }
-export function clearGuard(battle,target){
+export function forgetTrapGuard(b,unit) {
+  const key=unitKey(unit);
+  for(const t of b.traps??[])if(t.guards)t.guards=t.guards.filter(k=>k!==key);
+}
+export function clearGuard(battle,target,renewing=false){
+  if(battle.traps&&!renewing)forgetTrapGuard(battle,target);
   if(target.instance)target.guard=false;
   else battle.guards=battle.guards.filter(id=>id!==target.id);
   if(battle.guardLevels){delete battle.guardLevels[unitKey(target)];if(!Object.keys(battle.guardLevels).length)delete battle.guardLevels;}

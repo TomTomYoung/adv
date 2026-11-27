@@ -158,6 +158,8 @@ try{
   await families.getByRole('link',{name:'すべて',exact:true}).click();
   await guide.waitForFunction(total => document.querySelectorAll('#monster-index .guide-entry').length===total,Object.keys(enemies).length);
   for(const [id,actions,habits] of [
+    ['goblin_5_trapper',['足くくり'],[]],
+    ['goblin_5_slinger',['飛礫'],[]],
     ['kagaribi_soot_rat',['攻撃'],['煤煙']],
     ['garden_root_shell',['防御','攻撃'],['転がり甲羅']],
     ['slime_5_oil',['油玉の自爆','油まみれ体当たり'],['油膜','易燃体']],
@@ -168,6 +170,13 @@ try{
     const moves=sheet.locator('.block').filter({has:guide.getByText('行動と使用条件',{exact:true})});
     const traits=sheet.locator('.block').filter({has:guide.getByText('習性',{exact:true})});
     for(const action of actions)await moves.getByText(action,{exact:true}).first().waitFor();
+    if(id==='goblin_5_trapper'){
+      const levels=sheet.getByRole('region',{name:'レベル別の能力値と習性'});
+      assert.match(await levels.getByRole('row',{name:/^Lv5 /}).innerText(),/返し針、矢絡み糸、吸魔札/);
+      assert.match(await levels.getByRole('row',{name:/^Lv24 /}).innerText(),/骨封じ棺/);
+      assert.match(await moves.innerText(),/Lv21 甲割り万力/);
+    }
+    if(id==='goblin_5_slinger')assert.match(await moves.innerText(),/石虫投げ.*2倍/);
     if(id==='kagaribi_soot_rat'){
       assert.match(await traits.innerText(),/Lv5.*25%.*最大Lv3/);
       const levels=sheet.getByRole('region',{name:'レベル別の能力値と習性'});

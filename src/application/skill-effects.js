@@ -37,11 +37,12 @@ function statusText(data, effect) {
     (details.length ? '（' + details.join('、') + '）' : '');
 }
 
-function effectText(data, enemy, effect) {
+function effectText(data, enemy, effect, skill) {
   const amount = () => Math.floor(effect.formula
     ? evaluate(data.formulas[effect.formula], {source: enemy, target: {stats: {vit: 10}}})
     : effect.amount);
   switch (effect.type) {
+    case 'set_trap': return skill.description;
     case 'damage': return elementLabels[effect.element] + 'ダメージ（目安' + amount() + '）';
     case 'heal': return 'HPを回復（基礎回復量' + amount() + '、最大HPまで）';
     case 'drain_mp': return '残りMPを最大' + amount() + '減らす';
@@ -56,6 +57,7 @@ function effectText(data, enemy, effect) {
 
 // Scripted turns can choose a different skill after winding up or changing form.
 const variations = {
+  family_goblin_5_slinger: [['通常の飛礫', 'family_goblin_5_slinger'], ['石虫投げ', 'stone_beetle_throw']],
   family_skeleton_20_twoheads: [['火の頭', 'family_skeleton_20_twoheads'], ['氷の頭', 'skeleton_frost']],
   family_slime_20_twins: [['打撃', 'family_slime_20_twins'], ['後列の分体による回復', 'slime_cure']],
   family_slime_25_strata: [['HPが2/3超', 'family_slime_25_strata'], ['HPが1/3超〜2/3', 'slime_clay'], ['HPが1/3以下', 'slime_wave']],
@@ -70,9 +72,15 @@ export function monsterActionEffects(data, enemy, skillId) {
   if (skillId === 'recover_stance') lines.push('突進後の息継ぎで、この手番は休む。');
   for (const [when, id] of variations[skillId] ?? [['', skillId]]) {
     const variant = data.skills[id];
-    const effects = variant.effects.map(effect => effectText(data, enemy, effect));
+    const effects = variant.effects.map(effect => effectText(data, enemy, effect, variant));
     if (effects.length) lines.push((when ? when + '：' : '') + (variant.projectile ? '投射攻撃。' : '') + effects.join('。続いて') + '。');
-    for (const effect of variant.selfEffects ?? []) lines.push('行動後、自身に' + effectText(data, enemy, effect) + '。');
+    for (const effect of variant.selfEffects ?? []) lines.push('行動後、自身に' + effectText(data, enemy, effect, variant) + '。');
+  }
+  if(skillId==='family_goblin_5_trapper'){
+    for(const [id,level] of Object.entries(data.jobProfile.personalSkills.nio)){
+      const trap=data.skills[id];
+      if(trap?.effects[0]?.type==='set_trap')lines.push('Lv'+level+' '+trap.name+'：'+trap.description);
+    }
   }
   return lines;
 }

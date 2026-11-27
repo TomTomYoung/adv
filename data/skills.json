@@ -5671,7 +5671,7 @@
     "name": "飛礫",
     "mp": 0,
     "target": "enemy",
-    "description": "味方越しに後列を優先して投石します。",
+    "description": "後列を優先して投石。生きた味方の石虫がいれば1匹をつかんで石虫投げに切り替え、飛礫の2倍の基礎威力で投げる。石虫は死亡する。",
     "effects": [
       {
         "type": "damage",
@@ -5721,7 +5721,7 @@
     "name": "足くくり",
     "mp": 0,
     "target": "enemy",
-    "description": "縄で相手一人の移動を封じます。",
+    "description": "手元に罠がなければ個体Lvに応じた戦闘罠を1基設置する。設置済みなら足くくりで相手1人の移動を封じる。",
     "effects": [
       {
         "type": "buff",
@@ -12772,6 +12772,688 @@
         "shape": "single"
       },
       "trajectory": "direct",
+      "friendlyFire": false
+    }
+  },
+  "trap_barb": {
+    "name": "返し針",
+    "mp": 0,
+    "target": "self",
+    "description": "1手で設置。味方に直接攻撃を命中させた相手に、設置者の通常攻撃の30%の威力で反撃。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "barb"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_net": {
+    "name": "矢絡み糸",
+    "mp": 0,
+    "target": "self",
+    "description": "1手で設置。味方が受ける投擲・投射ダメージを初弾だけ25%軽減。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "net"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_siphon": {
+    "name": "吸魔札",
+    "mp": 0,
+    "target": "self",
+    "description": "1手で設置。相手がMPを使う魔法を唱え終えると、その術者のMPをさらに2減少。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "siphon"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_soot": {
+    "name": "煤かぶせ袋",
+    "mp": 0,
+    "target": "ally",
+    "description": "1手で設置。指定した味方が防御中に直接攻撃を受けると、攻撃者にくらやみを1段階付与。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "soot"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_snare": {
+    "name": "追い足縄",
+    "mp": 0,
+    "target": "ally",
+    "description": "1手で設置。同じ相手が続けて指定した味方を直接攻撃すると、2回目の攻撃を中止。連撃技は1行動として数える。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "snare"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_bell_fire": {
+    "name": "逆巻き鈴・炎",
+    "mp": 0,
+    "target": "self",
+    "description": "1手で設置。炎属性の攻撃を受けると、その行動で味方が受ける同属性のダメージを半減。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "bell",
+        "element": "fire"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_bell_ice": {
+    "name": "逆巻き鈴・氷",
+    "mp": 0,
+    "target": "self",
+    "description": "1手で設置。氷属性の攻撃を受けると、その行動で味方が受ける同属性のダメージを半減。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "bell",
+        "element": "ice"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_bell_water": {
+    "name": "逆巻き鈴・水",
+    "mp": 0,
+    "target": "self",
+    "description": "1手で設置。水属性の攻撃を受けると、その行動で味方が受ける同属性のダメージを半減。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "bell",
+        "element": "water"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_bell_lightning": {
+    "name": "逆巻き鈴・雷",
+    "mp": 0,
+    "target": "self",
+    "description": "1手で設置。雷属性の攻撃を受けると、その行動で味方が受ける同属性のダメージを半減。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "bell",
+        "element": "lightning"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_ceiling": {
+    "name": "吊り天井",
+    "mp": 0,
+    "target": "ally",
+    "description": "1手で設置。同じ巡に異なる相手2体が指定した味方を直接攻撃すると、2体目の攻撃後、両方に通常攻撃の150%の威力で打撃。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "ceiling"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_fireline": {
+    "name": "火走り溝",
+    "mp": 0,
+    "target": "self",
+    "description": "1手で設置。油状態の相手が2体以上いる時に1体の油が引火すると、残る油状態の相手すべてにも引火。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "fireline"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_vise": {
+    "name": "甲割り万力",
+    "mp": 0,
+    "target": "self",
+    "description": "1手で設置。同じ相手が防御を続けて2回かばうと、2回目の割り込みを阻止。防御を解除して2手スタンさせ、攻撃を元の標的へ通す。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "vise"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_coffin": {
+    "name": "骨封じ棺",
+    "mp": 0,
+    "target": "enemy",
+    "description": "1手で設置。仮死の相手1体に設置。復活する前に別の相手が死亡するととどめを刺す。先に復活すると失敗。 設置者につき1基、1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "coffin"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      },
+      "targetStates": [
+        "alive",
+        "down"
+      ]
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "piercing",
+      "friendlyFire": false
+    }
+  },
+  "stone_beetle_throw": {
+    "name": "石虫投げ",
+    "mp": 0,
+    "target": "enemy",
+    "projectile": true,
+    "description": "生きた味方の石虫1匹を投げる。飛礫の2倍の基礎威力。投げた石虫は命中・回避・無効にかかわらず死亡する。",
+    "effects": [
+      {
+        "type": "damage",
+        "element": "physical",
+        "formula": "stone_beetle_throw"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "lob",
       "friendlyFire": false
     }
   }

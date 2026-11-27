@@ -1,3 +1,4 @@
+import {viseStopsCover} from './battle-traps.js';
 import {hasMonsterHabit,usesMonsterFormation} from './monster-habits.js';
 import {slimeLabels,slimeMoved,slimeSaveValid} from './slime-actions.js';
 import {skeletonCover} from './skeleton-actions.js';
@@ -112,10 +113,12 @@ export function familyIntercept(engine,source,targets,skill) {
   const cover=active.find(e=>e!==target&&((profession(e)==='guard'&&royal===target.instance)||e.tactics?.cover===target.instance));
   if (!cover) {
     const shell=skeletonCover(engine,target,skill);
+    if(shell && b.traps && viseStopsCover(engine,shell))return targets;
     if(shell)b.log.push(shell.name+'が'+target.name+'をかばった。');
     return [shell??target];
   }
   delete tactics(cover).cover;
+  if(b.traps && viseStopsCover(engine,cover))return targets;
   b.log.push(cover.name+'が'+target.name+'をかばった。');
   return [cover];
 }
