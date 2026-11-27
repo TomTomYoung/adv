@@ -202,10 +202,14 @@ export const MONSTER_HABITS = {
   }
 };
 
+export function habitActiveAtLevel(id, level) {
+  return level >= (MONSTER_HABITS[id]?.minLevel ?? 1);
+}
+
 export function hasMonsterHabit(data, unit, id) {
   const definition = unit?.instance && data.enemies[unit.id];
   if (!definition?.habits?.includes(id)) return false;
-  return (definition.level ?? definition.levelBand ?? 1) >= (MONSTER_HABITS[id]?.minLevel ?? 1);
+  return habitActiveAtLevel(id, definition.level ?? definition.levelBand ?? 1);
 }
 
 export function usesMonsterFormation(definition) {

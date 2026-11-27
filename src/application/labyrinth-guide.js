@@ -1,4 +1,5 @@
-import {encounterWeightsForFloor} from '../core/encounter-groups.js';
+import {habitActiveAtLevel} from '../core/monster-habits.js';
+import {encounterEnemyStats, encounterWeightsForFloor} from '../core/encounter-groups.js';
 import {actorStats, canEquip, grantsFor} from '../core/jobs.js';
 import {readContentJson} from '../core/read-content-json.js';
 
@@ -46,12 +47,29 @@ export function guideBands(data, common) {
   return sections;
 }
 
+function monsterSections(sections, species) {
+  return sections.filter(section => section.groups.some(group =>
+    group.weight > 0 && group.members.some(member => member.id === species)));
+}
+
+export function monsterLevelRows(data, sections, species) {
+  const rows = [];
+  const habits = data.enemies[species].habits ?? [];
+  for (const {first, last, band} of monsterSections(sections, species)) {
+    for (let level = first; level <= last; level++) {
+      rows.push({
+        level,
+        stats: encounterEnemyStats(data.encounterGroups, band.enemies[species], level),
+        habits: habits.filter(id => habitActiveAtLevel(id, level))
+      });
+    }
+  }
+  return rows;
+}
+
 export function monsterFloorText(sections, species) {
   const ranges = [];
-  for (const section of sections) {
-    const present = section.groups.some(group =>
-      group.weight > 0 && group.members.some(member => member.id === species));
-    if (!present) continue;
+  for (const section of monsterSections(sections, species)) {
     const last = ranges.at(-1);
     if (last && last.to + 1 === section.first) last.to = section.last;
     else ranges.push({from: section.first, to: section.last});

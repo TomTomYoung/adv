@@ -168,7 +168,15 @@ try{
     const moves=sheet.locator('.block').filter({has:guide.getByText('行動と使用条件',{exact:true})});
     const traits=sheet.locator('.block').filter({has:guide.getByText('習性',{exact:true})});
     for(const action of actions)await moves.getByText(action,{exact:true}).first().waitFor();
-    if(id==='kagaribi_soot_rat')assert.match(await traits.innerText(),/Lv5.*25%.*最大Lv3/);
+    if(id==='kagaribi_soot_rat'){
+      assert.match(await traits.innerText(),/Lv5.*25%.*最大Lv3/);
+      const levels=sheet.getByRole('region',{name:'レベル別の能力値と習性'});
+      const rows=levels.locator('tbody tr');
+      assert.deepEqual(await rows.locator('th').allTextContents(),['Lv1','Lv2','Lv3','Lv4','Lv5']);
+      assert.deepEqual(await rows.locator('td:last-child').allTextContents(),['なし','なし','なし','なし','煤煙']);
+      assert.equal(await rows.last().locator('td').first().textContent(),'53 (+8)');
+      assert.equal(await guide.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    }
     if(id==='garden_root_shell')assert.match(await moves.innerText(),/受けるダメージを50%/);
     if(id==='slime_5_oil')assert.match(await moves.innerText(),/命中時100%で油状態Lv1/);
     for(const habit of habits){

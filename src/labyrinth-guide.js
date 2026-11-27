@@ -1,5 +1,5 @@
 import {damageExampleNote, monsterActionEffects} from './application/skill-effects.js';
-import {gearStages, guideActor, guideBands, loadGuide, monsterFloorText} from './application/labyrinth-guide.js';
+import {gearStages, guideActor, guideBands, loadGuide, monsterFloorText, monsterLevelRows} from './application/labyrinth-guide.js';
 import {conditionText, monsterGroups, targetText} from './application/monster-catalog.js';
 import {STAT_KEYS} from './core/jobs.js';
 
@@ -185,6 +185,36 @@ function fillMonsterList(family) {
   filterMonsters();
 }
 
+function monsterLevelComparison(rows) {
+  const section = block('千変の迷宮・レベル別比較');
+  const note = rows.length > 1 ? ' 括弧内は直前の掲載Lvからの増減です。' : '';
+  section.append(el('p', '通常遭遇時の個体Lvは地下の階数と同じです。' + note));
+  const scroll = el('div', undefined, 'scroll monster-levels');
+  scroll.tabIndex = 0;
+  scroll.setAttribute('role', 'region');
+  scroll.setAttribute('aria-label', 'レベル別の能力値と習性');
+  const table = el('table'), header = table.createTHead().insertRow();
+  for (const label of ['Lv', ...STAT_KEYS.map(k => data.jobProfile.statNames[k]), '有効な習性']) {
+    const th = el('th', label);
+    th.scope = 'col'; header.append(th);
+  }
+  const body = table.createTBody();
+  for (const [index, row] of rows.entries()) {
+    const tr = body.insertRow(), level = el('th', 'Lv' + row.level);
+    level.scope = 'row'; tr.append(level);
+    for (const key of STAT_KEYS) {
+      const cell = tr.insertCell();
+      cell.textContent = row.stats[key];
+      if (index === 0) continue;
+      const delta = row.stats[key] - rows[index - 1].stats[key];
+      if (delta) cell.append(el('small', ' (' + (delta > 0 ? '+' : '−') + Math.abs(delta) + ')'));
+    }
+    tr.insertCell().textContent = row.habits.map(id => MONSTER_HABITS[id].name).join('、') || 'なし';
+  }
+  scroll.append(table); section.append(scroll);
+  return section;
+}
+
 function drawMonster(id) {
   const enemy = data.enemies[id];
   const card = el('article', undefined, 'card');
@@ -225,10 +255,14 @@ function drawMonster(id) {
   actions.append(el('small', damageExampleNote), list);
   const detail = block(), link = el('a', '出現場所・遭遇条件の詳細');
   link.href = 'https://github.com/TomTomYoung/adv/blob/master/doc/battle/MONSTER_CATALOG.md#monster-' + id;
-  const floors = monsterFloorText(guideBands(data, false), id);
+  const sections = guideBands(data, false);
+  const floors = monsterFloorText(sections, id);
   if (floors) detail.append(el('p', '千変の迷宮　' + floors));
   detail.append(link);
-  card.append(header, parameters, rewards, affinity);
+  card.append(header, parameters);
+  const levels = monsterLevelRows(data, sections, id);
+  if (levels.length) card.append(monsterLevelComparison(levels));
+  card.append(rewards, affinity);
   const habits = block('習性');
   if (enemy.habits?.length) {
     for (const id of enemy.habits) {
