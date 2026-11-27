@@ -1,12 +1,17 @@
-export function conditionText(value) {
+export function conditionText(value, data) {
   if(value===undefined||value===null)return '条件なし';
   if(value.op==='lt'&&value.left?.ref==='self.guardTurns')return `連続防御が${value.right}手番未満`;
   if(value.op==='contains'&&value.left?.ref==='self.activeStatuses'&&value.right==='ablaze')return '自身が火だるまの間';
-  if(value.op==='contains'&&value.left?.ref==='self.buffs')return `自身に補助 ${value.right} がある間`;
-  if(value.op==='and')return value.args.map(conditionText).join('、かつ');
+  if(value.op==='contains'&&value.left?.ref==='self.buffs')return `自身に「${data?.buffs?.[value.right]?.name ?? value.right}」がある間`;
+  if(value.op==='and')return value.args.map(term => conditionText(term, data)).join('、かつ');
   if(value.op==='eq'&&value.left?.op==='mod'&&value.left.args?.[0]?.ref==='self.round'&&value.left.args[1]===2)return value.right===0?'偶数ラウンド':'奇数ラウンド';
+  if(value.op==='eq' && value.left?.op==='mod' && value.left.args?.[0]?.ref==='self.round'){
+    const interval=value.left.args[1], first=value.right || interval;
+    return `第${first}ラウンドから${interval}ラウンドごと`;
+  }
+  if(value.op==='gte'&&value.left?.ref==='self.mp')return `自身のMPが${value.right}以上`;
   if(value.left?.ref==='self.round'&&value.op==='eq')return `第${value.right}ラウンド`;
-  if(value.left?.ref==='self.hp_ratio'&&typeof value.right==='number'&&['lt','eq'].includes(value.op))return `自身のHPが${value.right*100}％${value.op==='lt'?'未満':'と等しい'}`;
+  if(value.left?.ref==='self.hp_ratio'&&typeof value.right==='number'&&['lt','eq'].includes(value.op))return `自身のHPが${Math.round(value.right*10000)/100}％${value.op==='lt'?'未満':'と等しい'}`;
   return `条件式 ${JSON.stringify(value)}`;
 }
 

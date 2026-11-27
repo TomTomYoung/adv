@@ -1,3 +1,4 @@
+import {damageExampleNote, monsterActionEffects} from './application/skill-effects.js';
 import {gearStages, guideActor, guideBands, loadGuide, monsterFloorText} from './application/labyrinth-guide.js';
 import {conditionText, monsterGroups, targetText} from './application/monster-catalog.js';
 import {STAT_KEYS} from './core/jobs.js';
@@ -50,7 +51,7 @@ function drawGroups() {
     // Floor additions come first; the common catalog retains the full roster.
     const added = g => g.override && g.base === 0 && g.weight > 0;
     const rows = common ? section.groups : section.groups
-      .filter(g => g.weight > 0 || g.override)
+      .filter(g => g.weight > 0)
       .sort((a, b) => Number(added(b)) - Number(added(a)));
     for (const group of rows) {
       const row = el('div', undefined, 'group'), roster = el('div'), members = el('div', undefined, 'members');
@@ -63,7 +64,7 @@ function drawGroups() {
       roster.append(members);
       if (added(group)) roster.append(el('small', 'この階で追加', 'override'));
       else if (group.override) roster.append(el('small', 'この階の優先設定　重み ' + group.base + ' → ' + group.weight, 'override'));
-      const share = common ? '' : group.weight && total ? percent.format(group.weight / total) : '出現なし';
+      const share = common ? '' : percent.format(group.weight / total);
       const rate = el('span', share, 'chance');
       rate.setAttribute('aria-label', '出現率 ' + share);
       row.append(roster, el('span', group.count + '匹', 'number'), rate);
@@ -215,11 +216,13 @@ function drawMonster(id) {
   for (const rule of [...enemy.ai].sort((a, b) => b.priority - a.priority)) {
     const skill = data.skills[rule.skill];
     const item = el('li');
-    item.append(el('strong', skill.name), el('small', 'MP' + skill.mp, 'tag'),
-      el('p', enemy.classSkill === rule.skill ? skill.description : conditionText(rule.condition) + ' ／ 対象　' + targetText(rule, skill)));
+    item.append(el('strong', skill.name), el('small', 'MP' + skill.mp, 'tag'));
+    if (enemy.classSkill !== rule.skill || enemy.actionMode === 'rules')
+      item.append(el('p', conditionText(rule.condition, data) + ' ／ 対象　' + targetText(rule, skill)));
+    for (const line of monsterActionEffects(data, enemy, rule.skill)) item.append(el('p', line));
     list.append(item);
   }
-  actions.append(list);
+  actions.append(el('small', damageExampleNote), list);
   const detail = block(), link = el('a', '出現場所・遭遇条件の詳細');
   link.href = 'https://github.com/TomTomYoung/adv/blob/master/doc/battle/MONSTER_CATALOG.md#monster-' + id;
   const floors = monsterFloorText(guideBands(data, false), id);

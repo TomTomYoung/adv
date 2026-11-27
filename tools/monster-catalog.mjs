@@ -1,3 +1,4 @@
+import {damageExampleNote, monsterActionEffects} from '../src/application/skill-effects.js';
 import {MONSTER_HABITS} from '../src/core/monster-habits.js';
 import {guideBands, monsterFloorText} from '../src/application/labyrinth-guide.js';
 import {conditionText, monsterGroups, targetText} from '../src/application/monster-catalog.js';
@@ -43,7 +44,7 @@ export function monsterCatalog(data) {
     `作品版${data.game.version}。配布中の敵は${enemies.length}定義、遭遇編成は${Object.keys(data.encounters).length}定義、敵が参照する画像ファイルは${imageUsers.size}点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。`,'',
     '敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。','',
     ...groups.map(([title,list])=>`[${title}](#${title})：${list.length}定義。`),'',
-    '## 現在の読み方','',
+    '## 現在の読み方','',damageExampleNote,'',
     '通常遭遇候補、仕掛けからの参照、スクリプトの戦闘開始命令を分けて記載します。参照は配置・命令の存在を示し、出現条件の成立や全分岐の到達を保証するものではありません。配布DBに残っていても、通常ロードのこれらの経路から呼ばれていない遭遇があります。','',
     'AIは優先度の高い順に、条件成立・MP充足・環境による使用許可を満たした最初の規則を使います。同順位は定義順です。「代表技能」だけでは回復・防御・毒牙・対象選択を説明できないため、以下には全規則を載せます。属性倍率は未指定なら1で、実ダメージには式・防御・環境なども作用します。','',
     '現在のくらがり画像は `wraith` が参照する `assets/images/monsters/wraith.webp` です。同じ画像を地域4・5・9の迷宮獣／守護者、腐肉鬼、足跡の追跡者も共有しています。くらがりだけの専用画像IDへ分離された状態ではありません。旧PNGの保存と現行の参照は[適用記録](../assets/source/characters/recovery-2026-09-24.json)で確認できます。','',
@@ -76,8 +77,9 @@ export function monsterCatalog(data) {
         `属性倍率：${Object.entries(e.resist??{}).map(([key,n])=>`${key} ${n}`).join(' / ')||'すべて既定値'}。`,'','行動と使用条件（AIの選択順）：','');
       for(const [i,rule] of [...e.ai].sort((a,b)=>b.priority-a.priority).entries()){
         const skill=data.skills[rule.skill];
-        if (rule.skill === e.classSkill) { out.push(`${i+1}. ${skill.name} (${rule.skill})：${skill.description}`); continue; }
-        out.push(`${i+1}. 優先度${rule.priority}、${conditionText(rule.condition)}：${skill.name} (${rule.skill})、MP${skill.mp}、対象は${targetText(rule,skill)}。`);
+        const scripted = rule.skill === e.classSkill && e.actionMode !== 'rules';
+        const selection = scripted ? '' : `優先度${rule.priority}、${conditionText(rule.condition, data)}、対象は${targetText(rule,skill)}。`;
+        out.push(`${i+1}. ${skill.name} (${rule.skill})、MP${skill.mp}。${selection}${monsterActionEffects(data,e,rule.skill).join(' ')}`);
       }
       out.push('','遭遇と参照先：','');
       const floors = monsterFloorText(shiftingBands, e.id);

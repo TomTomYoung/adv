@@ -47,7 +47,7 @@ test('一つの帯の途中にある優先設定と、重みゼロの候補を�
   const data = {...guide, encounterGroups: structuredClone(guide.encounterGroups)};
   const band = data.encounterGroups.bands.find(b => b.minLevel === 11);
   const id = Object.keys(band.groups)[0];
-  data.encounterGroups.dungeons.shifting_labyrinth.floors[13] = {[id]: 0};
+  data.encounterGroups.dungeons.shifting_labyrinth.floors = {13: {[id]: 0}};
   const sections = guideBands(data, false).filter(s => s.band === band);
   assert.deepEqual(sections.map(s => [s.first, s.last]), [[11, 12], [13, 13], [14, 14]]);
   const disabled = sections[1].groups.find(g => g.id === id);
@@ -89,14 +89,14 @@ test('仲間と全職の想定装備が職業条件を満たし、技能と上�
   }
 });
 
-test('千変6〜9階は各階2つの専用編成を抽選し、共通候補と他の階に重みを加えない', () => {
+test('千変6〜9階は各階の専用編成を抽選し、共通候補と他の階に重みを加えない', () => {
   const sections = guideBands(guide, false);
   const common = guideBands(guide, true).find(s => s.first === 6);
   assert.equal(common.last, 9);
   const additions = [
-    ['stone_log_escort', 'shell_stone_guard'],
-    ['trapper_iron_moth', 'piper_butterflies'],
-    ['bone_shield_archer', 'bone_skull_slingers'],
+    ['stone_log_escort', 'shell_stone_guard', 'mochi_escort'],
+    ['sticky_escort', 'hunter_iron_moth', 'diviner_butterflies'],
+    ['bone_shield_archer', 'berry_escort', 'bubble_escort', 'bone_skull_drummer'],
     ['torch_oil_moth_swarm', 'oil_globe_firebrand']
   ];
   for (const [index, ids] of additions.entries()) {
@@ -109,4 +109,27 @@ test('千変6〜9階は各階2つの専用編成を抽選し、共通候補と�
       assert.deepEqual(sections.filter(s => s.groups.some(g => g.id === id && g.weight > 0)).map(s => s.first), [floor]);
     }
   }
+});
+
+test('千変5〜10階の亜人は指定の系統だけが出現し、スライム26種は別種との混成で散らばる', () => {
+  const sections = guideBands(guide, false);
+  const featured = ['goblin','goblin','orc','orc','ogre','ogre'];
+  const slimes = new Set();
+  for (let floor = 5; floor <= 29; floor++) {
+    const {groups} = sections.find(s => s.first <= floor && floor <= s.last);
+    const present = groups.filter(g => g.weight > 0);
+    const members = present.flatMap(g => g.members.map(m => guide.enemies[m.id]));
+    if (floor <= 10) assert.deepEqual(new Set(members.map(m => m.family).filter(f => featured.includes(f))), new Set([featured[floor - 5]]));
+    const local = members.filter(m => m.family === 'slime');
+    assert.ok(local.length > 0, floor);
+    for (const slime of new Set(local)) {
+      assert.ok(!slimes.has(slime.id), slime.id);
+      slimes.add(slime.id);
+    }
+    for (const g of present) {
+      const count = g.members.filter(m => guide.enemies[m.id].family === 'slime').reduce((n,m) => n+m.count,0);
+      if (count) assert.ok(count === 1 && g.count > 1, g.id);
+    }
+  }
+  assert.equal(slimes.size,26);
 });

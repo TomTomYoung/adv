@@ -4,7 +4,7 @@ import {readContentJson} from '../core/read-content-json.js';
 
 export async function loadGuide(read = readContentJson) {
   const game = await read('data/game.json');
-  const types = ['actors', 'system', 'skills', 'items', 'enemies', 'encounterGroups', 'shops', 'assets', 'jobs', 'jobProfile', 'fieldAbilities', 'expedition'];
+  const types = ['actors', 'system', 'formulas', 'statuses', 'buffs', 'skills', 'items', 'enemies', 'encounterGroups', 'shops', 'assets', 'jobs', 'jobProfile', 'fieldAbilities', 'expedition'];
   const [entries, parties] = await Promise.all([
     Promise.all(types.map(async key => [key, await read(game.files.databases[key])])),
     read('playtests/quest-parties.json')

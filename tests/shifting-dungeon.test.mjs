@@ -408,3 +408,25 @@ test('going deeper increases combat pressure, caps XP boosts and gives no XP on 
   assert.ok(Math.abs(xpAt(8) - xpAt(7)) < 0.001);
   assert.ok(xpAt(6) > xpAt(1));
 });
+
+test('再配置前のゴブリン混成・オーガ隊・スライム隊で保存した戦闘を再開できる', () => {
+  const groups = structuredClone(data.encounterGroups);
+  const profile = groups.dungeons.shifting_labyrinth;
+  const cases = [[7,'trapper_iron_moth'],[5,'ogre_squad_2'],[10,'slime_squad_1']];
+  for (const [floor, group] of cases) profile.floors[floor][group] = 5;
+  const old = new GameEngine(shiftingDungeonData({...data, encounterGroups: groups}));
+  drain(old); enter(old);
+  for (const [floor, group] of cases) {
+    const map = old.data.maps[id + '_f' + floor];
+    old.teleport(map.id,map.entrance.x,map.entrance.y);
+    const entry = map.encounterPool.find(row => row.encounter.endsWith('_' + group));
+    const before = old.save();
+    old.startBattle(entry.encounter,{win:[],lose:[],escape:[]});
+    const copy = newGame();
+    copy.load(old.save());
+    assert.deepEqual(copy.state.battle,old.state.battle);
+    assert.ok(copy.data.encounters[entry.encounter].progression);
+    assert.ok(!copy.map().encounterPool.some(row => row.encounter === entry.encounter));
+    old.load(before);
+  }
+});

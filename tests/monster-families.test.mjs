@@ -16,7 +16,11 @@ test('five bestiary families include the sixth Lv5 slime and a distinct sprite f
     const entries=classes.filter(e=>e.family===family&&e.levelBand===lv);
     assert.equal(entries.length,family==='slime'&&lv===5?6:5);
     for(const e of entries){
-      assert.equal(monsterFloorText(sections,e.id),'地下'+lv+'〜'+(lv+4)+'階');
+      const floors = monsterFloorText(sections,e.id);
+      assert.ok(floors, e.id);
+      if (family==='skeleton' || (family!=='slime' && lv>=15))
+        assert.equal(floors,'地下'+lv+'〜'+(lv+4)+'階');
+      if (family==='slime') assert.match(floors,/^地下\d+階$/, e.id);
       if(e.id!=='slime_5_berry')assert.equal(e.name.includes('の'),false,e.name);
       if(family==='goblin')assert.ok(e.name.startsWith('ゴブリン'),e.name);
       assert.ok(data.skills[e.classSkill]?.description,e.name);
@@ -29,14 +33,16 @@ for(const mode of ['classic','grid','frontline'])test(mode+' runs each class in 
   const g=new GameEngine(playable,713);drain(g);
   g.award(0,1000000,['ada']);g.state.actors.ada.hp=g.stats('ada').hp;
   assert.ok(g.dispatch({type:'travel',dungeon:SHIFTING_DUNGEON}));
-  for(const lv of [5,10,15,20,25]){
+  for(let lv=5;lv<=29;lv++){
     const map=g.data.maps[g.data.dungeons[SHIFTING_DUNGEON].maps[lv-1]];
     g.teleport(map.id,map.entrance.x,map.entrance.y,map.entrance.facing);
     const checkpoint=g.save();
-    for(const entry of map.encounterPool.filter(e=>e.encounter.includes('_squad_'))){
+    for(const entry of map.encounterPool){
+      const roster=g.data.encounters[entry.encounter].enemies.map(id=>g.data.enemies[id]);
+      if(!roster.some(e=>e.classSkill&&!encountered.has(e.classSkill)))continue;
       g.startBattle(entry.encounter,{win:[],lose:[],escape:[]},{battleMode:mode,manualTurns:true});
       const b=g.state.battle;
-      for(const unit of b.enemies)encountered.add(unit.classSkill);
+      for(const unit of b.enemies)if(unit.classSkill)encountered.add(unit.classSkill);
       let steps=0;
       while(g.state.battle===b&&b.round<=4){
         assert.ok(g.dispatch({type:'battle.step'}),'step '+entry.encounter);
