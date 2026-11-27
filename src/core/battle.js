@@ -324,7 +324,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   syncFrontlineDefeats(engine);return damageTotal;
 }
 function misfireTargets(engine,source,targets,skill,skillId,itemId){
-  if(itemId||['attack','guard'].includes(skillId)||skill.effects.some(e=>e.type==='repel'))return targets;
+  if(itemId||['attack','guard','armadillo_rampage'].includes(skillId)||skill.effects.some(e=>e.type==='repel'))return targets;
   const {data:d,state:s}=engine,b=s.battle;
   if(spatial(s)){
     const limit=source.instance?skill.maxTargets??1:Math.min(skill.maxTargets??Infinity,permission(d,s,source.id,skillId,'battle.skill')?.maxTargets??1);
@@ -402,20 +402,23 @@ function finishTrapAction(engine,source,targets,results,skill,skillId,itemId) {
 function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=null){
   const physicalPower=actionPower(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(source));
   const origin=describeTarget(engine,unitKey(source)),sourceName=source.name??engine.data.actors[source.id]?.name??'対象';
-  if(wetSkillBlocked(engine,source,skill)){
-    (engine.state.battle?.log??engine.state.log).push(`${sourceName}の術は濡れに阻まれて発動しなかった。`);
-    wetAfterSkill(engine,source,skill);return false;
-  }
   if(skillId==='stone_beetle_throw' || skillId==='family_goblin_5_slinger' && source.classSkill===skillId){
     const bug=engine.state.battle.enemies.find(u=>battleAlive(engine.state,u) && (engine.data.enemies[u.id].species??u.id)==='stone_beetle');
     if(bug && skillId!=='stone_beetle_throw' && !dungeonAbilityReason(engine.data,engine.state,'stone_beetle_throw','battle.skill')){
       skillId='stone_beetle_throw';skill=engine.data.skills[skillId];
+    } else if (!bug && skillId==='family_goblin_5_slinger' && hasMonsterHabit(engine.data,source,'bomb_rock_throw') &&
+               !dungeonAbilityReason(engine.data,engine.state,'bomb_rock_throw','battle.skill')) {
+      skillId='bomb_rock_throw';skill=engine.data.skills[skillId];
     }
     if(skillId==='stone_beetle_throw'){
       if(!source.instance||!bug||!dungeonEffectActive(engine.data,engine.state,'skill',skillId))return false;
       engine.state.battle.log.push(sourceName+'は'+bug.name+'をつかんで投げた。石虫は砕けた。');
       bug.hp=0;recordDefeated(engine,false,source);
     }
+  }
+  if(wetSkillBlocked(engine,source,skill)){
+    (engine.state.battle?.log??engine.state.log).push(`${sourceName}の術は濡れに阻まれて発動しなかった。`);
+    wetAfterSkill(engine,source,skill);return false;
   }
   const torchPool = torchTargets(engine, source, skillId);
   if (torchPool) {
@@ -440,7 +443,7 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
   const hit=(target,context)=>{
     const result={...describeTarget(engine,unitKey(target)),hpBefore:target.hp,mpBefore:target.mp};
     const statuses=[...target.statuses];
-    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId,true,context,physicalPower,result,habitImpacts,trapAction);
+    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId,skillId!=='soot_beetle_dust',context,physicalPower,result,habitImpacts,trapAction);
     if(damage>0)result.damage=damage;
     result.hpAfter=target.hp;result.mpAfter=target.mp;
     if(target.hp>result.hpBefore)result.healing=target.hp-result.hpBefore;
@@ -474,9 +477,10 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
   if(engine.state.battle.familyField)settleSkeletonCrown(engine);
   familyAfterHit(engine,source,targets,skillId,skill,results,(enemy,victim)=>familyCast(engine,enemy,[victim],'attack'));
   if (ignitesSource && dungeonEffectActive(engine.data,engine.state,'skill',skillId)) igniteOil(engine,source);
-  if(skillId==='slime_burst' && dungeonEffectActive(engine.data,engine.state,'skill',skillId)){
+  if ((skillId==='slime_burst' || skillId==='soot_beetle_dust') && dungeonEffectActive(engine.data,engine.state,'skill',skillId)) {
     source.hp=0;recordDefeated(engine);
-    engine.state.battle.log.push(sourceName+'は自爆して燃え尽きた。');
+    engine.state.battle.log.push(sourceName+(skillId==='soot_beetle_dust'?'は突撃して自爆した。':'は自爆して燃え尽きた。'));
+    if (skillId==='soot_beetle_dust') emitFeedback(engine,{effects:['fade_out'],targets:[origin],phase:'defeat'});
   }
   if(engine.state.battle.traps)finishTrapAction(engine,source,targets,results,skill,skillId,itemId);
   wetAfterSkill(engine,source,skill);
@@ -518,6 +522,17 @@ function performSkill(engine,source,selection){
       const bindings=engine.data.presentation?.bindings;
       engine.cue(bindings?.skills?.[skillId]??bindings?.events?.light);
       endBattle(engine,'repel');
+    }
+    return;
+  }
+  if (skillId==='armadillo_rampage') {
+    delete source.guardTurns;
+    const count = engine.random() < 0.5 ? 2 : 3;
+    const team = s.members.map(id => s.actors[id]);
+    for (let i=0; i<count && battleAlive(s,source) && team.some(unit=>battleAlive(s,unit)); i++) {
+      const pool = [...team,...s.battle.enemies].filter(unit=>unit!==source && battleAlive(s,unit));
+      const target = pool[Math.floor(engine.random()*pool.length)];
+      if (!useSkill(engine,source,[target],skill,skillId,enemySource)) break;
     }
     return;
   }
@@ -616,8 +631,13 @@ function familyCast(engine,source,targets,skillId) {
 function performEnemyAction(engine,enemy,bonus=false){
   const s=engine.state,b=s.battle;
     if(!battleAlive(s,enemy))return;
+    const wasGuarding = enemy.guard;
     clearGuard(b,enemy,true);
     if(consumeStun(engine,enemy)||actionOverridden(engine,enemy))return;
+    if (wasGuarding && hasMonsterHabit(engine.data,enemy,'armadillo_rampage') &&
+        !statusAbilityReason(engine.data,s,enemy,'armadillo_rampage') && !dungeonAbilityReason(engine.data,s,'armadillo_rampage','battle.skill')) {
+      return performSkill(engine,enemy,{skill:engine.data.skills.armadillo_rampage,skillId:'armadillo_rampage'});
+    }
     if(enemy.classSkill && b.familyField && engine.data.enemies[enemy.id].actionMode!=='rules') {
       if (statusAbilityReason(engine.data,s,enemy,enemy.classSkill)||dungeonAbilityReason(engine.data,s,enemy.classSkill,'battle.skill')) {
         const victim=s.members.map(id=>s.actors[id]).find(u=>battleAlive(s,u));
@@ -786,6 +806,11 @@ export function battleAction(engine,intent){
 function gridEnemyChoices(engine,enemy,skillId,{anySide=false,origin=null}={}){
   const {data:d,state:s}=engine,skill=d.skills[skillId];
   if(!skill||enemy.mp<skill.mp||statusAbilityReason(d,s,enemy,skillId)||dungeonAbilityReason(d,s,skillId,'battle.skill')||effectsProblem(d,skill,s))return [];
+  if (skillId==='armadillo_rampage') {
+    if (!enemy.guard || !hasMonsterHabit(d,enemy,skillId)) return [];
+    return [{ok:true,id:unitKey(enemy),targets:[enemy],skill,skillId}];
+  }
+  if (skillId==='bomb_rock_throw' && (!hasMonsterHabit(d,enemy,skillId) || s.battle.enemies.some(u=>battleAlive(s,u) && (d.enemies[u.id].species??u.id)==='stone_beetle'))) return [];
   if(skillId==='slime_burst'){
     if(!hasActiveStatus(d,s,enemy,'ablaze'))return [];
     const targets=s.members.map(id=>s.actors[id]).filter(unit=>battleAlive(s,unit));

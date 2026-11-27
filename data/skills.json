@@ -9203,15 +9203,20 @@
     }
   },
   "soot_beetle_dust": {
-    "name": "煤払い",
-    "mp": 3,
+    "name": "煤の自爆突撃",
+    "mp": 0,
     "target": "enemy",
-    "description": "後脚で煤を払い、敵1体に60%の確率でくらやみLv1を与えます。",
+    "description": "探索隊の1人に突撃して物理ダメージを与え、生き残った対象にくらやみを確実に1段階付与して自爆する。",
     "effects": [
+      {
+        "type": "damage",
+        "element": "physical",
+        "formula": "physical"
+      },
       {
         "type": "status",
         "status": "blindness",
-        "chance": 0.6
+        "chance": 1
       }
     ],
     "frontlineTargeting": {
@@ -13418,6 +13423,105 @@
         "type": "damage",
         "element": "physical",
         "formula": "stone_beetle_throw"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "lob",
+      "friendlyFire": false
+    }
+  },
+  "armadillo_rampage": {
+    "name": "乱転がり",
+    "mp": 0,
+    "target": "enemy",
+    "description": "Lv8から、防御したまま手番を迎えると甲羅で2〜3回突進する。毎回、自分を除く両陣営の生存者から等確率で1体を選ぶ。",
+    "effects": [
+      {
+        "type": "damage",
+        "element": "physical",
+        "formula": "physical"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    }
+  },
+  "bomb_rock_throw": {
+    "name": "爆弾岩投げ",
+    "mp": 0,
+    "target": "enemy",
+    "projectile": true,
+    "description": "Lv8から、生きた味方の石虫がいないとき、後列を優先して爆弾岩を投げ、着弾した相手1体に火属性ダメージを与える。",
+    "effects": [
+      {
+        "type": "damage",
+        "element": "fire",
+        "formula": "heavy"
       }
     ],
     "frontlineTargeting": {

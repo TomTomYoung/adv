@@ -120,7 +120,7 @@ test('千変6〜9階は各階の専用編成を抽選し、共通候補と他の
   const additions = [
     ['stone_log_escort', 'shell_stone_guard', 'mochi_escort', 'stone_sling'],
     ['sticky_escort', 'hunter_iron_moth', 'diviner_butterflies'],
-    ['bone_shield_archer', 'drop_stone_escort', 'berry_escort', 'bubble_escort', 'bone_skull_drummer'],
+    ['bone_shield_archer', 'bomb_slinger_escort', 'drop_stone_escort', 'berry_escort', 'bubble_escort', 'bone_skull_drummer'],
     ['torch_oil_moth_swarm', 'oil_globe_firebrand', 'drop_moth_escort']
   ];
   for (const [index, ids] of additions.entries()) {
@@ -143,7 +143,14 @@ test('千変5〜10階の亜人は指定の系統だけが出現し、スライ�
     const {groups} = sections.find(s => s.first <= floor && floor <= s.last);
     const present = groups.filter(g => g.weight > 0);
     const members = present.flatMap(g => g.members.map(m => guide.enemies[m.id]));
-    if (floor <= 10) assert.deepEqual(new Set(members.map(m => m.family).filter(f => featured.includes(f))), new Set([featured[floor - 5]]));
+    if (floor <= 10) {
+      for (const group of present) {
+        const humanoids=group.members.map(m=>guide.enemies[m.id]).filter(m=>featured.includes(m.family));
+        if (floor===8 && group.id==='bomb_slinger_escort') assert.deepEqual(humanoids.map(m=>m.id),['goblin_5_slinger']);
+        else assert.ok(humanoids.every(m=>m.family===featured[floor-5]),group.id);
+      }
+      assert.ok(members.some(m=>m.family===featured[floor-5]));
+    }
     const local = members.filter(m => m.family === 'slime');
     assert.ok(local.length > 0, floor);
     for (const slime of new Set(local)) {

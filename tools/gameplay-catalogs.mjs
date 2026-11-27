@@ -31,6 +31,8 @@ const usage=(data,id,api)=>{
     if (skills[id]) values.push(`${data.actors[actor].name} Lv${skills[id]}`);
   }
   if(data.skills?.[id]?.effects[0]?.type==='set_trap')values.push('ゴブリン罠師 Lv'+data.jobProfile.personalSkills.nio[id]);
+  if(id==='armadillo_rampage')values.push('殻甲アルマジロ Lv8（防御中の手番）');
+  if(id==='bomb_rock_throw')values.push('ゴブリン投石手 Lv8（生きた味方の石虫がいない時）');
   if(id==='stone_beetle_throw')values.push('ゴブリン投石手（味方に生きた石虫がいる時）');
   const job=grants(data,id,api);if(job.length)values.push(`職業：${compact(job)}`);
   if(api==='battle.skill'){const enemies=enemyUsers(data,id);if(enemies.length)values.push(`魔物：${compact(enemies)}`);const items=itemUsers(data,id);if(items.length)values.push(`道具：${compact(items)}`);}

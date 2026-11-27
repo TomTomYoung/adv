@@ -254,7 +254,7 @@ test('a tank escort resumes on the sixth floor and fires a log on its second tur
   assert.ok(battle.log.some(line => line.includes('丸太砲')));
 });
 
-test('石虫は防御と岩殻突進を交互に使い、煤虫は初手だけくらやみを狙う', () => {
+test('石虫は防御と岩殻突進を交互に使い、煤虫は自爆突撃でくらやみを付与する', () => {
   const g = newGame();
   g.award(0, xpThreshold(data, 6));
   enter(g);
@@ -274,7 +274,8 @@ test('石虫は防御と岩殻突進を交互に使い、煤虫は初手だけ�
   const [stone, soot] = g.state.battle.enemies;
   assert.deepEqual([stone.name, soot.name], ['石虫 Lv6', '煤虫 Lv6']);
   assert.ok(stone.guard);
-  assert.equal(soot.mp, 0);
+  assert.equal(soot.hp, 0);
+  assert.equal(g.state.records.kills[soot.id],1);
   assert.ok(g.state.members.some(id => g.state.actors[id].statuses.includes('blindness')));
   assert.ok(!g.state.battle.log.some(line => line.includes('岩殻突進')));
 
@@ -284,7 +285,8 @@ test('石虫は防御と岩殻突進を交互に使い、煤虫は初手だけ�
   defendRound(copy);
   assert.ok(!copy.state.battle.enemies[0].guard);
   assert.ok(copy.state.battle.log.some(line => line.includes('石虫 Lv6の岩殻突進')));
-  assert.ok(copy.state.battle.log.some(line => line.includes('煤虫 Lv6の攻撃')));
+  assert.equal(copy.state.records.kills[soot.id],1);
+  assert.equal(copy.state.battle.log.filter(line=>line.includes('突撃して自爆した')).length,1);
   defendRound(copy);
   assert.ok(copy.state.battle.enemies[0].guard);
 });

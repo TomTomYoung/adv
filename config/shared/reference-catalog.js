@@ -33118,6 +33118,18 @@ export const referenceData={
         "soot_beetle_dust",
         "effects",
         0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "soot_beetle_dust",
+        "effects",
+        1,
         "status"
       ],
       "kind": "statuses",
@@ -33818,6 +33830,30 @@ export const referenceData={
       ],
       "kind": "formulas",
       "id": "stone_beetle_throw"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "armadillo_rampage",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "bomb_rock_throw",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
     },
     {
       "file": "jobs.json",
@@ -51443,7 +51479,7 @@ export const referenceData={
         "name": "岩殻突進"
       },
       "soot_beetle_dust": {
-        "name": "煤払い"
+        "name": "煤の自爆突撃"
       },
       "torch_play": {
         "name": "火遊び"
@@ -51705,6 +51741,12 @@ export const referenceData={
       },
       "stone_beetle_throw": {
         "name": "石虫投げ"
+      },
+      "armadillo_rampage": {
+        "name": "乱転がり"
+      },
+      "bomb_rock_throw": {
+        "name": "爆弾岩投げ"
       }
     },
     "items": {
@@ -82265,6 +82307,20 @@ export const referenceData={
       "path": [
         "skills",
         "stone_beetle_throw"
+      ]
+    },
+    "skills/armadillo_rampage": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "armadillo_rampage"
+      ]
+    },
+    "skills/bomb_rock_throw": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "bomb_rock_throw"
       ]
     },
     "fieldAbilities/survey": {

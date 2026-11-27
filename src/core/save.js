@@ -234,6 +234,10 @@ function migrateTwoHeadedOgres(original,data){
 
 // Only replace a known, shipped action list. Other invalid rules still fail validation.
 const previousMonsterAI = {
+  soot_beetle: [
+    {priority:20,condition:{op:'eq',left:{ref:'self.round'},right:1},skill:'soot_beetle_dust',target:'random'},
+    {priority:0,skill:'attack',target:'random'}
+  ],
   garden_root_shell: [
     {priority:10,skill:'guard',target:'self',condition:{op:'eq',left:{op:'mod',args:[{ref:'self.round'},2]},right:1}},
     {priority:0,skill:'attack',target:'random'}
@@ -249,7 +253,7 @@ function migrateMonsterActions(save,data){
   let updated;
   for(const [i,u] of units.entries()){
     if(typeof u?.id!=='string')continue;
-    const id=u.id.replace(/^shifting_labyrinth_f[0-9]+_lv[0-9]+_/,'');
+    const id=data.enemies[u.id]?.species ?? u.id.replace(/^shifting_labyrinth_f[0-9]+_lv[0-9]+_/,'');
     const previous=Object.hasOwn(previousMonsterAI,id) && previousMonsterAI[id];
     const current=data.enemies[id]?.ai;
     const oldRules=previous && current && JSON.stringify(u.ai)===JSON.stringify(previous) && JSON.stringify(current)!==JSON.stringify(previous);

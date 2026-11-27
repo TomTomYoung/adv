@@ -32,6 +32,18 @@ export const MONSTER_HABITS = {
     fatalHitElement: 'fire',
     burstSkill: 'fire'
   },
+  armadillo_rampage: {
+    name: '乱転がり',
+    onTurn: true,
+    minLevel: 8,
+    description: 'Lv8から、防御中に手番を迎えると2〜3回転がって攻撃する。攻撃ごとに、自分を除く敵味方の生存者から1体を等確率で選ぶ。同じ相手に続けて当たることもある。'
+  },
+  bomb_rock_throw: {
+    name: '爆弾岩投げ',
+    onTurn: true,
+    minLevel: 8,
+    description: 'Lv8から、生きた味方の石虫がいないとき、後列を優先して爆弾岩を投げ、相手1体に火属性ダメージを与える。'
+  },
   rolling_shell: {
     name: '転がり甲羅',
     description: '防御中、仲間を狙った単体の物理攻撃に転がり込んで引き受ける。各巡1回。'
