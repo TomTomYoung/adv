@@ -2717,7 +2717,15 @@ export const defaultPresentation = {
   "materialSprites": {
     "construct": "metal",
     "skeleton": "stone",
-    "slime": "water"
+    "slime": "water",
+    "monster_guard_2": "stone",
+    "monster_guard_2_elite": "stone",
+    "monster_battlefield_bonebeast": "stone",
+    "monster_kagaribi_ash_guard": "stone",
+    "monster_kagaribi_chain_bone": "stone",
+    "monster_kagaribi_patrol_guard": "stone",
+    "monster_kagaribi_ossuary_bone": "stone",
+    "monster_kagaribi_ossuary_remnant": "stone"
   },
   "mixer": {
     "maxSynthVoices": 24,

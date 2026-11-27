@@ -73,7 +73,8 @@ for(const region of regions){
   const r=region.id;
   for(const boss of [false,true]){
     const id=`guard_${r}${boss?'_elite':''}`,hp=(22+r*9)*(boss?2.4:1);
-    enemies[id]={id,name:`${region.name}の${boss?'守護者':'迷宮獣'}`,sprite:region.enemy,stats:{hp:Math.round(hp),mp:boss?20:8,str:8+r*2+(boss?3:0),vit:3+r,agi:5+r,int:6+r*2},resist:{fire:region.enemy==='slime'?1.3:1,physical:region.enemy==='construct'?0.85:1},rewards:{gold:5+r*2,xp:8+r*3},ai:[...(boss?[{priority:30,condition:{op:'lt',left:ref('self.hp_ratio'),right:0.3},skill:'heal',target:'self'}]:[]),{priority:20,condition:eq(ref('self.hp_ratio'),1),skill:r%3===0?'poison_bite':'attack',target:'weakest'},{priority:10,skill:r%2===0?'power':'attack',target:'random'},{priority:0,skill:'attack',target:'random'}]};
+    const sprite=r===2 ? `monster_${id}` : region.enemy;
+    enemies[id]={id,name:`${region.name}の${boss?'守護者':'迷宮獣'}`,sprite,stats:{hp:Math.round(hp),mp:boss?20:8,str:8+r*2+(boss?3:0),vit:3+r,agi:5+r,int:6+r*2},resist:{fire:region.enemy==='slime'?1.3:1,physical:region.enemy==='construct'?0.85:1},rewards:{gold:5+r*2,xp:8+r*3},ai:[...(boss?[{priority:30,condition:{op:'lt',left:ref('self.hp_ratio'),right:0.3},skill:'heal',target:'self'}]:[]),{priority:20,condition:eq(ref('self.hp_ratio'),1),skill:r%3===0?'poison_bite':'attack',target:'weakest'},{priority:10,skill:r%2===0?'power':'attack',target:'random'},{priority:0,skill:'attack',target:'random'}]};
   }
   encounters[`roaming_${r}`]={id:`roaming_${r}`,text:'石床を引っ掻く音。通路を巡る迷宮獣が、灯の中へ入ってきました。',escape:true,enemies:[`guard_${r}`]};
   encounters[`guard_${r}`]={id:`guard_${r}`,text:'奥の足場を迷宮の守護者が塞ぎます。道を通すには、戦い抜くか退くかを選ぶ必要があります。',escape:true,enemies:[`guard_${r}`,`guard_${r}`]};

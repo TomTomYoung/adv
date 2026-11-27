@@ -2,7 +2,7 @@
 
 [ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)
 
-作品版1.34.0。配布中の敵は199定義、遭遇編成は123定義、敵が参照する画像ファイルは139点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.34.0。配布中の敵は199定義、遭遇編成は123定義、敵が参照する画像ファイルは146点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
@@ -3935,10 +3935,10 @@ story_175：鏡牙獣×1。逃走可。
 
 ### 戦場の骸骨獣 (battlefield_bonebeast)
 
-<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="戦場の骸骨獣">
+<img src="../../assets/images/monsters/battlefield_bonebeast.webp" width="160" alt="戦場の骸骨獣">
 
-画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
+画像ID：monster_battlefield_bonebeast。実ファイル：[assets/images/monsters/battlefield_bonebeast.webp](../../assets/images/monsters/battlefield_bonebeast.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
@@ -4060,10 +4060,10 @@ kagaribi_oil_beetle_moth：油虫×1・灯蛾×1。逃走可。
 
 ### 赤錆の番兵 (kagaribi_ash_guard)
 
-<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="赤錆の番兵">
+<img src="../../assets/images/monsters/kagaribi_ash_guard.webp" width="160" alt="赤錆の番兵">
 
-画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
+画像ID：monster_kagaribi_ash_guard。実ファイル：[assets/images/monsters/kagaribi_ash_guard.webp](../../assets/images/monsters/kagaribi_ash_guard.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
@@ -4112,10 +4112,10 @@ kagaribi_deep_pair：鎖引き骸骨×1・灰積みゴーレム×1。逃走可�
 
 ### 鎖引き骸骨 (kagaribi_chain_bone)
 
-<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="鎖引き骸骨">
+<img src="../../assets/images/monsters/kagaribi_chain_bone.webp" width="160" alt="鎖引き骸骨">
 
-画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
+画像ID：monster_kagaribi_chain_bone。実ファイル：[assets/images/monsters/kagaribi_chain_bone.webp](../../assets/images/monsters/kagaribi_chain_bone.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
@@ -4268,10 +4268,10 @@ kagaribi_shallow_manifold_pair：油染みの煤ネズミ×1・煤けた灯蛾×
 
 ### 巡回路の赤錆番兵 (kagaribi_patrol_guard)
 
-<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="巡回路の赤錆番兵">
+<img src="../../assets/images/monsters/kagaribi_patrol_guard.webp" width="160" alt="巡回路の赤錆番兵">
 
-画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・納骨堂の鎖引き・納骨堂の残骸兵。
+画像ID：monster_kagaribi_patrol_guard。実ファイル：[assets/images/monsters/kagaribi_patrol_guard.webp](../../assets/images/monsters/kagaribi_patrol_guard.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
@@ -4323,10 +4323,10 @@ kagaribi_ossuary_deep_pair：納骨堂の残骸兵×1・炭焼き場の灰積み
 
 ### 納骨堂の鎖引き (kagaribi_ossuary_bone)
 
-<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="納骨堂の鎖引き">
+<img src="../../assets/images/monsters/kagaribi_ossuary_bone.webp" width="160" alt="納骨堂の鎖引き">
 
-画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の残骸兵。
+画像ID：monster_kagaribi_ossuary_bone。実ファイル：[assets/images/monsters/kagaribi_ossuary_bone.webp](../../assets/images/monsters/kagaribi_ossuary_bone.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
@@ -4350,10 +4350,10 @@ kagaribi_shallow_deep_pair：納骨堂の鎖引き×1・炭焼き場の灰積み
 
 ### 納骨堂の残骸兵 (kagaribi_ossuary_remnant)
 
-<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="納骨堂の残骸兵">
+<img src="../../assets/images/monsters/kagaribi_ossuary_remnant.webp" width="160" alt="納骨堂の残骸兵">
 
-画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き。
+画像ID：monster_kagaribi_ossuary_remnant。実ファイル：[assets/images/monsters/kagaribi_ossuary_remnant.webp](../../assets/images/monsters/kagaribi_ossuary_remnant.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
@@ -4971,10 +4971,10 @@ boss_1：灯守の地下水道の守護者×1・灯守の地下水道の迷宮�
 
 ### 塩哭きの廃坑の迷宮獣 (guard_2)
 
-<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="塩哭きの廃坑の迷宮獣">
+<img src="../../assets/images/monsters/guard_2.webp" width="160" alt="塩哭きの廃坑の迷宮獣">
 
-画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
+画像ID：monster_guard_2。実ファイル：[assets/images/monsters/guard_2.webp](../../assets/images/monsters/guard_2.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
@@ -5003,10 +5003,10 @@ boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1�
 
 ### 塩哭きの廃坑の守護者 (guard_2_elite)
 
-<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="塩哭きの廃坑の守護者">
+<img src="../../assets/images/monsters/guard_2_elite.webp" width="160" alt="塩哭きの廃坑の守護者">
 
-画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
+画像ID：monster_guard_2_elite。実ファイル：[assets/images/monsters/guard_2_elite.webp](../../assets/images/monsters/guard_2_elite.webp)。
+画像共有：他の敵定義との共有なし。
 
 習性：骨の再生。HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。
 
