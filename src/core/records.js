@@ -1,3 +1,4 @@
+import {sootOnDeath} from './soot-smoke.js';
 import {frontlineState,syncFrontlineDefeats} from './frontline-lifecycle.js';
 // Objective history. Script commands can read it, but cannot write it.
 export const freshRecords=(historyComplete=true)=>({historyComplete,battles:0,wins:0,escapes:0,losses:0,repels:0,interruptions:0,kills:{},encounters:{},baselines:{}});
@@ -9,11 +10,12 @@ export function recordCount(records,{metric,id,sinceQuest}){
   const count=r=>['kills','encounters'].includes(metric)?(r?.[metric]?.[id]??0):(r?.[metric]??0);
   return count(records)-count(base);
 }
-export function recordDefeated(engine,victory=false){
+export function recordDefeated(engine,victory=false,attacker=null){
   const b=engine.state.battle,r=engine.state.records;
   syncFrontlineDefeats(engine);b.recordedKills??=[];
   for(const enemy of b.enemies)if((victory||!enemy.reviveRound)&&(enemy.hp===0||b.mode==='frontline'&&frontlineState(engine.state,enemy)==='removed')&&!b.recordedKills.includes(enemy.instance)){
     b.recordedKills.push(enemy.instance);r.kills[enemy.id]=(r.kills[enemy.id]??0)+1;
+    sootOnDeath(engine,enemy,attacker);
   }
 }
 export function recordResult(engine,result){

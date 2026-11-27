@@ -50,7 +50,7 @@ function addFloorEncounter(data, floor) {
   const base = data.enemies[species[Math.floor((floor - 1) / 5) % species.length]];
   const id = floorId(floor), enemy = `${id}_beast`, encounter = `${id}_encounter`;
   const growth = floor - 1;
-  data.enemies[enemy] = {...base, id: enemy, name: `${base.name} Lv${floor}`,
+  data.enemies[enemy] = {...base, id: enemy, level: floor, name: `${base.name} Lv${floor}`,
     stats: {hp: 32 + 12 * growth, mp: base.stats.mp + growth, str: 10 + 2 * growth,
       vit: 4 + growth, agi: 6 + Math.floor(growth / 2), int: 8 + 2 * growth},
     rewards: {xp: 32 * floor, gold: 6 + 2 * growth}};

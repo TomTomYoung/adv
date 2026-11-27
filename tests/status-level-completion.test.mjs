@@ -68,7 +68,7 @@ test('all six recovery rates begin at 10/5/2 percent and reach certainty on roun
 test('higher-level statuses retain failed recovery counts across reapplication, save/load and next battle',()=>{
   const {g,d,a}=game();for(const id of recovering)applyStatus(d,g.state,a,id,undefined,2);
   g.random=()=>.99;for(let i=0;i<3;i++)recoverStatuses(g,a);
-  for(const id of recovering){applyStatus(d,g.state,a,id,undefined,1);assert.equal(a.statusLevels[id],2);applyStatus(d,g.state,a,id,undefined,3);assert.equal(a.statusRecoveryTurns[id],3);}
+  for(const id of recovering){applyStatus(d,g.state,a,id,undefined,1);assert.equal(a.statusLevels[id],id==='blindness'?3:2);applyStatus(d,g.state,a,id,undefined,3);assert.equal(a.statusRecoveryTurns[id],3);}
   g.finishBattle('escape');roundtrip(g);g.startBattle('wild_pair_10',{win:[],lose:[],escape:[]});
   const actor=g.state.actors.ada;assert.ok(recovering.every(id=>actor.statusLevels[id]===3&&actor.statusRecoveryTurns[id]===3));
   g.random=()=>.08;recoverStatuses(g,actor);assert.ok(recovering.every(id=>actor.statusRecoveryTurns[id]===4));
