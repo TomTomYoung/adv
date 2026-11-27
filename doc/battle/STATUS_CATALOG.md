@@ -172,7 +172,7 @@
 
 分類：身体異常。
 持続：解除まで。
-付与元：灰かぶせ (family_ogre_20_quarrel) / 煤払い (soot_beetle_dust) / 地層崩し (family_slime_25_strata) / 魔物の習性「煤煙」（Lv5以上）。
+付与元：灰かぶせ (family_ogre_20_quarrel) / 煤の自爆突撃 (soot_beetle_dust) / 地層崩し (family_slime_25_strata) / 魔物の習性「煤煙」（Lv5以上）。
 
 再付与が成功すると1段階上昇し、最大Lv3。解除後は初回の付与Lvから始まります。
 

@@ -67,7 +67,7 @@ const variations = {
 
 export function monsterActionEffects(data, enemy, skillId) {
   const skill = data.skills[skillId], lines = [];
-  if (skillId === enemy.classSkill || ['moth_whistle','slime_burst','mine_drill_ready'].includes(skillId))
+  if (skillId === enemy.classSkill || ['moth_whistle','slime_burst','mine_drill_ready','soot_beetle_dust'].includes(skillId))
     lines.push(skill.description);
   if (skillId === 'recover_stance') lines.push('突進後の息継ぎで、この手番は休む。');
   for (const [when, id] of variations[skillId] ?? [['', skillId]]) {
