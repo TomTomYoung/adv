@@ -59,6 +59,9 @@
       },
       "il": {
         "twin_thunder": 6
+      },
+      "sera": {
+        "stun_break": 3
       }
     }
   },
@@ -5373,6 +5376,24 @@
           "element": "lightning"
         }
       ]
+    },
+    "stun_break": {
+      "name": "スタンブレイク",
+      "mp": 3,
+      "target": "enemy",
+      "description": "敵1体を打撃。相手が防御中なら、ダメージを与える前に防御を解除し、続く2回の行動をスタンで封じます。",
+      "effects": [
+        {
+          "type": "stun",
+          "breakGuard": true,
+          "count": 2
+        },
+        {
+          "type": "damage",
+          "formula": "physical",
+          "element": "physical"
+        }
+      ]
     }
   },
   "formulas": {
@@ -7260,7 +7281,8 @@
     "water_bash": "skill_tide",
     "aegis_field": "skill_ward",
     "white_fang": "skill_cleave",
-    "twin_thunder": "skill_storm"
+    "twin_thunder": "skill_storm",
+    "stun_break": "skill_smash"
   },
   "gridProfiles": {
     "power": {
@@ -9586,6 +9608,18 @@
         "shape": "side_all"
       },
       "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "stun_break": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
       "friendlyFire": false
     }
   },
@@ -14293,6 +14327,30 @@
       },
       "area": {
         "shape": "side_all"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "stun_break": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
       },
       "friendlyFire": false,
       "resolution": "simultaneous",

@@ -455,6 +455,10 @@ export class GameEngine {
     const catalog=seed || source.shiftingLayoutSeed!==undefined ? shiftingDungeonData(source,seed) : source;
     this.data=acceptedStoryRouteData(catalog,save.state);
     this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();restoreWorldConversations(this);
+    for (const enemy of this.state.battle?.enemies ?? []) {
+      const currentName = this.data.enemies[enemy.id].name;
+      if (currentName.startsWith('殻甲アルマジロ') && enemy.name === currentName.replace('殻甲アルマジロ','根殻甲')) enemy.name = currentName;
+    }
     // Earlier battles could save oil or flames together with a water ward.
     for (const unit of [...Object.values(this.state.actors), ...(this.state.battle?.enemies ?? [])]) {
       if (unit.statuses.includes('water_ward')) clearWaterWardConflicts(unit);

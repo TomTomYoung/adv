@@ -7,6 +7,10 @@ export const MONSTER_HABITS = {
     fatalHitElement: 'fire',
     burstSkill: 'fire'
   },
+  rolling_shell: {
+    name: '転がり甲羅',
+    description: '2手番続けて防御し、各巡1回、仲間を狙った単体の物理攻撃に転がり込んで引き受ける。次の手番は甲羅を開いて通常攻撃する。'
+  },
   burn_out: {
     name: '燃え尽き',
     description: '火属性の攻撃が命中すると、その個体だけが燃え尽きて即死する。',
@@ -20,7 +24,7 @@ export function validHabits(ids) {
 }
 
 export function fatalHitHabit(data, target, element) {
-  if (!target.instance || target.hp <= 0) return;
+  if (!element || !target.instance || target.hp <= 0) return;
   const habits = data.enemies[target.id]?.habits;
   if (!habits?.length) return;
   const matching = habits.map(id => MONSTER_HABITS[id]).filter(habit => habit.fatalHitElement === element);

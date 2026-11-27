@@ -435,6 +435,10 @@ export function validateSave(save,data){
       if(b.enemyScale!==undefined&&(!Number.isFinite(b.enemyScale)||b.enemyScale<.1||b.enemyScale>5))fail('敵の環境倍率不正');
       if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&(e.hp===0||b.mode==='frontline')))))fail('撃破記録不正');
       if(new Set(b.acted).size!==b.acted.length||new Set(b.guards).size!==b.guards.length||b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
+      for(const enemy of b.enemies){
+        if(enemy?.rollingShellTurns!==undefined && !integer(enemy.rollingShellTurns,1,2))fail('転がり甲羅の防御手番不正');
+        if(enemy?.rollingShellRound!==undefined && !integer(enemy.rollingShellRound,1,b.round))fail('転がり甲羅の割り込み巡不正');
+      }
       b.enemies.forEach((enemy,i)=>{if(Array.isArray(enemy?.statuses))errors.push(...statusStateErrors(data,enemy));const def=scaledEnemy(data.enemies[roster[i]],i,b.enemyScale??1);if(!isRecord(enemy)||enemy.id!==def.id||enemy.frontlineDefeat!==def.frontlineDefeat||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
       const c=b.continuations;
       if(!isRecord(c))fail('戦闘継続不正');

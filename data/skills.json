@@ -9748,5 +9748,59 @@
       "trajectory": "indirect",
       "friendlyFire": false
     }
+  },
+  "stun_break": {
+    "name": "スタンブレイク",
+    "mp": 3,
+    "target": "enemy",
+    "description": "敵1体を打撃。相手が防御中なら、ダメージを与える前に防御を解除し、続く2回の行動をスタンで封じます。",
+    "effects": [
+      {
+        "type": "stun",
+        "breakGuard": true,
+        "count": 2
+      },
+      {
+        "type": "damage",
+        "formula": "physical",
+        "element": "physical"
+      }
+    ],
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    }
   }
 }

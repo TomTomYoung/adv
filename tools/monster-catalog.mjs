@@ -72,7 +72,7 @@ export function monsterCatalog(data) {
       if(e.id.startsWith('water_'))out.push('旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。','');
       out.push(`基礎能力：${stats(e.stats)}。報酬：${e.rewards.gold}G / ${e.rewards.xp}EXP。`,
         `宝箱：${e.drop?.chance?`${data.items[e.drop.item].name} 1個 / ${e.drop.chance*100}％`:'なし（確率0）'}。`,
-        `属性倍率：${Object.entries(e.resist??{}).map(([key,n])=>`${key} ${n}`).join(' / ')||'すべて既定値'}。`,'','AIの選択順：','');
+        `属性倍率：${Object.entries(e.resist??{}).map(([key,n])=>`${key} ${n}`).join(' / ')||'すべて既定値'}。`,'',e.habits?.includes('rolling_shell')?'転がり甲羅を外したときの行動：':'AIの選択順：','');
       for(const [i,rule] of [...e.ai].sort((a,b)=>b.priority-a.priority).entries()){
         const skill=data.skills[rule.skill];
         if (rule.skill === e.classSkill) { out.push(`${i+1}. ${skill.name} (${rule.skill})：${skill.description}`); continue; }

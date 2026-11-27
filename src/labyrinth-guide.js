@@ -193,7 +193,7 @@ function drawMonster(id) {
   affinity.append(el('p', modified.length
     ? modified.map(([key, rate]) => (elements[key] ?? key) + ' ×' + rate).join(' ／ ') + '　その他 ×1'
     : '全属性 ×1'));
-  const actions = block('行動と使用条件'), list = el('ol');
+  const actions = block(enemy.habits?.includes('rolling_shell') ? '転がり甲羅を外したときの行動' : '行動と使用条件'), list = el('ol');
   for (const rule of [...enemy.ai].sort((a, b) => b.priority - a.priority)) {
     const skill = data.skills[rule.skill];
     const item = el('li');
