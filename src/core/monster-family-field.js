@@ -100,13 +100,7 @@ export function familyIntercept(engine,source,targets,skill) {
   const s=engine.state,b=s.battle,f=b.familyField;
   if (!f||source.instance||targets.length!==1||!targets[0].instance||targets[0].hp<=0||!skill.effects.some(e=>e.type==='damage')) return targets;
   const active=living(s,b.enemies);
-  const taunt=active.find(e=>profession(e)==='quarrel'&&e.tactics?.challenged?.includes(source.id));
-  const target=taunt??targets[0];
-  if (taunt&&target!==targets[0]) b.log.push(label(engine,source)+'は'+taunt.name+'の挑発に乗った。');
-  if (profession(target)==='quarrel'&&target.tactics?.challenged?.includes(source.id)) {
-    const replies=tactics(target).replies??=[];
-    if (!replies.includes(source.id)) replies.push(source.id);
-  }
+  const [target]=targets;
   const wall=active.find(e=>e.tactics?.wall===depth(s,target));
   if (wall) { delete wall.tactics.wall; b.log.push(wall.name+'の防壁が一撃を止めた。'); return []; }
   if (f.owl===target.instance) { delete f.owl; b.log.push('梟の声で'+target.name+'は一撃をかわした。'); return []; }
@@ -210,7 +204,6 @@ export function familySaveValid(data,state) {
     if(t.windup!==undefined&&(!record(t.windup)||!tier(t.windup.row)||!tier(t.windup.left)))return false;
     for(const k of ['lastAttack','lastSpecial'])if(t[k]!==undefined&&!Object.hasOwn(data.skills,t[k]))return false;
     if(t.honored!==undefined&&(!Array.isArray(t.honored)||t.honored.some(id=>!enemies.has(id))))return false;
-    for(const k of ['replies','challenged'])if(t[k]!==undefined&&(!Array.isArray(t[k])||t[k].some(id=>!actors.has(id))))return false;
     for(const k of ['clay','heir','cover'])if(t[k]!==undefined&&!enemies.has(t[k]))return false;
     if(t.rage!==undefined&&(!Number.isInteger(t.rage)||t.rage<0||t.rage>3))return false;
   }

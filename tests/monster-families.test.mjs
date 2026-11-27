@@ -95,3 +95,39 @@ test('a mountain king winding up can be interrupted by a hit before the stomp',(
   assert.equal(king.tactics.windup,undefined);
   assert.ok((b.stuns?.['enemy:'+king.instance]??0)>0);
 });
+
+test('a saved challenge becomes a single ash throw against the foremost occupied row',()=>{
+  const game=stage(20,'ogre_squad_1');
+  const save=JSON.parse(game.save());
+  const id='family_ogre_20_quarrel';
+  for(const enemy of save.state.battle.enemies) enemy.breed='ツインヘッドオーガ';
+  const old=save.state.battle.enemies.find(e=>e.classSkill===id);
+  old.name='口喧嘩オーガ Lv20';
+  old.ai[0].target='self';
+  old.tactics.challenged=['ada','nio'];
+  old.tactics.replies=['ada'];
+  old.hp--;
+
+  const resumed=new GameEngine(data);
+  resumed.load(JSON.stringify(save));
+  const thrower=()=>resumed.state.battle.enemies.find(e=>e.classSkill===id);
+  assert.equal(thrower().name,'灰撒きオーガ Lv20');
+  assert.equal(thrower().hp,old.hp);
+  assert.equal(thrower().tactics.challenged,undefined);
+  assert.equal(thrower().tactics.replies,undefined);
+  resumed.random=()=>0.5;
+  const takeTurn=()=>{
+    const b=resumed.state.battle;
+    for(let i=0;b.turnQueue[b.turnIndex]!=='enemy:'+thrower().instance;i++){
+      assert.ok(i<20);
+      assert.ok(resumed.dispatch({type:'battle.step'}));
+    }
+    assert.ok(resumed.dispatch({type:'battle.step'}));
+  };
+  takeTurn();
+  assert.deepEqual(resumed.state.members.filter(id=>resumed.state.actors[id].statuses.includes('blindness')),['ada','nio']);
+  assert.equal(thrower().tactics.spent,true);
+  resumed.load(resumed.save());
+  takeTurn();
+  assert.equal(thrower().tactics.lastAttack,'attack');
+});

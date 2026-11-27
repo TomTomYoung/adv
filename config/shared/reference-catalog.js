@@ -31851,6 +31851,18 @@ export const referenceData={
       "file": "jobs.json",
       "path": [
         "skills",
+        "family_ogre_20_quarrel",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "blindness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
         "family_ogre_20_singer",
         "effects",
         0,
@@ -49819,13 +49831,13 @@ export const referenceData={
         "name": "双頭警戒"
       },
       "family_ogre_20_hex": {
-        "name": "双頭呪法"
+        "name": "結び呪い"
       },
       "family_ogre_20_quarrel": {
-        "name": "二声の挑発"
+        "name": "灰かぶせ"
       },
       "family_ogre_20_singer": {
-        "name": "双声の和音"
+        "name": "癒やしの独唱"
       },
       "family_goblin_25_king": {
         "name": "小王の号令"
@@ -50800,7 +50812,7 @@ export const referenceData={
         "sprite": "monster_ogre_20_hex"
       },
       "ogre_20_quarrel": {
-        "name": "口喧嘩オーガ",
+        "name": "灰撒きオーガ",
         "sprite": "monster_ogre_20_quarrel"
       },
       "ogre_20_singer": {
@@ -86748,7 +86760,7 @@ export const referenceData={
       "monster_ogre_20_twinclubs": "assets/images/monsters/families/ogre_20_twinclubs.webp",
       "monster_ogre_20_warden": "assets/images/monsters/families/ogre_20_warden.webp",
       "monster_ogre_20_hex": "assets/images/monsters/families/ogre_20_hex.webp",
-      "monster_ogre_20_quarrel": "assets/images/monsters/families/ogre_20_quarrel.webp",
+      "monster_ogre_20_quarrel": "assets/images/monsters/families/ogre_20_ashsack.webp",
       "monster_ogre_20_singer": "assets/images/monsters/families/ogre_20_singer.webp",
       "monster_goblin_25_king": "assets/images/monsters/families/goblin_25_king.webp",
       "monster_goblin_25_guard": "assets/images/monsters/families/goblin_25_guard.webp",
