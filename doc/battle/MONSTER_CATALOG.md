@@ -2,12 +2,12 @@
 
 [ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)
 
-作品版1.34.0。配布中の敵は199定義、遭遇編成は123定義、敵が参照する画像ファイルは146点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.34.0。配布中の敵は225定義、遭遇編成は123定義、敵が参照する画像ファイルは172点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
-[個別デザインの通常魔物](#個別デザインの通常魔物)：125定義。
+[個別デザインの通常魔物](#個別デザインの通常魔物)：151定義。
 [依頼に追加した敵](#依頼に追加した敵)：48定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
@@ -3625,6 +3625,682 @@ AIの選択順：
 AIの選択順：
 
 1. 王冠渡り (family_skeleton_25_crowned)：戦闘中一度、倒れると他の仮死の骸骨へ王冠が移る。全員が倒れるとそのまま勝利する。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-slime_5_drop"></a>
+
+### しずくスライム (slime_5_drop)
+
+<img src="../../assets/images/monsters/families/slime_5_drop.webp" width="160" alt="しずくスライム">
+
+画像ID：monster_slime_5_drop。実ファイル：[assets/images/monsters/families/slime_5_drop.webp](../../assets/images/monsters/families/slime_5_drop.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：しずく種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_5_drop)。
+
+設計上の役割：体当たりの後に長く伸び上がり、次の手番に鞭のように強打します。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. しずく鞭 (family_slime_5_drop)：体当たりの後に長く伸び上がり、次の手番に鞭のように強打します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-slime_5_mochi"></a>
+
+### もちスライム (slime_5_mochi)
+
+<img src="../../assets/images/monsters/families/slime_5_mochi.webp" width="160" alt="もちスライム">
+
+画像ID：monster_slime_5_mochi。実ファイル：[assets/images/monsters/families/slime_5_mochi.webp](../../assets/images/monsters/families/slime_5_mochi.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：しずく種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_5_mochi)。
+
+設計上の役割：平たく縮んだ次の手番に後列へ跳びます。防御で受け止められると床に貼りつき、一手休みます。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. もち跳び (family_slime_5_mochi)：平たく縮んだ次の手番に後列へ跳びます。防御で受け止められると床に貼りつき、一手休みます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-slime_5_sticky"></a>
+
+### くっつきスライム (slime_5_sticky)
+
+<img src="../../assets/images/monsters/families/slime_5_sticky.webp" width="160" alt="くっつきスライム">
+
+画像ID：monster_slime_5_sticky。実ファイル：[assets/images/monsters/families/slime_5_sticky.webp](../../assets/images/monsters/families/slime_5_sticky.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：しずく種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_5_sticky)。
+
+設計上の役割：最初に直接殴った人の武器にくっつき、手番を遅らせます。その武器で別の敵を通常攻撃すると一緒に叩きつけられます。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. ねばつく体 (family_slime_5_sticky)：最初に直接殴った人の武器にくっつき、手番を遅らせます。その武器で別の敵を通常攻撃すると一緒に叩きつけられます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-slime_5_berry"></a>
+
+### 木の実スライム (slime_5_berry)
+
+<img src="../../assets/images/monsters/families/slime_5_berry.webp" width="160" alt="木の実スライム">
+
+画像ID：monster_slime_5_berry。実ファイル：[assets/images/monsters/families/slime_5_berry.webp](../../assets/images/monsters/families/slime_5_berry.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：しずく種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_5_berry)。
+
+設計上の役割：傷つくと一度だけ体内の赤い木の実で回復します。食べる前に倒すと実が手に入ります。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：赤い木の実 1個 / 100％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 木の実の消化 (family_slime_5_berry)：傷つくと一度だけ体内の赤い木の実で回復します。食べる前に倒すと実が手に入ります。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-slime_5_bubble"></a>
+
+### 泡吹きスライム (slime_5_bubble)
+
+<img src="../../assets/images/monsters/families/slime_5_bubble.webp" width="160" alt="泡吹きスライム">
+
+画像ID：monster_slime_5_bubble。実ファイル：[assets/images/monsters/families/slime_5_bubble.webp](../../assets/images/monsters/families/slime_5_bubble.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：しずく種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_5_bubble)。
+
+設計上の役割：近くの仲間を大きな泡で包み、次に受ける一撃を防ぎます。連撃の二発目は通ります。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 泡のひと張り (family_slime_5_bubble)：近くの仲間を大きな泡で包み、次に受ける一撃を防ぎます。連撃の二発目は通ります。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-slime_5_oil"></a>
+
+### 油玉 (slime_5_oil)
+
+<img src="../../assets/images/monsters/families/slime_5_oil.webp" width="160" alt="油玉">
+
+画像ID：monster_slime_5_oil。実ファイル：[assets/images/monsters/families/slime_5_oil.webp](../../assets/images/monsters/families/slime_5_oil.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：しずく種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_5_oil)。
+
+設計上の役割：体当たりと直接物理攻撃への接触で相手を油状態にします。炎に弱く、生き残ると火だるまになります。巡の終わりには燃え尽きますが、先に手番が来ると自爆して味方全体を炎に巻き込みます。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：fire 2。
+
+AIの選択順：
+
+1. 油まみれ体当たり (family_slime_5_oil)：体当たりと直接物理攻撃への接触で相手を油状態にします。炎に弱く、生き残ると火だるまになります。巡の終わりには燃え尽きますが、先に手番が来ると自爆して味方全体を炎に巻き込みます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-slime_10_stones"></a>
+
+### 石呑みスライム (slime_10_stones)
+
+<img src="../../assets/images/monsters/families/slime_10_stones.webp" width="160" alt="石呑みスライム">
+
+画像ID：monster_slime_10_stones。実ファイル：[assets/images/monsters/families/slime_10_stones.webp](../../assets/images/monsters/families/slime_10_stones.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：呑み込み種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_10_stones)。
+
+設計上の役割：後列へ三つの石を順に吐きます。一つ吐くごとに素早くなり、最後は体当たりに切り替えます。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 腹石飛ばし (family_slime_10_stones)：後列へ三つの石を順に吐きます。一つ吐くごとに素早くなり、最後は体当たりに切り替えます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-slime_10_bottle"></a>
+
+### 瓶詰めスライム (slime_10_bottle)
+
+<img src="../../assets/images/monsters/families/slime_10_bottle.webp" width="160" alt="瓶詰めスライム">
+
+画像ID：monster_slime_10_bottle。実ファイル：[assets/images/monsters/families/slime_10_bottle.webp](../../assets/images/monsters/families/slime_10_bottle.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：呑み込み種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_10_bottle)。
+
+設計上の役割：瓶に守られています。打撃で瓶が割れると防御が下がり、割った相手の列へ一度だけ中身が飛び散ります。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 瓶転がり (family_slime_10_bottle)：瓶に守られています。打撃で瓶が割れると防御が下がり、割った相手の列へ一度だけ中身が飛び散ります。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-slime_10_iron"></a>
+
+### 砂鉄スライム (slime_10_iron)
+
+<img src="../../assets/images/monsters/families/slime_10_iron.webp" width="160" alt="砂鉄スライム">
+
+画像ID：monster_slime_10_iron。実ファイル：[assets/images/monsters/families/slime_10_iron.webp](../../assets/images/monsters/families/slime_10_iron.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：呑み込み種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_10_iron)。
+
+設計上の役割：砂鉄の針を撃つと防御が落ち、次の手番に床の砂鉄を集め直します。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 砂鉄針 (family_slime_10_iron)：砂鉄の針を撃つと防御が落ち、次の手番に床の砂鉄を集め直します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-slime_10_wick"></a>
+
+### 灯芯スライム (slime_10_wick)
+
+<img src="../../assets/images/monsters/families/slime_10_wick.webp" width="160" alt="灯芯スライム">
+
+画像ID：monster_slime_10_wick。実ファイル：[assets/images/monsters/families/slime_10_wick.webp](../../assets/images/monsters/families/slime_10_wick.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：呑み込み種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_10_wick)。
+
+設計上の役割：炎を受けると蝋が柔らかくなり、打撃がよく通ります。次に動くと最前列へ熱い蝋を浴びせます。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 熱蝋まき (family_slime_10_wick)：炎を受けると蝋が柔らかくなり、打撃がよく通ります。次に動くと最前列へ熱い蝋を浴びせます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-slime_10_chime"></a>
+
+### 鈴呑みスライム (slime_10_chime)
+
+<img src="../../assets/images/monsters/families/slime_10_chime.webp" width="160" alt="鈴呑みスライム">
+
+画像ID：monster_slime_10_chime。実ファイル：[assets/images/monsters/families/slime_10_chime.webp](../../assets/images/monsters/families/slime_10_chime.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：呑み込み種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_10_chime)。
+
+設計上の役割：打撃を受けると鈴が鳴り、眠っている魔物を起こします。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 目覚まし鈴 (family_slime_10_chime)：打撃を受けると鈴が鳴り、眠っている魔物を起こします。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-slime_15_parasol"></a>
+
+### 傘スライム (slime_15_parasol)
+
+<img src="../../assets/images/monsters/families/slime_15_parasol.webp" width="160" alt="傘スライム">
+
+画像ID：monster_slime_15_parasol。実ファイル：[assets/images/monsters/families/slime_15_parasol.webp](../../assets/images/monsters/families/slime_15_parasol.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：変形種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_15_parasol)。
+
+設計上の役割：自分の後ろにいる一匹を傘に入れ、飛び道具を防ぎます。傘を開くと垂れた核に近接攻撃がよく通ります。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 傘開き (family_slime_15_parasol)：自分の後ろにいる一匹を傘に入れ、飛び道具を防ぎます。傘を開くと垂れた核に近接攻撃がよく通ります。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-slime_15_rubber"></a>
+
+### ゴムまりスライム (slime_15_rubber)
+
+<img src="../../assets/images/monsters/families/slime_15_rubber.webp" width="160" alt="ゴムまりスライム">
+
+画像ID：monster_slime_15_rubber。実ファイル：[assets/images/monsters/families/slime_15_rubber.webp](../../assets/images/monsters/families/slime_15_rubber.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：変形種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_15_rubber)。
+
+設計上の役割：打撃で一列後ろへ弾かれます。その列に魔物がいれば、両方が衝突ダメージを受けます。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 跳ね返り (family_slime_15_rubber)：打撃で一列後ろへ弾かれます。その列に魔物がいれば、両方が衝突ダメージを受けます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-slime_15_thread"></a>
+
+### 糸引きスライム (slime_15_thread)
+
+<img src="../../assets/images/monsters/families/slime_15_thread.webp" width="160" alt="糸引きスライム">
+
+画像ID：monster_slime_15_thread。実ファイル：[assets/images/monsters/families/slime_15_thread.webp](../../assets/images/monsters/families/slime_15_thread.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：変形種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_15_thread)。
+
+設計上の役割：後方の仲間と糸をつなぎます。仲間を前に引き出すと、この個体も同じだけ引き寄せられます。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 糸つなぎ (family_slime_15_thread)：後方の仲間と糸をつなぎます。仲間を前に引き出すと、この個体も同じだけ引き寄せられます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-slime_15_mirror"></a>
+
+### 鏡面スライム (slime_15_mirror)
+
+<img src="../../assets/images/monsters/families/slime_15_mirror.webp" width="160" alt="鏡面スライム">
+
+画像ID：monster_slime_15_mirror。実ファイル：[assets/images/monsters/families/slime_15_mirror.webp](../../assets/images/monsters/families/slime_15_mirror.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：変形種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_15_mirror)。
+
+設計上の役割：表面を張った間、次の単体攻撃魔法を一度反射します。物理攻撃を当てると鏡面が崩れます。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 鏡張り (family_slime_15_mirror)：表面を張った間、次の単体攻撃魔法を一度反射します。物理攻撃を当てると鏡面が崩れます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-slime_15_molt"></a>
+
+### 抜け殻スライム (slime_15_molt)
+
+<img src="../../assets/images/monsters/families/slime_15_molt.webp" width="160" alt="抜け殻スライム">
+
+画像ID：monster_slime_15_molt。実ファイル：[assets/images/monsters/families/slime_15_molt.webp](../../assets/images/monsters/families/slime_15_molt.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：変形種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_15_molt)。
+
+設計上の役割：最初の一撃を外皮に受けて一列下がります。その場に目も核もない外皮を残します。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 脱皮逃れ (family_slime_15_molt)：最初の一撃を外皮に受けて一列下がります。その場に目も核もない外皮を残します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-slime_20_twins"></a>
+
+### 双子スライム (slime_20_twins)
+
+<img src="../../assets/images/monsters/families/slime_20_twins.webp" width="160" alt="双子スライム">
+
+画像ID：monster_slime_20_twins。実ファイル：[assets/images/monsters/families/slime_20_twins.webp](../../assets/images/monsters/families/slime_20_twins.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：群生種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_20_twins)。
+
+設計上の役割：半分以下のHPで生き残ると、そのHPを前後の二匹に分けます。前が攻撃し、後ろが前を回復します。分裂は一度限りです。
+
+基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 二核分裂 (family_slime_20_twins)：半分以下のHPで生き残ると、そのHPを前後の二匹に分けます。前が攻撃し、後ろが前を回復します。分裂は一度限りです。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-slime_20_bandage"></a>
+
+### 包帯スライム (slime_20_bandage)
+
+<img src="../../assets/images/monsters/families/slime_20_bandage.webp" width="160" alt="包帯スライム">
+
+画像ID：monster_slime_20_bandage。実ファイル：[assets/images/monsters/families/slime_20_bandage.webp](../../assets/images/monsters/families/slime_20_bandage.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：群生種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_20_bandage)。
+
+設計上の役割：傷ついた仲間に巻きつき、手番ごとに回復します。巻きつき中は打撃に弱く、殴るとほどけます。
+
+基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 包帯巻き (family_slime_20_bandage)：傷ついた仲間に巻きつき、手番ごとに回復します。巻きつき中は打撃に弱く、殴るとほどけます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-slime_20_beads"></a>
+
+### こぼれ玉スライム (slime_20_beads)
+
+<img src="../../assets/images/monsters/families/slime_20_beads.webp" width="160" alt="こぼれ玉スライム">
+
+画像ID：monster_slime_20_beads。実ファイル：[assets/images/monsters/families/slime_20_beads.webp](../../assets/images/monsters/families/slime_20_beads.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：群生種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_20_beads)。
+
+設計上の役割：被弾すると自分の列に粒をこぼします。次にその列へ移動した者は、所属を問わず滑って一手休みます。
+
+基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. こぼれ玉 (family_slime_20_beads)：被弾すると自分の列に粒をこぼします。次にその列へ移動した者は、所属を問わず滑って一手休みます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-slime_20_balloon"></a>
+
+### 風船スライム (slime_20_balloon)
+
+<img src="../../assets/images/monsters/families/slime_20_balloon.webp" width="160" alt="風船スライム">
+
+画像ID：monster_slime_20_balloon。実ファイル：[assets/images/monsters/families/slime_20_balloon.webp](../../assets/images/monsters/families/slime_20_balloon.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：群生種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_20_balloon)。
+
+設計上の役割：三回吸気すると両陣営の最前列を吹き飛ばします。膨張中に突くと背後へ空気が抜け、後ろの魔物を直撃します。
+
+基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 破裂風 (family_slime_20_balloon)：三回吸気すると両陣営の最前列を吹き飛ばします。膨張中に突くと背後へ空気が抜け、後ろの魔物を直撃します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-slime_20_porter"></a>
+
+### 壺運びスライム (slime_20_porter)
+
+<img src="../../assets/images/monsters/families/slime_20_porter.webp" width="160" alt="壺運びスライム">
+
+画像ID：monster_slime_20_porter。実ファイル：[assets/images/monsters/families/slime_20_porter.webp](../../assets/images/monsters/families/slime_20_porter.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：群生種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_20_porter)。
+
+設計上の役割：傷ついた仲間へ回復壺を運び、次の手番に届けます。途中で倒れると壺が割れ、同じ深さの列にいる敵味方が回復します。
+
+基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 壺の配達 (family_slime_20_porter)：傷ついた仲間へ回復壺を運び、次の手番に届けます。途中で倒れると壺が割れ、同じ深さの列にいる敵味方が回復します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-slime_25_strata"></a>
+
+### 地層スライム (slime_25_strata)
+
+<img src="../../assets/images/monsters/families/slime_25_strata.webp" width="160" alt="地層スライム">
+
+画像ID：monster_slime_25_strata。実ファイル：[assets/images/monsters/families/slime_25_strata.webp](../../assets/images/monsters/families/slime_25_strata.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：大粘体種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_25_strata)。
+
+設計上の役割：残りHPに応じて砂、粘土、水の順に層が剝がれ、最前列を目潰し、押し潰し、激流で襲います。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 地層崩し (family_slime_25_strata)：残りHPに応じて砂、粘土、水の順に層が剝がれ、最前列を目潰し、押し潰し、激流で襲います。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-slime_25_gem"></a>
+
+### 宝石核スライム (slime_25_gem)
+
+<img src="../../assets/images/monsters/families/slime_25_gem.webp" width="160" alt="宝石核スライム">
+
+画像ID：monster_slime_25_gem。実ファイル：[assets/images/monsters/families/slime_25_gem.webp](../../assets/images/monsters/families/slime_25_gem.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：大粘体種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_25_gem)。
+
+設計上の役割：深く沈んだ核は頑丈です。詠唱で核が浮上した時に打撃を当てると、大きく削って放射も中断できます。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 蒼晶放射 (family_slime_25_gem)：深く沈んだ核は頑丈です。詠唱で核が浮上した時に打撃を当てると、大きく削って放射も中断できます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-slime_25_pot"></a>
+
+### 大釜スライム (slime_25_pot)
+
+<img src="../../assets/images/monsters/families/slime_25_pot.webp" width="160" alt="大釜スライム">
+
+画像ID：monster_slime_25_pot。実ファイル：[assets/images/monsters/families/slime_25_pot.webp](../../assets/images/monsters/families/slime_25_pot.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：大粘体種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_25_pot)。
+
+設計上の役割：赤い攻撃薬と緑の回復薬を交互に煮ます。煮上がる前に打撃で釜を返すと、その薬を自分で浴びます。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 煮え薬 (family_slime_25_pot)：赤い攻撃薬と緑の回復薬を交互に煮ます。煮上がる前に打撃で釜を返すと、その薬を自分で浴びます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-slime_25_falls"></a>
+
+### 滝スライム (slime_25_falls)
+
+<img src="../../assets/images/monsters/families/slime_25_falls.webp" width="160" alt="滝スライム">
+
+画像ID：monster_slime_25_falls。実ファイル：[assets/images/monsters/families/slime_25_falls.webp](../../assets/images/monsters/families/slime_25_falls.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：大粘体種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_25_falls)。
+
+設計上の役割：傾いた次の手番に狙った列へ倒れ込み、一列押し流します。直後の一手は水たまりになって核が露出します。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 滝倒し (family_slime_25_falls)：傾いた次の手番に狙った列へ倒れ込み、一列押し流します。直後の一手は水たまりになって核が露出します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-slime_25_abyss"></a>
+
+### 底なしスライム (slime_25_abyss)
+
+<img src="../../assets/images/monsters/families/slime_25_abyss.webp" width="160" alt="底なしスライム">
+
+画像ID：monster_slime_25_abyss。実ファイル：[assets/images/monsters/families/slime_25_abyss.webp](../../assets/images/monsters/families/slime_25_abyss.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：大粘体種。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/slime/slime_25_abyss)。
+
+設計上の役割：剣は横薙ぎ、盾は防御、杖は魔法。浮上中の道具に強打を当てると体外へ弾き出せます。三つ失うとのしかかります。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 遺物浮かし (family_slime_25_abyss)：剣は横薙ぎ、盾は防御、杖は魔法。浮上中の道具に強打を当てると体外へ弾き出せます。三つ失うとのしかかります。
 2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
 
 遭遇と参照先：

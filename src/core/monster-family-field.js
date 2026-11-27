@@ -1,3 +1,4 @@
+import {slimeLabels,slimeMoved,slimeSaveValid} from './slime-actions.js';
 import {skeletonCover} from './skeleton-actions.js';
 import {battleAlive} from './frontline-lifecycle.js';
 import {frontPosition, frontlineMovePlan, moveFrontline} from './battle-frontline.js';
@@ -20,6 +21,7 @@ export function depth(s, u) {
 export function moveTo(engine, u, row) {
   const s=engine.state, b=s.battle;
   if (!u || depth(s,u)===row || movementBlockReason(engine.data,b,u)) return false;
+  const old=depth(s,u);
   if (b.frontline) {
     const plan=frontlineMovePlan(s,u,{depth:row},engine.data);
     if (!plan.ok) return false;
@@ -32,6 +34,7 @@ export function moveTo(engine, u, row) {
     if (x===undefined) return false;
     b.grid.positions[unitKey(u)]={x,y};
   } else b.familyField.depths[unitKey(u)]=row;
+  if(!b.frontline)slimeMoved(engine,u,old,row);
   b.log.push(label(engine,u)+'は'+['前列','中列','後列'][row]+'へ移った。');
   return true;
 }
@@ -57,7 +60,7 @@ export function syncFamilyBattle(engine) {
 export function familyBattleLabels(s,u) {
   const b=s.battle, f=b?.familyField;
   if (!f) return [];
-  const t=u.tactics, labels=[];
+  const t=u.tactics, labels=slimeLabels(u);
   if (b.mode==='classic') labels.push(['前列','中列','後列'][depth(s,u)]);
   if(t?.wearsCrown)labels.push('王冠');
   if(t?.lostHead)labels.push('頭なし');
@@ -194,6 +197,7 @@ export function familySaveValid(data,state) {
   for(const e of units) {
     const def=data.enemies[e?.id],t=e?.tactics;
     if(!def||e.classSkill!==def.classSkill||e.family!==def.family||e.levelBand!==def.levelBand||!record(t)||!tier(t.home))return false;
+    if(!slimeSaveValid(state,e,f))return false;
     if(e.family==='skeleton'){
       for(const k of ['looseArm','lostShield','lostHead','ready','stitched','iceHead','wearsCrown','passedCrown'])if(t[k]!==undefined&&typeof t[k]!=='boolean')return false;
       if(t.ribs!==undefined&&(!Number.isInteger(t.ribs)||t.ribs<0||t.ribs>3))return false;

@@ -1,4 +1,4 @@
-import {syncFamilyBattle} from './monster-family-field.js';
+import {moveTo,syncFamilyBattle} from './monster-family-field.js';
 import {isRecord} from './expression.js';
 import {scaledEnemy} from './enemy.js';
 import {unitKey} from './buffs.js';
@@ -25,7 +25,7 @@ export function reinforcementRoster(encounter, records, round = 1e6, enemies = {
   if (records === undefined) return schedule ? null : roster;
   if (!Array.isArray(records) || (!schedule && !records.length) || roster.length + records.length > 15) return null;
   let previousRound = 1, scheduled = 0;
-  const callers = new Set();
+  const callers = new Set(), splitChildren = new Set();
   for (let i = 0; i < records.length; i++) {
     const row = records[i];
     if (!isRecord(row) || !integer(row.round, previousRound, round)) return null;
@@ -33,8 +33,11 @@ export function reinforcementRoster(encounter, records, round = 1e6, enemies = {
     if (row.caller !== undefined) {
       if (typeof row.caller !== 'string' || !/^enemy_(0|[1-9]\d*)$/.test(row.caller)) return null;
       const caller = roster[Number(row.caller.slice(6))];
-      if(enemies[caller]?.classSkill==='family_skeleton_10_keyring'){
-        const species=caller.replace(/keyring$/,'rustwall');
+      const callerSkill=enemies[caller]?.classSkill;
+      if(callerSkill==='family_skeleton_10_keyring'||callerSkill==='family_slime_20_twins'){
+        if(splitChildren.has(row.caller))return null;
+        if(callerSkill==='family_slime_20_twins')splitChildren.add('enemy_'+roster.length);
+        const species=callerSkill==='family_slime_20_twins'?caller:caller.replace(/keyring$/,'rustwall');
         if(callers.has(row.caller)||!enemies[species]||Object.keys(row).some(k=>!['caller','round','eventId'].includes(k))||
           row.eventId!==undefined&&!integer(row.eventId,1,1e9))return null;
         callers.add(row.caller);roster.push(species);continue;
@@ -88,6 +91,23 @@ export function mothSummonPositions(engine, caller) {
   const capacity = Math.min(3, 5 - b.enemies.filter(u => battleAlive(s,u)||u.reviveRound).length, 15 - b.enemies.length - pending);
   return capacity < 2 ? [] : freePositions(s).slice(0, capacity);
 }
+export function splitSlime(engine,parent){
+  const s=engine.state,b=s.battle;
+  const reserved=(engine.data.encounters[b.encounter].reinforcements?.length??0)-(b.reinforcements?.filter(r=>r.id).length??0);
+  if(parent.tactics.half||parent.hp<2||hasWhistled(b,parent)||b.enemies.length+reserved>=15||b.enemies.filter(e=>battleAlive(s,e)||e.reviveRound).length>=5)return;
+  const cell=freePositions(s,{x:2,y:0})[0];if(!cell)return;
+  const record={caller:parent.instance};if(b.frontline)record.eventId=b.frontline.eventSerial+1;
+  const child=appendReinforcement(engine,parent.id,cell,record);
+  child.hp=Math.floor(parent.hp/2);parent.hp-=child.hp;
+  syncFamilyBattle(engine);
+  parent.tactics.half='front';child.tactics.half='rear';
+  parent.tactics.twin=child.instance;child.tactics.twin=parent.instance;
+  if(!b.grid&&!b.frontline)b.familyField.depths[unitKey(child)]=2;
+  moveTo(engine,parent,0);
+  traceFrontline(engine,'reinforcements',{units:[unitKey(child)]});
+  b.log.push(parent.name+'の二つの核が前後に分かれた。');
+}
+
 export function summonPatrol(engine,caller){
   const b=engine.state.battle,id=caller.id.replace(/keyring$/,'rustwall');
   const pending=(engine.data.encounters[b.encounter].reinforcements?.length??0)-(b.reinforcements?.filter(r=>r.id).length??0);

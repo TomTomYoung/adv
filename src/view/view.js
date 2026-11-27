@@ -226,7 +226,13 @@ export class GameView {
     if(m.dungeon){const direction=node('span','compass',({north:'N 北',east:'E 東',south:'S 南',west:'W 西'})[m.dungeon.location.facing]);scene.append(direction);}
     if(m.battle?.frontline)frontlineScene(this,scene,m);
     else if(m.battle?.grid)gridScene(this,scene,m);
-    else if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.feign){const marker=button(e.name+'（'+e.feign+'）',()=>{this.selectedTarget=e.id;this.render(m);},'enemy-dormant');enemies.append(marker);continue;}if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;image.alt=e.name;image.dataset.fx=`enemy:${e.id}`;b.append(image,node('span','enemy-name',e.name),battleVitals(meter(e.hp,e.maxHp,'enemy-meter'),`enemy:${e.id}`,e,'meter'),battleVitals(node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}${buffLabels(e).length?'・'+buffLabels(e).join(' / '):''}`),`enemy:${e.id}`,e));enemies.append(b);}scene.append(enemies);}
+    else if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.feign){const marker=button(e.name+'（'+e.feign+'）',()=>{this.selectedTarget=e.id;this.render(m);},'enemy-dormant');enemies.append(marker);continue;}if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;if(e.pose)image.dataset.slimePose=e.pose;image.alt=e.name;image.dataset.fx=`enemy:${e.id}`;b.append(image,node('span','enemy-name',e.name),battleVitals(meter(e.hp,e.maxHp,'enemy-meter'),`enemy:${e.id}`,e,'meter'),battleVitals(node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}${buffLabels(e).length?'・'+buffLabels(e).join(' / '):''}`),`enemy:${e.id}`,e));enemies.append(b);}scene.append(enemies);}
+    for(const enemy of m.battle?.enemies??[]){
+      if(!enemy.shell)continue;
+      const husk=node('img','slime-husk');husk.src=enemy.shell.image;
+      husk.alt=['前列','中列','後列'][enemy.shell.row]+'の抜け殻';
+      husk.style.bottom=(8+enemy.shell.row*18)+'%';scene.append(husk);
+    }
     for(const layer of m.atmosphere??[]){if(!layer.opacity||!layer.lighting&&(this.ui.effectsMode?.()??'full')==='off')continue;const shade=node('div','field-atmosphere');shade.setAttribute('aria-hidden','true');shade.style.opacity=String(layer.opacity);shade.style.background=layer.shade?`radial-gradient(ellipse at center,transparent 20%,${layer.color} 100%)`:layer.color;scene.append(shade);}
     parent.append(scene);if(m.dungeon)requestAnimationFrame(()=>paintDungeon(canvas,m.dungeon,m.battle));
   }

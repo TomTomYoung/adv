@@ -18153,6 +18153,266 @@ export const referenceData={
       "id": "medicinal_leaf"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_5_drop",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_5_mochi",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_5_sticky",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_5_berry",
+        "item"
+      ],
+      "kind": "items",
+      "id": "slime_berry"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_5_bubble",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_5_oil",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_10_stones",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_10_bottle",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_10_iron",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_10_wick",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_10_chime",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_15_parasol",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_15_rubber",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_15_thread",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_15_mirror",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_15_molt",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_20_twins",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_20_bandage",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_20_beads",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_20_balloon",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_20_porter",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_25_strata",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_25_gem",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_25_pot",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_25_falls",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "slime_25_abyss",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -23492,6 +23752,890 @@ export const referenceData={
       "path": [
         "enemies",
         "skeleton_25_crowned",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_drop",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_5_drop"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_drop",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_5_drop"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_drop",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_mochi",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_5_mochi"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_mochi",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_5_mochi"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_mochi",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_sticky",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_5_sticky"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_sticky",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_5_sticky"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_sticky",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_berry",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_5_berry"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_berry",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_5_berry"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_berry",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_bubble",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_5_bubble"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_bubble",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_5_bubble"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_bubble",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_oil",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_5_oil"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_oil",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_5_oil"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_oil",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_stones",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_10_stones"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_stones",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_10_stones"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_stones",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_bottle",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_10_bottle"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_bottle",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_10_bottle"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_bottle",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_iron",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_10_iron"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_iron",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_10_iron"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_iron",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_wick",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_10_wick"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_wick",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_10_wick"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_wick",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_chime",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_10_chime"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_chime",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_10_chime"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_chime",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_parasol",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_15_parasol"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_parasol",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_15_parasol"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_parasol",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_rubber",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_15_rubber"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_rubber",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_15_rubber"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_rubber",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_thread",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_15_thread"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_thread",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_15_thread"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_thread",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_mirror",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_15_mirror"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_mirror",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_15_mirror"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_mirror",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_molt",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_15_molt"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_molt",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_15_molt"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_molt",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_twins",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_20_twins"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_twins",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_20_twins"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_twins",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_bandage",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_20_bandage"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_bandage",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_20_bandage"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_bandage",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_beads",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_20_beads"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_beads",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_20_beads"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_beads",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_balloon",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_20_balloon"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_balloon",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_20_balloon"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_balloon",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_porter",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_20_porter"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_porter",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_20_porter"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_porter",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_strata",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_25_strata"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_strata",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_25_strata"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_strata",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_gem",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_25_gem"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_gem",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_25_gem"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_gem",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_pot",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_25_pot"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_pot",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_25_pot"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_pot",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_falls",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_25_falls"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_falls",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_25_falls"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_falls",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_abyss",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_slime_25_abyss"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_abyss",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_slime_25_abyss"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_abyss",
         "ai",
         1,
         "skill"
@@ -32266,6 +33410,390 @@ export const referenceData={
       ],
       "kind": "formulas",
       "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_drop",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_mochi",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_sticky",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_berry",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heal"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_oil",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_oil",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "oiled"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_10_stones",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_10_bottle",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_10_iron",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_10_wick",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_10_chime",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_15_rubber",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_15_molt",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_20_twins",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_20_bandage",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heal"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_20_beads",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_20_balloon",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_20_porter",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heal"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_25_strata",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "blindness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_25_gem",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_25_pot",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_25_falls",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_25_abyss",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_burst",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_splash",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_bump",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_clay",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_wave",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_cure",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heal"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_relicslash",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_relicspell",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_press",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
     },
     {
       "file": "jobs.json",
@@ -50003,6 +51531,111 @@ export const referenceData={
       },
       "lay_to_rest": {
         "name": "鎮魂"
+      },
+      "family_slime_5_drop": {
+        "name": "しずく鞭"
+      },
+      "family_slime_5_mochi": {
+        "name": "もち跳び"
+      },
+      "family_slime_5_sticky": {
+        "name": "ねばつく体"
+      },
+      "family_slime_5_berry": {
+        "name": "木の実の消化"
+      },
+      "family_slime_5_bubble": {
+        "name": "泡のひと張り"
+      },
+      "family_slime_5_oil": {
+        "name": "油まみれ体当たり"
+      },
+      "family_slime_10_stones": {
+        "name": "腹石飛ばし"
+      },
+      "family_slime_10_bottle": {
+        "name": "瓶転がり"
+      },
+      "family_slime_10_iron": {
+        "name": "砂鉄針"
+      },
+      "family_slime_10_wick": {
+        "name": "熱蝋まき"
+      },
+      "family_slime_10_chime": {
+        "name": "目覚まし鈴"
+      },
+      "family_slime_15_parasol": {
+        "name": "傘開き"
+      },
+      "family_slime_15_rubber": {
+        "name": "跳ね返り"
+      },
+      "family_slime_15_thread": {
+        "name": "糸つなぎ"
+      },
+      "family_slime_15_mirror": {
+        "name": "鏡張り"
+      },
+      "family_slime_15_molt": {
+        "name": "脱皮逃れ"
+      },
+      "family_slime_20_twins": {
+        "name": "二核分裂"
+      },
+      "family_slime_20_bandage": {
+        "name": "包帯巻き"
+      },
+      "family_slime_20_beads": {
+        "name": "こぼれ玉"
+      },
+      "family_slime_20_balloon": {
+        "name": "破裂風"
+      },
+      "family_slime_20_porter": {
+        "name": "壺の配達"
+      },
+      "family_slime_25_strata": {
+        "name": "地層崩し"
+      },
+      "family_slime_25_gem": {
+        "name": "蒼晶放射"
+      },
+      "family_slime_25_pot": {
+        "name": "煮え薬"
+      },
+      "family_slime_25_falls": {
+        "name": "滝倒し"
+      },
+      "family_slime_25_abyss": {
+        "name": "遺物浮かし"
+      },
+      "slime_burst": {
+        "name": "油玉の自爆"
+      },
+      "slime_splash": {
+        "name": "飛び散り"
+      },
+      "slime_bump": {
+        "name": "玉突き"
+      },
+      "slime_clay": {
+        "name": "粘土潰し"
+      },
+      "slime_wave": {
+        "name": "奔流"
+      },
+      "slime_cure": {
+        "name": "粘液の手当て"
+      },
+      "slime_relicslash": {
+        "name": "遺剣の横薙ぎ"
+      },
+      "slime_relicspell": {
+        "name": "遺杖の閃光"
+      },
+      "slime_press": {
+        "name": "のしかかり"
       }
     },
     "items": {
@@ -50200,6 +51833,9 @@ export const referenceData={
       },
       "kagaribi_torch_stub": {
         "name": "燃えさしの松明"
+      },
+      "slime_berry": {
+        "name": "赤い木の実"
       }
     },
     "enemies": {
@@ -50998,6 +52634,110 @@ export const referenceData={
       "skeleton_25_crowned": {
         "name": "骸骨王",
         "sprite": "monster_skeleton_25_crowned"
+      },
+      "slime_5_drop": {
+        "name": "しずくスライム",
+        "sprite": "monster_slime_5_drop"
+      },
+      "slime_5_mochi": {
+        "name": "もちスライム",
+        "sprite": "monster_slime_5_mochi"
+      },
+      "slime_5_sticky": {
+        "name": "くっつきスライム",
+        "sprite": "monster_slime_5_sticky"
+      },
+      "slime_5_berry": {
+        "name": "木の実スライム",
+        "sprite": "monster_slime_5_berry"
+      },
+      "slime_5_bubble": {
+        "name": "泡吹きスライム",
+        "sprite": "monster_slime_5_bubble"
+      },
+      "slime_5_oil": {
+        "name": "油玉",
+        "sprite": "monster_slime_5_oil"
+      },
+      "slime_10_stones": {
+        "name": "石呑みスライム",
+        "sprite": "monster_slime_10_stones"
+      },
+      "slime_10_bottle": {
+        "name": "瓶詰めスライム",
+        "sprite": "monster_slime_10_bottle"
+      },
+      "slime_10_iron": {
+        "name": "砂鉄スライム",
+        "sprite": "monster_slime_10_iron"
+      },
+      "slime_10_wick": {
+        "name": "灯芯スライム",
+        "sprite": "monster_slime_10_wick"
+      },
+      "slime_10_chime": {
+        "name": "鈴呑みスライム",
+        "sprite": "monster_slime_10_chime"
+      },
+      "slime_15_parasol": {
+        "name": "傘スライム",
+        "sprite": "monster_slime_15_parasol"
+      },
+      "slime_15_rubber": {
+        "name": "ゴムまりスライム",
+        "sprite": "monster_slime_15_rubber"
+      },
+      "slime_15_thread": {
+        "name": "糸引きスライム",
+        "sprite": "monster_slime_15_thread"
+      },
+      "slime_15_mirror": {
+        "name": "鏡面スライム",
+        "sprite": "monster_slime_15_mirror"
+      },
+      "slime_15_molt": {
+        "name": "抜け殻スライム",
+        "sprite": "monster_slime_15_molt"
+      },
+      "slime_20_twins": {
+        "name": "双子スライム",
+        "sprite": "monster_slime_20_twins"
+      },
+      "slime_20_bandage": {
+        "name": "包帯スライム",
+        "sprite": "monster_slime_20_bandage"
+      },
+      "slime_20_beads": {
+        "name": "こぼれ玉スライム",
+        "sprite": "monster_slime_20_beads"
+      },
+      "slime_20_balloon": {
+        "name": "風船スライム",
+        "sprite": "monster_slime_20_balloon"
+      },
+      "slime_20_porter": {
+        "name": "壺運びスライム",
+        "sprite": "monster_slime_20_porter"
+      },
+      "slime_25_strata": {
+        "name": "地層スライム",
+        "sprite": "monster_slime_25_strata"
+      },
+      "slime_25_gem": {
+        "name": "宝石核スライム",
+        "sprite": "monster_slime_25_gem"
+      },
+      "slime_25_pot": {
+        "name": "大釜スライム",
+        "sprite": "monster_slime_25_pot"
+      },
+      "slime_25_falls": {
+        "name": "滝スライム",
+        "sprite": "monster_slime_25_falls"
+      },
+      "slime_25_abyss": {
+        "name": "底なしスライム",
+        "sprite": "monster_slime_25_abyss"
       }
     },
     "encounters": {
@@ -76994,6 +78734,13 @@ export const referenceData={
         "kagaribi_torch_stub"
       ]
     },
+    "items/slime_berry": {
+      "file": "dungeon-content.json",
+      "path": [
+        "items",
+        "slime_berry"
+      ]
+    },
     "enemies/valley_hexer": {
       "file": "dungeon-content.json",
       "path": [
@@ -77860,6 +79607,188 @@ export const referenceData={
       "path": [
         "enemies",
         "skeleton_25_crowned"
+      ]
+    },
+    "enemies/slime_5_drop": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_drop"
+      ]
+    },
+    "enemies/slime_5_mochi": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_mochi"
+      ]
+    },
+    "enemies/slime_5_sticky": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_sticky"
+      ]
+    },
+    "enemies/slime_5_berry": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_berry"
+      ]
+    },
+    "enemies/slime_5_bubble": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_bubble"
+      ]
+    },
+    "enemies/slime_5_oil": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_5_oil"
+      ]
+    },
+    "enemies/slime_10_stones": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_stones"
+      ]
+    },
+    "enemies/slime_10_bottle": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_bottle"
+      ]
+    },
+    "enemies/slime_10_iron": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_iron"
+      ]
+    },
+    "enemies/slime_10_wick": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_wick"
+      ]
+    },
+    "enemies/slime_10_chime": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_10_chime"
+      ]
+    },
+    "enemies/slime_15_parasol": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_parasol"
+      ]
+    },
+    "enemies/slime_15_rubber": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_rubber"
+      ]
+    },
+    "enemies/slime_15_thread": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_thread"
+      ]
+    },
+    "enemies/slime_15_mirror": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_mirror"
+      ]
+    },
+    "enemies/slime_15_molt": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_15_molt"
+      ]
+    },
+    "enemies/slime_20_twins": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_twins"
+      ]
+    },
+    "enemies/slime_20_bandage": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_bandage"
+      ]
+    },
+    "enemies/slime_20_beads": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_beads"
+      ]
+    },
+    "enemies/slime_20_balloon": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_balloon"
+      ]
+    },
+    "enemies/slime_20_porter": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_20_porter"
+      ]
+    },
+    "enemies/slime_25_strata": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_strata"
+      ]
+    },
+    "enemies/slime_25_gem": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_gem"
+      ]
+    },
+    "enemies/slime_25_pot": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_pot"
+      ]
+    },
+    "enemies/slime_25_falls": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_falls"
+      ]
+    },
+    "enemies/slime_25_abyss": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "slime_25_abyss"
       ]
     },
     "encounters/market_enforcers": {
@@ -79924,6 +81853,251 @@ export const referenceData={
       "path": [
         "skills",
         "lay_to_rest"
+      ]
+    },
+    "skills/family_slime_5_drop": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_drop"
+      ]
+    },
+    "skills/family_slime_5_mochi": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_mochi"
+      ]
+    },
+    "skills/family_slime_5_sticky": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_sticky"
+      ]
+    },
+    "skills/family_slime_5_berry": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_berry"
+      ]
+    },
+    "skills/family_slime_5_bubble": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_bubble"
+      ]
+    },
+    "skills/family_slime_5_oil": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_5_oil"
+      ]
+    },
+    "skills/family_slime_10_stones": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_10_stones"
+      ]
+    },
+    "skills/family_slime_10_bottle": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_10_bottle"
+      ]
+    },
+    "skills/family_slime_10_iron": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_10_iron"
+      ]
+    },
+    "skills/family_slime_10_wick": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_10_wick"
+      ]
+    },
+    "skills/family_slime_10_chime": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_10_chime"
+      ]
+    },
+    "skills/family_slime_15_parasol": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_15_parasol"
+      ]
+    },
+    "skills/family_slime_15_rubber": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_15_rubber"
+      ]
+    },
+    "skills/family_slime_15_thread": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_15_thread"
+      ]
+    },
+    "skills/family_slime_15_mirror": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_15_mirror"
+      ]
+    },
+    "skills/family_slime_15_molt": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_15_molt"
+      ]
+    },
+    "skills/family_slime_20_twins": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_20_twins"
+      ]
+    },
+    "skills/family_slime_20_bandage": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_20_bandage"
+      ]
+    },
+    "skills/family_slime_20_beads": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_20_beads"
+      ]
+    },
+    "skills/family_slime_20_balloon": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_20_balloon"
+      ]
+    },
+    "skills/family_slime_20_porter": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_20_porter"
+      ]
+    },
+    "skills/family_slime_25_strata": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_25_strata"
+      ]
+    },
+    "skills/family_slime_25_gem": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_25_gem"
+      ]
+    },
+    "skills/family_slime_25_pot": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_25_pot"
+      ]
+    },
+    "skills/family_slime_25_falls": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_25_falls"
+      ]
+    },
+    "skills/family_slime_25_abyss": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_slime_25_abyss"
+      ]
+    },
+    "skills/slime_burst": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_burst"
+      ]
+    },
+    "skills/slime_splash": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_splash"
+      ]
+    },
+    "skills/slime_bump": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_bump"
+      ]
+    },
+    "skills/slime_clay": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_clay"
+      ]
+    },
+    "skills/slime_wave": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_wave"
+      ]
+    },
+    "skills/slime_cure": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_cure"
+      ]
+    },
+    "skills/slime_relicslash": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_relicslash"
+      ]
+    },
+    "skills/slime_relicspell": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_relicspell"
+      ]
+    },
+    "skills/slime_press": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "slime_press"
       ]
     },
     "fieldAbilities/survey": {
@@ -86810,6 +88984,36 @@ export const referenceData={
       "monster_skeleton_25_musician": "assets/images/monsters/families/skeleton_25_musician.webp",
       "monster_skeleton_25_headsman": "assets/images/monsters/families/skeleton_25_headsman.webp",
       "monster_skeleton_25_crowned": "assets/images/monsters/families/skeleton_25_crowned.webp",
+      "monster_slime_5_drop": "assets/images/monsters/families/slime_5_drop.webp",
+      "monster_slime_5_mochi": "assets/images/monsters/families/slime_5_mochi.webp",
+      "monster_slime_5_sticky": "assets/images/monsters/families/slime_5_sticky.webp",
+      "monster_slime_5_berry": "assets/images/monsters/families/slime_5_berry.webp",
+      "monster_slime_5_bubble": "assets/images/monsters/families/slime_5_bubble.webp",
+      "monster_slime_5_oil": "assets/images/monsters/families/slime_5_oil.webp",
+      "monster_slime_10_stones": "assets/images/monsters/families/slime_10_stones.webp",
+      "monster_slime_10_bottle": "assets/images/monsters/families/slime_10_bottle.webp",
+      "monster_slime_10_iron": "assets/images/monsters/families/slime_10_iron.webp",
+      "monster_slime_10_wick": "assets/images/monsters/families/slime_10_wick.webp",
+      "monster_slime_10_chime": "assets/images/monsters/families/slime_10_chime.webp",
+      "monster_slime_15_parasol": "assets/images/monsters/families/slime_15_parasol.webp",
+      "monster_slime_15_rubber": "assets/images/monsters/families/slime_15_rubber.webp",
+      "monster_slime_15_thread": "assets/images/monsters/families/slime_15_thread.webp",
+      "monster_slime_15_mirror": "assets/images/monsters/families/slime_15_mirror.webp",
+      "monster_slime_15_molt": "assets/images/monsters/families/slime_15_molt.webp",
+      "monster_slime_20_twins": "assets/images/monsters/families/slime_20_twins.webp",
+      "monster_slime_20_bandage": "assets/images/monsters/families/slime_20_bandage.webp",
+      "monster_slime_20_beads": "assets/images/monsters/families/slime_20_beads.webp",
+      "monster_slime_20_balloon": "assets/images/monsters/families/slime_20_balloon.webp",
+      "monster_slime_20_porter": "assets/images/monsters/families/slime_20_porter.webp",
+      "monster_slime_25_strata": "assets/images/monsters/families/slime_25_strata.webp",
+      "monster_slime_25_gem": "assets/images/monsters/families/slime_25_gem.webp",
+      "monster_slime_25_pot": "assets/images/monsters/families/slime_25_pot.webp",
+      "monster_slime_25_falls": "assets/images/monsters/families/slime_25_falls.webp",
+      "monster_slime_25_abyss": "assets/images/monsters/families/slime_25_abyss.webp",
+      "monster_slime_bottle_open": "assets/images/monsters/families/slime_bottle_open.webp",
+      "monster_slime_molt_shell": "assets/images/monsters/families/slime_molt_shell.webp",
+      "monster_slime_twin_half": "assets/images/monsters/families/slime_twin_half.webp",
+      "monster_slime_oil_lit": "assets/images/monsters/families/slime_oil_lit.webp",
       "monster_guard_2": "assets/images/monsters/guard_2.webp",
       "monster_guard_2_elite": "assets/images/monsters/guard_2_elite.webp",
       "monster_battlefield_bonebeast": "assets/images/monsters/battlefield_bonebeast.webp",

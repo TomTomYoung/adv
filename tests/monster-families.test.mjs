@@ -8,16 +8,16 @@ import {validateSave} from '../src/core/save.js';
 import {guideBands,monsterFloorText} from '../src/application/labyrinth-guide.js';
 
 const playable=shiftingDungeonData(data), classes=Object.values(data.enemies).filter(e=>e.family);
-test('four bestiary families contain 25 illustrated classes each, five per level tier',()=>{
-  assert.equal(classes.length,100);
-  assert.equal(new Set(classes.map(e=>data.assets.images[e.sprite])).size,100);
+test('five bestiary families include the sixth Lv5 slime and a distinct sprite for every class',()=>{
+  assert.equal(classes.length,126);
+  assert.equal(new Set(classes.map(e=>data.assets.images[e.sprite])).size,126);
   const sections=guideBands(data,false);
-  for(const family of ['goblin','orc','ogre','skeleton'])for(const lv of [5,10,15,20,25]){
+  for(const family of ['goblin','orc','ogre','skeleton','slime'])for(const lv of [5,10,15,20,25]){
     const entries=classes.filter(e=>e.family===family&&e.levelBand===lv);
-    assert.equal(entries.length,5);
+    assert.equal(entries.length,family==='slime'&&lv===5?6:5);
     for(const e of entries){
       assert.equal(monsterFloorText(sections,e.id),'地下'+lv+'〜'+(lv+4)+'階');
-      assert.equal(e.name.includes('の'),false,e.name);
+      if(e.id!=='slime_5_berry')assert.equal(e.name.includes('の'),false,e.name);
       if(family==='goblin')assert.ok(e.name.startsWith('ゴブリン'),e.name);
       assert.ok(data.skills[e.classSkill]?.description,e.name);
     }
@@ -52,7 +52,7 @@ for(const mode of ['classic','grid','frontline'])test(mode+' runs each class in 
       g.load(checkpoint);
     }
   }
-  assert.equal(encountered.size,100);
+  assert.equal(encountered.size,126);
 });
 
 function stage(lv, group) {
