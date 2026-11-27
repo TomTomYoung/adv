@@ -141,14 +141,14 @@ try{
   assert.equal(await columns('#monster-index .guide-grid'),2);
   assert.equal(await guide.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   const families = guide.getByRole('navigation',{name:'魔物の種別'});
-  assert.deepEqual(await families.getByRole('link').allTextContents(),['すべて','ゴブリン','オーク','オーガ','スケルトン']);
-  for (const [family,name] of Object.entries({goblin:'ゴブリン',orc:'オーク',ogre:'オーガ',skeleton:'スケルトン'})) {
+  assert.deepEqual(await families.getByRole('link').allTextContents(),['すべて','ゴブリン','オーク','オーガ','スケルトン','スライム']);
+  for (const [family,name] of Object.entries({goblin:'ゴブリン',orc:'オーク',ogre:'オーガ',skeleton:'スケルトン',slime:'スライム'})) {
     await families.getByRole('link',{name,exact:true}).click();
     await guide.waitForFunction(id => document.querySelector('.monster-families [aria-current=page]')?.dataset.family===id,family);
-    assert.equal(await monsterCards.count(),25);
+    assert.equal(await monsterCards.count(),family==='slime'?26:25);
     const ids = await monsterCards.locator('a').evaluateAll(nodes=>nodes.map(a=>a.hash.split('/').at(-1)));
     assert.deepEqual(ids.sort(),Object.keys(enemies).filter(id=>enemies[id].family===family).sort());
-    assert.deepEqual(await guide.locator('#monster-index h3 small').allTextContents(),Array(5).fill('5件'));
+    assert.deepEqual(await guide.locator('#monster-index h3 small').allTextContents(),[family==='slime'?'6件':'5件',...Array(4).fill('5件')]);
     await monsterCards.first().getByRole('link').click();
     await guide.locator('#monster-sheet').waitFor();
     await guide.locator('#monsters-back').click();

@@ -1,3 +1,4 @@
+import {oilBurnout,slimeAfterDamage,slimeDeflect,slimeHitType,slimeInitiative,slimeMoved,slimePower,slimeTurn} from './slime-actions.js';
 import {settleSkeletonCrown,skeletonAfterDamage,skeletonGuardBroken,skeletonInterrupted,skeletonTurn} from './skeleton-actions.js';
 import {feigning,finishOnly,reviveBones,sealBones} from './feigned-death.js';
 import {abilityCategory} from './ability-category.js';
@@ -203,6 +204,13 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     b.log.push(`${targetName}の飛び道具の結界が${skill.name}を防いで消えた。`);
     return 0;
   }
+  const projectile = isProjectile(engine.data,source,skill,skillId);
+  if (b?.familyField && slimeDeflect(engine,source,target,skill,skillId,projectile,
+      () => applySkill(engine,target,source,skill,skillId,true,null,false))) {
+    if (feedback) feedback.blocked=true;
+    if (series) series.didHit=false;
+    return 0;
+  }
   let brokeGuard=false;
   for(const effect of skill.effects){
     if(effect.type==='frontline_remove'){removeFrontline(engine,target);break;}
@@ -252,7 +260,8 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
       const fireRate = element === 'fire' ? fireDamageTaken(engine.data, s, target) : 1;
       if(feedback){feedback.critical=Boolean(critical);feedback.guarded=guardRate<1;feedback.weak=elementScale*fireRate>1;feedback.resisted=elementScale*fireRate<1;}
       const taken=series?.snapshot.taken??(target.instance?1:(passives(engine.data,s,target.id).damageTaken??1));
-      const familyScale=familyPower(engine,source,target);
+      const slimeHit=b?.familyField ? slimeHitType(engine.data,source,skill,skillId,physical,projectile) : null;
+      const familyScale=familyPower(engine,source,target)*(slimeHit?slimePower(target,slimeHit):1);
       let damage=guardRate===0?0:Math.max(1,Math.floor(Math.floor(raw)*power*guardRate*elementScale*taken*familyScale*(critical?CRITICAL_DAMAGE_MULTIPLIER:1)));
       if(series?.basis==='final'){const index=skill.effects.indexOf(effect);series.finalBase[index]??=damage;damage=Math.max(0,Math.floor(series.finalBase[index]*series.factor));}
       if(series?.basis==='power'&&series.factor===0)damage=0;
@@ -264,6 +273,13 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
       if(physical)damage=takePhysicalHit(engine.data,b,unitKey(target),damage,dungeonBuffs(engine.data,s));
       target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);if(damage>0)skeletonAfterDamage(engine,target);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
       if (damage > 0 && element === 'fire') igniteOil(engine,target);
+      if(slimeHit?.contact && target.classSkill==='family_slime_5_oil' && !source.instance && applyStatus(engine.data,s,source,'oiled')){
+        b.log.push(target.name+'に触れた'+engine.data.actors[source.id].name+'に油が付いた。');
+      }
+      if(damage>0 && slimeHit){
+        slimeAfterDamage(engine,source,target,skillId,element,slimeHit,damage,(actor,units,id)=>familyCast(engine,actor,units,id));
+        if(source.classSkill==='family_slime_5_oil' && skillId==='attack' && target.hp>0)applyStatus(engine.data,s,target,'oiled');
+      }
       if(damage>0&&!wakeChecked){wakeOnDamage(engine,target);wakeChecked=true;}
     }
     if(effect.type==='heal'){
@@ -552,6 +568,9 @@ const shellAttack=[{priority:0,skill:'attack',target:'random'}];
 function performEnemyAction(engine,enemy,bonus=false){
   const s=engine.state,b=s.battle;
     if(!battleAlive(s,enemy))return;clearGuard(b,enemy);if(consumeStun(engine,enemy)||actionOverridden(engine,enemy))return;
+    if(enemy.classSkill==='family_slime_5_oil' && hasActiveStatus(engine.data,s,enemy,'ablaze')){
+      slimeTurn(engine,enemy,(source,targets,skillId)=>performSkill(engine,source,{targets,skillId,skill:engine.data.skills[skillId]}));return;
+    }
     const rollingShell=hasRollingShell(engine.data,enemy);
     if(rollingShell){
       if((enemy.rollingShellTurns??0)<2 && !statusAbilityReason(engine.data,s,enemy,'guard') &&
@@ -568,6 +587,7 @@ function performEnemyAction(engine,enemy,bonus=false){
         if(victim)familyCast(engine,enemy,[victim],'attack');
         return;
       }
+      if(enemy.family==='slime'){slimeTurn(engine,enemy,(u,targets,id)=>familyCast(engine,u,targets,id));return;}
       if(enemy.family==='skeleton'){skeletonTurn(engine,enemy,(source,targets,id)=>familyCast(engine,source,targets,id));return;}
       familyTurn(engine,enemy,{
         cast:(source,targets,id)=>familyCast(engine,source,targets,id),
@@ -601,8 +621,8 @@ function performEnemyAction(engine,enemy,bonus=false){
 function buildTurnQueue(engine){
   const s=engine.state,b=s.battle;
   const entries=[
-    ...s.members.filter(id=>battleAlive(s,s.actors[id])&&!b.acted.includes(id)).map((id,i)=>({key:'actor:'+id,agi:engine.stats(id).agi,order:i})),
-    ...b.enemies.filter(e=>battleAlive(s,e)).map((enemy,i)=>({key:unitKey(enemy),agi:enemyStats(engine,enemy).agi,order:s.members.length+i}))
+    ...s.members.filter(id=>battleAlive(s,s.actors[id])&&!b.acted.includes(id)).map((id,i)=>({key:'actor:'+id,agi:engine.stats(id).agi+slimeInitiative(s,s.actors[id]),order:i})),
+    ...b.enemies.filter(e=>battleAlive(s,e)).map((enemy,i)=>({key:unitKey(enemy),agi:enemyStats(engine,enemy).agi+slimeInitiative(s,enemy),order:s.members.length+i}))
   ];
   return entries.sort((a,c)=>c.agi-a.agi||a.order-c.order).map(entry=>entry.key);
 }
@@ -610,13 +630,15 @@ function buildTurnQueue(engine){
 function resortRemainingQueue(engine){
   const s=engine.state,b=s.battle,order=[...s.members.map(id=>'actor:'+id),...b.enemies.map(e=>unitKey(e))],rank=new Map(order.map((key,i)=>[key,i]));
   const speed=key=>key.startsWith('actor:')?engine.stats(key.slice(6)).agi:enemyStats(engine,b.enemies.find(e=>unitKey(e)===key)).agi;
-  const remaining=b.turnQueue.slice(b.turnIndex).sort((a,c)=>speed(c)-speed(a)||rank.get(a)-rank.get(c));
+  const adjusted=key=>speed(key)+slimeInitiative(s,key.startsWith('actor:')?s.actors[key.slice(6)]:b.enemies.find(e=>unitKey(e)===key));
+  const remaining=b.turnQueue.slice(b.turnIndex).sort((a,c)=>adjusted(c)-adjusted(a)||rank.get(a)-rank.get(c));
   b.turnQueue.splice(b.turnIndex,remaining.length,...remaining);
 }
 function finishRound(engine){
   const s=engine.state,b=s.battle;
   dungeonBattleRound(engine);
   if(s.members.every(id=>!battleAlive(engine.state,s.actors[id]))){endBattle(engine,'lose');return;}
+  for(const enemy of b.enemies)if(battleAlive(s,enemy))oilBurnout(engine,enemy);
   for(const enemy of b.enemies)if(battleAlive(s,enemy))for(const status of enemy.statuses){const loss=applyStatusClock(engine.data,s,enemy,status,'turns',enemy.stats);recordDefeated(engine);if(loss.hp||loss.mp)b.log.push(`${enemy.name}は${engine.data.statuses[status].name}で${loss.hp?`HP${loss.hp}`:''}${loss.hp&&loss.mp?'・':''}${loss.mp?`MP${loss.mp}`:''}を失った。`);}
   if(b.enemies.every(e=>!battleAlive(s,e))){endBattle(engine,'win');return;}
   for(const id of s.members){const a=s.actors[id];if(!battleAlive(s,a))continue;const max=engine.stats(id);for(const status of a.statuses){const loss=applyStatusClock(engine.data,s,a,status,'turns',max);if(loss.hp||loss.mp)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${loss.hp?`HP${loss.hp}`:''}${loss.hp&&loss.mp?'・':''}${loss.mp?`MP${loss.mp}`:''}を失った。`);}}
@@ -706,6 +728,7 @@ export function battleAction(engine,intent){
   else if(intent.action==='move'){b.grid.positions[unitKey(actor)]=selection.to;b.log.push(`${engine.data.actors[actorId].name}は移動した。`);}
   else performSkill(engine,actor,selection);
   if(intent.action==='move'&&b.familyField)b.familyField.lastMover=actor.id;
+  if(oldDepth!==null&&!isFrontline(s))slimeMoved(engine,actor,oldDepth,depth(s,actor));
   if(oldDepth!==null)familyAfterMove(engine,actor,oldDepth,(enemy,victim)=>familyCast(engine,enemy,[victim],'attack'));
   if(s.battle===b)finishAction(engine,actorId,consumed);
   return true;
@@ -749,7 +772,7 @@ function gridEnemyAction(engine,enemy,rules){
   const skills=rules.filter(r=>(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&!statusAbilityReason(d,s,enemy,r.skill)&&!dungeonAbilityReason(d,s,r.skill,'battle.skill')&&enemy.mp>=d.skills[r.skill].mp).map(r=>targetingProfile(d,enemy,d.skills[r.skill],r.skill));
   const score=p=>rules.some(r=>(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&gridEnemyChoices(engine,enemy,r.skill,{origin:p}).length)?-1:Math.min(...foes.flatMap(t=>skills.map(v=>{const n=distance(p,position(s,t));return Math.max(v.range.min-n,0,n-v.range.max)*10+n;})));
   const steps=gridCells().map(p=>gridMovePlan(s,enemy,p,engine.data)).filter(p=>p.ok).sort((a,c)=>score(a.to)-score(c.to));
-  if(steps.length&&score(steps[0].to)<score(from)){b.grid.positions[unitKey(enemy)]=steps[0].to;b.log.push(`${enemy.name}は移動した。`);}
+  if(steps.length&&score(steps[0].to)<score(from)){b.grid.positions[unitKey(enemy)]=steps[0].to;slimeMoved(engine,enemy,2-from.y,2-steps[0].to.y);b.log.push(`${enemy.name}は移動した。`);}
   else if(rules!==shellAttack){applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
 }
 

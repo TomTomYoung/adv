@@ -1,3 +1,4 @@
+import {slimeMoved} from './slime-actions.js';
 import {markFeignedDeaths,feigning} from './feigned-death.js';
 import {unitKey} from './buffs.js';
 import {clone,isRecord} from './expression.js';
@@ -60,7 +61,7 @@ export function knockbackFrontline(engine,unit,effect){
   else if(blocker)collision={kind:'unit',unit:key(blocker)};
   else if(object)collision={kind:'object',object:object.id};
   if(collision){damage=Math.min(unit.hp,effect.collisionDamage);unit.hp-=damage;break;}
-  f.positions[key(unit)]=to;moves.push({from,to});
+  f.positions[key(unit)]=to;moves.push({from,to});slimeMoved(engine,unit,from.depth,to.depth);
  }
  syncFrontlineDefeats(engine);traceFrontline(engine,'knockback',{unit:key(unit),moves,collision,damage});
  s.battle.log.push(`${unit.name??engine.data.actors[unit.id].name}は${moves.length}段押された。${collision?`衝突して追加ダメージ${damage}。`:''}`);return damage;

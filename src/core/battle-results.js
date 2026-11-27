@@ -21,6 +21,8 @@ export function beginBattleResult(engine,battle){
     : recipients.map(id=>d.actors[id].name).join('、')+'は、それぞれ'+(amount(recipients[0])??0)+'の経験値を獲得した。';
   const levels=engine.award(gold,experience,recipients);
   s.battleResult={encounter:battle.encounter,continuation:clone(battle.continuations),phase:'result',index:0,levels,drops:null,gems,...(battle.reinforcements?{reinforcements:clone(battle.reinforcements)}:{})};
+  const eaten=battle.enemies.flatMap((e,i)=>e.classSkill==='family_slime_5_berry'&&e.tactics?.spent?[i]:[]);
+  if(eaten.length)s.battleResult.eatenBerries=eaten;
   s.notice='';delete s.presentation.cast;delete s.presentation.message;
   show(engine,`戦いに勝った！\n${rewardText}\n${gold}ゴールドを手に入れた。${gems?`\n技能宝石を${gems}個手に入れた。`:''}`,'戦闘リザルト');
 }
@@ -40,7 +42,8 @@ function nextLevel(engine){
 function treasure(engine){
   const r=engine.state.battleResult,counts={};
   // One independent lottery per defeated monster. A chest groups all winning items.
-  for(const id of reinforcementRoster(engine.data.encounters[r.encounter],r.reinforcements,undefined,engine.data.enemies)){
+  for(const [index,id] of reinforcementRoster(engine.data.encounters[r.encounter],r.reinforcements,undefined,engine.data.enemies).entries()){
+    if(r.eatenBerries?.includes(index))continue;
     const drop=engine.data.enemies[id].drop;
     if(drop&&drop.chance>0&&engine.random()<drop.chance)counts[drop.item]=(counts[drop.item]??0)+1;
   }
@@ -74,11 +77,12 @@ export function battleResultErrors(data,s){
   if(r===null)return s.waiting?.type==='battle_result'?fail():[];
   if(!isRecord(r)||s.battle||s.waiting?.type!=='battle_result'||typeof s.waiting.text!=='string'||typeof s.waiting.speaker!=='string'||!Object.hasOwn(data.encounters,r.encounter)||!['result','level','chest','item'].includes(r.phase)||!Number.isInteger(r.index)||r.index<0||!Array.isArray(r.levels)||r.levels.length>data.system.maxParty*(data.system.maxLevel-1))return fail();
   const roster=reinforcementRoster(data.encounters[r.encounter],r.reinforcements,undefined,data.enemies);if(!roster)return fail();
+  if(r.eatenBerries!==undefined&&(!Array.isArray(r.eatenBerries)||new Set(r.eatenBerries).size!==r.eatenBerries.length||r.eatenBerries.some(i=>!Number.isInteger(i)||data.enemies[roster[i]]?.classSkill!=='family_slime_5_berry')))return fail();
   if(r.levels.some(row=>!isRecord(row)||!s.members.includes(row.actor)||!Number.isInteger(row.level)||row.level<2||row.level>s.actors[row.actor].level||!isRecord(row.growth)||Object.entries(row.growth).some(([key,n])=>!['hp','mp','str','vit','agi','int'].includes(key)||!Number.isInteger(n))||!Array.isArray(row.skills)||row.skills.some(id=>!data.skills[id]&&!data.fieldAbilities?.[id])))return fail();
   if(['result','level'].includes(r.phase)){
     if(r.drops!==null||r.phase==='result'&&r.index!==0||r.phase==='level'&&r.index>=r.levels.length)return fail();
   }else{
-    const possible={};for(const id of roster){const drop=data.enemies[id].drop;if(drop?.chance>0)possible[drop.item]=(possible[drop.item]??0)+1;}
+    const possible={};for(const [i,id] of roster.entries()){if(r.eatenBerries?.includes(i))continue;const drop=data.enemies[id].drop;if(drop?.chance>0)possible[drop.item]=(possible[drop.item]??0)+1;}
     if(!Array.isArray(r.drops)||!r.drops.length||new Set(r.drops.map(v=>v?.item)).size!==r.drops.length||r.drops.some(v=>!isRecord(v)||!possible[v.item]||!Number.isInteger(v.count)||v.count<1||v.count>possible[v.item])||r.index>=r.drops.length||r.phase==='chest'&&r.index!==0)return fail();
   }
   if(r.gems!==undefined&&(!Number.isSafeInteger(r.gems)||r.gems<0||r.gems>roster.reduce((sum,id)=>sum+(data.expedition?.enemyGems[id]??0),0)))return fail();

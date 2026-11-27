@@ -1,3 +1,4 @@
+import {slimeMoved} from './slime-actions.js';
 import {battleAlive,frontlinePresent,frontlineState,frontlineRows,traceFrontline,syncFrontlineDefeats,displaceFrontlineDown,shrinkFrontline,frontlineObjectErrors} from './frontline-lifecycle.js';
 export {traceFrontline} from './frontline-lifecycle.js';
 import {unitKey,movementBlockReason} from './buffs.js';
@@ -52,6 +53,7 @@ export function prepareFrontlineRound(engine,react=()=>{}){
    if(retreats.length)traceFrontline(engine,'retreat',{side:enemy?'enemies':'allies',step,moves:retreats});
    traceFrontline(engine,'advance',{side:enemy?'enemies':'allies',step,moves});
    b.log.push(`${enemy?'敵':'味方'}の前衛不在：${moves.map(m=>`${depthNames[m.from.depth]}→${depthNames[m.to.depth]}`).filter((v,i,a)=>a.indexOf(v)===i).join('・')}（${step}歩目）。`);
+   moves.forEach((m,i)=>slimeMoved(engine,moving[i],m.from.depth,m.to.depth));
    for(const u of moving)react(u,'onAdvance',null);
    syncFrontlineDefeats(engine);
   }
@@ -69,7 +71,7 @@ export function frontlineMovePlan(s,unit,to,data){
  const lanes=[0,1,2,3,4].sort((a,b)=>Math.abs(a-from.lane)-Math.abs(b-from.lane)||a-b),lane=lanes.find(lane=>!occupied.some(p=>p.depth===to.depth&&p.lane===lane));
  if(lane===undefined)return fail('その段は満員です。');return {ok:true,to:{depth:to.depth,lane}};
 }
-export function moveFrontline(engine,unit,to){const b=engine.state.battle,from={...frontPosition(engine.state,unit)};b.frontline.positions[unitKey(unit)]={...to};if(!unit.instance&&to.depth>=frontlineRows(engine.state)){const before=frontlineRows(engine.state);b.frontline.rows=to.depth+1;traceFrontline(engine,'expand',{from:before,to:b.frontline.rows});}traceFrontline(engine,'move',{unit:unitKey(unit),from,to});b.log.push(`${unit.name??engine.data.actors[unit.id].name}は${depthNames[to.depth]}へ移動した。`);}
+export function moveFrontline(engine,unit,to){const b=engine.state.battle,from={...frontPosition(engine.state,unit)};b.frontline.positions[unitKey(unit)]={...to};if(!unit.instance&&to.depth>=frontlineRows(engine.state)){const before=frontlineRows(engine.state);b.frontline.rows=to.depth+1;traceFrontline(engine,'expand',{from:before,to:b.frontline.rows});}traceFrontline(engine,'move',{unit:unitKey(unit),from,to});slimeMoved(engine,unit,from.depth,to.depth);b.log.push(`${unit.name??engine.data.actors[unit.id].name}は${depthNames[to.depth]}へ移動した。`);}
 export function frontlineRevivePosition(s,unit){
  return frontlinePresent(s,unit)&&frontPosition(s,unit).depth<frontlineRows(s,Boolean(unit.instance))?{...frontPosition(s,unit)}:false;
 }
