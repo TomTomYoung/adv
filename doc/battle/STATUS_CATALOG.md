@@ -28,7 +28,7 @@
 
 分類：身体・環境状態。
 持続：解除まで。
-付与元：途切れぬ呪詠 (valley_curse) / 双頭呪法 (family_ogre_20_hex)。
+付与元：途切れぬ呪詠 (valley_curse) / 結び呪い (family_ogre_20_hex)。
 
 #### Lv1
 
@@ -172,7 +172,7 @@
 
 分類：身体異常。
 持続：解除まで。
-付与元：煤払い (soot_beetle_dust)。
+付与元：灰かぶせ (family_ogre_20_quarrel) / 煤払い (soot_beetle_dust)。
 
 #### Lv1
 

@@ -213,10 +213,10 @@ export function familyTurn(engine,e,{cast,order},bonus=false) {
       const [key]=b.turnQueue.splice(at,1);return command(mates.find(u=>unitKey(u)===key));
     }
     case 'twinclubs':return use(target);
-    case 'quarrel':
-      if(t.replies?.length===1){delete t.challenged;delete t.replies;say('二つの頭が口論を始めた。');return;}
-      if(t.challenged){delete t.challenged;delete t.replies;return attack();}
-      t.challenged=foes.slice(0,2).map(u=>u.id);t.replies=[];return signal();
+    case 'quarrel': // The ash thrower retains the original class ID for saved battles.
+      if (t.spent) return attack();
+      t.spent = true;
+      return use(row(depth(s, front)));
     case 'singer':
       if(!all.some(u=>u.hp<u.stats.hp))return attack();
       if(ready()!==null)use(all);return;

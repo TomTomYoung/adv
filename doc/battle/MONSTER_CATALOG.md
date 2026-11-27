@@ -2367,7 +2367,7 @@ AIの選択順：
 画像ID：monster_ogre_20_twinclubs。実ファイル：[assets/images/monsters/families/ogre_20_twinclubs.webp](../../assets/images/monsters/families/ogre_20_twinclubs.webp)。
 画像共有：他の敵定義との共有なし。
 
-レベル帯：Lv20　種名：ツインヘッドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_twinclubs)。
+レベル帯：Lv20　種名：黄土オーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_twinclubs)。
 
 設計上の役割：左の小振りと右の強打を同じ相手へ重ねます。
 
@@ -2393,9 +2393,9 @@ AIの選択順：
 画像ID：monster_ogre_20_warden。実ファイル：[assets/images/monsters/families/ogre_20_warden.webp](../../assets/images/monsters/families/ogre_20_warden.webp)。
 画像共有：他の敵定義との共有なし。
 
-レベル帯：Lv20　種名：ツインヘッドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_warden)。
+レベル帯：Lv20　種名：黄土オーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_warden)。
 
-設計上の役割：二つの頭を使って後列への攻撃を見張り、肩代わりします。
+設計上の役割：片方の頭が敵をにらみ、もう片方が後方を見張ります。いちばん後ろの仲間への一撃を門扉の盾で受けます。
 
 基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
 宝箱：薬効葉 1個 / 12.5％。
@@ -2403,7 +2403,7 @@ AIの選択順：
 
 AIの選択順：
 
-1. 双頭警戒 (family_ogre_20_warden)：二つの頭を使って後列への攻撃を見張り、肩代わりします。
+1. 双頭警戒 (family_ogre_20_warden)：片方の頭が敵をにらみ、もう片方が後方を見張ります。いちばん後ろの仲間への一撃を門扉の盾で受けます。
 2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
 
 遭遇と参照先：
@@ -2419,9 +2419,9 @@ AIの選択順：
 画像ID：monster_ogre_20_hex。実ファイル：[assets/images/monsters/families/ogre_20_hex.webp](../../assets/images/monsters/families/ogre_20_hex.webp)。
 画像共有：他の敵定義との共有なし。
 
-レベル帯：Lv20　種名：ツインヘッドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_hex)。
+レベル帯：Lv20　種名：黄土オーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_hex)。
 
-設計上の役割：一方の頭で詠唱し、詠唱中に攻撃した相手にはもう一方が噛みつきます。
+設計上の役割：棘杖に呪い紐を結び、次の手番に相手を呪います。詠唱中に傷を負うと、攻撃した相手に杖で反撃します。
 
 基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
 宝箱：薬効葉 1個 / 12.5％。
@@ -2429,7 +2429,7 @@ AIの選択順：
 
 AIの選択順：
 
-1. 双頭呪法 (family_ogre_20_hex)：一方の頭で詠唱し、詠唱中に攻撃した相手にはもう一方が噛みつきます。
+1. 結び呪い (family_ogre_20_hex)：棘杖に呪い紐を結び、次の手番に相手を呪います。詠唱中に傷を負うと、攻撃した相手に杖で反撃します。
 2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
 
 遭遇と参照先：
@@ -2438,16 +2438,16 @@ AIの選択順：
 
 <a id="monster-ogre_20_quarrel"></a>
 
-### 口喧嘩オーガ (ogre_20_quarrel)
+### 灰撒きオーガ (ogre_20_quarrel)
 
-<img src="../../assets/images/monsters/families/ogre_20_quarrel.webp" width="160" alt="口喧嘩オーガ">
+<img src="../../assets/images/monsters/families/ogre_20_ashsack.webp" width="160" alt="灰撒きオーガ">
 
-画像ID：monster_ogre_20_quarrel。実ファイル：[assets/images/monsters/families/ogre_20_quarrel.webp](../../assets/images/monsters/families/ogre_20_quarrel.webp)。
+画像ID：monster_ogre_20_quarrel。実ファイル：[assets/images/monsters/families/ogre_20_ashsack.webp](../../assets/images/monsters/families/ogre_20_ashsack.webp)。
 画像共有：他の敵定義との共有なし。
 
-レベル帯：Lv20　種名：ツインヘッドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_quarrel)。
+レベル帯：Lv20　種名：黄土オーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_quarrel)。
 
-設計上の役割：二人を挑発し、片方だけが応じると頭同士が揉めて一手休みます。
+設計上の役割：最初の手番に、相手がいる最前列へ袋の灰を一度だけ撒いて「くらやみ」にします。袋が空になると通常攻撃に切り替えます。
 
 基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
 宝箱：薬効葉 1個 / 12.5％。
@@ -2455,7 +2455,7 @@ AIの選択順：
 
 AIの選択順：
 
-1. 二声の挑発 (family_ogre_20_quarrel)：二人を挑発し、片方だけが応じると頭同士が揉めて一手休みます。
+1. 灰かぶせ (family_ogre_20_quarrel)：最初の手番に、相手がいる最前列へ袋の灰を一度だけ撒いて「くらやみ」にします。袋が空になると通常攻撃に切り替えます。
 2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
 
 遭遇と参照先：
@@ -2471,9 +2471,9 @@ AIの選択順：
 画像ID：monster_ogre_20_singer。実ファイル：[assets/images/monsters/families/ogre_20_singer.webp](../../assets/images/monsters/families/ogre_20_singer.webp)。
 画像共有：他の敵定義との共有なし。
 
-レベル帯：Lv20　種名：ツインヘッドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_singer)。
+レベル帯：Lv20　種名：黄土オーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_singer)。
 
-設計上の役割：二つの声を揃え、味方全員のHPを回復します。
+設計上の役割：傷ついた仲間がいると竪琴を爪弾き、次の手番に独唱で味方全員のHPを回復します。
 
 基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
 宝箱：薬効葉 1個 / 12.5％。
@@ -2481,7 +2481,7 @@ AIの選択順：
 
 AIの選択順：
 
-1. 双声の和音 (family_ogre_20_singer)：二つの声を揃え、味方全員のHPを回復します。
+1. 癒やしの独唱 (family_ogre_20_singer)：傷ついた仲間がいると竪琴を爪弾き、次の手番に独唱で味方全員のHPを回復します。
 2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
 
 遭遇と参照先：
