@@ -4,6 +4,7 @@ import {data,newGame} from './helpers.mjs';
 import {xpThreshold} from '../src/core/progression.js';
 import {applySkill,battleSkillPlan} from '../src/core/battle.js';
 import {projectGame} from '../src/application/projection.js';
+import {describeTarget} from '../src/core/feedback.js';
 import {feigning} from '../src/core/feigned-death.js';
 import {createSkeletonTrial} from '../src/application/battle-tester-model.js';
 
@@ -97,5 +98,21 @@ test('王冠の継承は仲間がまだ戦えるときだけ発動する',()=>{
       assert.equal(heir.hp,Math.ceil(heir.stats.hp/2));
       assert.ok(heir.tactics.wearsCrown);assert.ok(feigning(king));restore(g);
     }else assert.equal(g.state.battleResult?.phase,'result');
+  }
+});
+
+test('骨の再生を持つ魔物は専用絵を使い、旧戦闘セーブの被弾演出にも新しい絵が出る',()=>{
+  const bones=Object.values(data.enemies).filter(e=>e.habits?.includes('bone_revival'));
+  const images=bones.map(e=>data.assets.images[e.sprite]);
+  assert.equal(new Set(images).size,bones.length);
+  const ids=['guard_2','guard_2_elite','battlefield_bonebeast','kagaribi_ash_guard','kagaribi_chain_bone','kagaribi_patrol_guard','kagaribi_ossuary_bone','kagaribi_ossuary_remnant'];
+  for(const id of ids){
+    const g=encounter('classic',[id]);
+    g.state.battle.enemies[0].sprite='skeleton';
+    g.load(g.save());
+    const enemy=g.state.battle.enemies[0],target=describeTarget(g,'enemy:'+enemy.instance);
+    assert.equal(projectGame(g).battle.enemies[0].sprite,'assets/images/monsters/'+id+'.webp');
+    assert.equal(target.image,data.enemies[id].sprite);
+    assert.equal(target.material,'stone');
   }
 });

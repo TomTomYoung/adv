@@ -7,7 +7,11 @@ export function describeTarget(engine,key='scene'){
   if(typeof key!=='string')return clone(key);
   const [kind,id]=key.split(':');
   if(kind==='actor'){const a=engine.data.actors[id];return {key,image:a?.portrait,label:a?.name,material:a?.impactMaterial??'flesh'};}
-  if(kind==='enemy'){const e=engine.state.battle?.enemies.find(e=>e.instance===id);return {key,image:e?.sprite,label:e?.name,material:engine.data.enemies[e?.id]?.impactMaterial??defaultPresentation.materialSprites[e?.sprite]??'flesh'};}
+  if(kind==='enemy'){
+    const enemy=engine.state.battle?.enemies.find(e=>e.instance===id);
+    const definition=engine.data.enemies[enemy?.id],image=definition?.sprite??enemy?.sprite;
+    return {key,image,label:enemy?.name,material:definition?.impactMaterial??defaultPresentation.materialSprites[image]??'flesh'};
+  }
   return {key};
 }
 export function emitFeedback(engine,{effects=[],sound=null,targets=['scene'],source,at=engine.feedback.clock,gain=1,phase,action,attackStart}){
