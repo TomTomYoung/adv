@@ -118,7 +118,7 @@ test('千変6〜9階は各階の専用編成を抽選し、共通候補と他の
   const common = guideBands(guide, true).find(s => s.first === 6);
   assert.equal(common.last, 9);
   const additions = [
-    ['stone_log_escort', 'shell_stone_guard', 'mochi_escort'],
+    ['stone_log_escort', 'shell_stone_guard', 'mochi_escort', 'stone_sling'],
     ['sticky_escort', 'hunter_iron_moth', 'diviner_butterflies'],
     ['bone_shield_archer', 'berry_escort', 'bubble_escort', 'bone_skull_drummer'],
     ['torch_oil_moth_swarm', 'oil_globe_firebrand']

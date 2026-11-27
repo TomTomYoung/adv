@@ -8,6 +8,7 @@ import {migrateFrontlineLifecycle} from './frontline-lifecycle.js';
 import {frontlineSaveErrors} from './battle-frontline.js';
 import {nextFormation} from './battle-formation.js';
 import {gridSaveErrors} from './battle-grid.js';
+import {trapsValid} from './battle-traps.js';
 import {battleTurnSaveErrors} from './battle-turns.js';
 import {scoutingSaveErrors} from './scouting.js';
 import {skillProgressErrors} from './skill-levels.js';
@@ -461,6 +462,7 @@ export function validateSave(save,data){
     else if(s.waiting.type==='choice'){try{const f=s.vm.at(-1),c=commandsAt(data,f)[s.waiting.index];if(c?.op!=='choice'||f.index!==s.waiting.index+1)fail('選択肢位置不正');}catch{fail('選択肢不正');}}
   }
   errors.push(...battleResultErrors(data,s));
+  if(s.battle?.traps!==undefined && !trapsValid(data,s))fail('戦闘罠の設置状態不正');
   if(s.battle!==null){
     const b=s.battle,e=data.encounters[b?.encounter],roster=reinforcementRoster(e,b?.reinforcements,b?.round,data.enemies);
     if(!isRecord(b)||!e||!Array.isArray(b.enemies)||!roster||b.enemies.length!==roster.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}

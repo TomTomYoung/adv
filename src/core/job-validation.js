@@ -1,3 +1,4 @@
+import {TRAP_KINDS} from './trap-skills.js';
 import {frontlineTargetingErrors} from './frontline-targeting.js';
 import {targetingErrors} from './battle-targeting.js';
 import {skillLevelDefinitionErrors,maxSkillLevel,effectiveSkill,skillLevel} from './skill-levels.js';
@@ -38,7 +39,8 @@ export function skillDefinitionErrors(data,skill){
     if(effect.breakGuard!==undefined&&typeof effect.breakGuard!=='boolean')fail('防御解除条件不正');
     if(effect.type==='stun'&&(!integer(effect.count??1,1,20)||effect.stack!==undefined&&!['refresh','add'].includes(effect.stack)))fail('スタン回数・重複指定不正');
     if(effect.type==='frontline_knockback'&&(!integer(effect.distance,1,3)||!integer(effect.collisionDamage,0,1000000)))fail('ノックバック距離・衝突ダメージ不正');
-    const common=['type','formula','amount','scale','chance','element','itemHealing','buff','status','level',...(effect.type==='cleanse'?['statuses']:[]),...(effect.type==='stun'?['count','stack','breakGuard']:[]),...(effect.type==='frontline_knockback'?['distance','collisionDamage']:[])];
+    if(effect.type==='set_trap' && (!TRAP_KINDS.includes(effect.trap) || (effect.trap==='bell' ? !['fire','ice','lightning','water'].includes(effect.element) : effect.element!==undefined)))fail('戦闘罠の種類・属性不正');
+    const common=['type',...(effect.type==='set_trap'?['trap']:[]),'formula','amount','scale','chance','element','itemHealing','buff','status','level',...(effect.type==='cleanse'?['statuses']:[]),...(effect.type==='stun'?['count','stack','breakGuard']:[]),...(effect.type==='frontline_knockback'?['distance','collisionDamage']:[])];
     if(Object.keys(effect).some(key=>!common.includes(key)))fail('未知の効果項目');
   }
   if(skill.effects?.some(e=>e.type==='repel')&&(skill.target!=='self'||skill.effects.length!==1||skill.selfEffects?.length||typeof skill.fireEffect!=='string'))fail('撃退技能の対象・効果が不正です');

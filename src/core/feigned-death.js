@@ -3,7 +3,7 @@ import {unitKey} from './buffs.js';
 import {BATTLE_STATUS_DEFINITIONS,clearGuard} from './battle-turns.js';
 
 export const feigning = unit => unit?.hp === 0 && Number.isInteger(unit.reviveRound);
-export const finishOnly = skill => skill.effects.some(e => e.type === 'lay_to_rest');
+export const finishOnly = skill => skill.effects.some(e => e.type === 'lay_to_rest' || e.type === 'set_trap' && e.trap === 'coffin');
 export const feignLabel = (battle, unit) => '仮死・復活まで' + Math.max(0,unit.reviveRound-battle.round) + 'ターン';
 
 export function markFeignedDeaths(engine) {
@@ -27,6 +27,10 @@ export function reviveBones(engine,unit) {
     const cell=revivePosition(engine.state,unit);
     if(!cell)return false;
     b.grid.positions[unitKey(unit)]=cell;
+  }
+  if(b.traps){
+    b.traps=b.traps.filter(t=>t.target!==unitKey(unit)||engine.data.skills[t.skill].effects[0].trap!=='coffin');
+    if(!b.traps.length)delete b.traps;
   }
   delete unit.reviveRound;
   unit.hp=Math.max(1,Math.ceil(unit.stats.hp/2));

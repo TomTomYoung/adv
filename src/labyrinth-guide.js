@@ -3,6 +3,7 @@ import {gearStages, guideActor, guideBands, loadGuide, monsterFloorText, monster
 import {conditionText, monsterGroups, targetText} from './application/monster-catalog.js';
 import {STAT_KEYS} from './core/jobs.js';
 
+import {trapSkillChoices} from './core/trap-skills.js';
 import {MONSTER_HABITS} from './core/monster-habits.js';
 
 const $ = id => document.getElementById(id);
@@ -185,7 +186,7 @@ function fillMonsterList(family) {
   filterMonsters();
 }
 
-function monsterLevelComparison(rows) {
+function monsterLevelComparison(rows, enemy) {
   const section = block('千変の迷宮・レベル別比較');
   const note = rows.length > 1 ? ' 括弧内は直前の掲載Lvからの増減です。' : '';
   section.append(el('p', '通常遭遇時の個体Lvは地下の階数と同じです。' + note));
@@ -194,7 +195,10 @@ function monsterLevelComparison(rows) {
   scroll.setAttribute('role', 'region');
   scroll.setAttribute('aria-label', 'レベル別の能力値と習性');
   const table = el('table'), header = table.createTHead().insertRow();
-  for (const label of ['Lv', ...STAT_KEYS.map(k => data.jobProfile.statNames[k]), '有効な習性']) {
+  const trapper = enemy.classSkill === 'family_goblin_5_trapper';
+  const columns = ['Lv', ...STAT_KEYS.map(k => data.jobProfile.statNames[k]), '有効な習性'];
+  if (trapper) columns.push('設置できる罠');
+  for (const label of columns) {
     const th = el('th', label);
     th.scope = 'col'; header.append(th);
   }
@@ -210,6 +214,10 @@ function monsterLevelComparison(rows) {
       if (delta) cell.append(el('small', ' (' + (delta > 0 ? '+' : '−') + Math.abs(delta) + ')'));
     }
     tr.insertCell().textContent = row.habits.map(id => MONSTER_HABITS[id].name).join('、') || 'なし';
+    if (trapper) {
+      const names = trapSkillChoices(data, row.level).map(id => data.skills[id].name.split('・')[0]);
+      tr.insertCell().textContent = [...new Set(names)].join('、') || 'なし';
+    }
   }
   scroll.append(table); section.append(scroll);
   return section;
@@ -261,7 +269,7 @@ function drawMonster(id) {
   detail.append(link);
   card.append(header, parameters);
   const levels = monsterLevelRows(data, sections, id);
-  if (levels.length) card.append(monsterLevelComparison(levels));
+  if (levels.length) card.append(monsterLevelComparison(levels, enemy));
   card.append(rewards, affinity);
   const habits = block('習性');
   if (enemy.habits?.length) {

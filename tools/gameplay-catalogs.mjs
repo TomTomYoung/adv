@@ -30,6 +30,8 @@ const usage=(data,id,api)=>{
   for (const [actor, skills] of Object.entries(data.jobProfile?.personalSkills ?? {})) {
     if (skills[id]) values.push(`${data.actors[actor].name} Lv${skills[id]}`);
   }
+  if(data.skills?.[id]?.effects[0]?.type==='set_trap')values.push('ゴブリン罠師 Lv'+data.jobProfile.personalSkills.nio[id]);
+  if(id==='stone_beetle_throw')values.push('ゴブリン投石手（味方に生きた石虫がいる時）');
   const job=grants(data,id,api);if(job.length)values.push(`職業：${compact(job)}`);
   if(api==='battle.skill'){const enemies=enemyUsers(data,id);if(enemies.length)values.push(`魔物：${compact(enemies)}`);const items=itemUsers(data,id);if(items.length)values.push(`道具：${compact(items)}`);}
   return values.length?values.join(' / '):'定義のみ・直接参照';
@@ -53,6 +55,7 @@ function expressionText(node){
 const rawText=(data,effect)=>effect.formula?expressionText(data.formulas?.[effect.formula]??effect.formula):String(effect.amount??0);
 const chanceText=chance=>`${Math.round((chance??1)*1000)/10}%`;
 function effectCalculation(data,skillId,effect,prefix='計算式',priorEffects=[]){
+  if(effect.type==='set_trap')return '設置時には発動せず、戦闘中に条件が成立すると1回発動。';
   const base=`max(0, ${rawText(data,effect)})`;
   if(effect.type==='damage'){
     const guardNote=priorEffects.some(e=>e.type==='stun'&&e.breakGuard)?'防御解除時のガード補正は1。':'防御Lv3では0。';
