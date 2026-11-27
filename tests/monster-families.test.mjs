@@ -20,7 +20,8 @@ test('five bestiary families include the sixth Lv5 slime and a distinct sprite f
       assert.ok(floors, e.id);
       if (family==='skeleton' || (family!=='slime' && lv>=15))
         assert.equal(floors,'地下'+lv+'〜'+(lv+4)+'階');
-      if (family==='slime') assert.match(floors,/^地下\d+階$/, e.id);
+      if (e.id==='slime_5_drop') assert.equal(floors, '地下5階、地下8〜9階');
+      else if (family==='slime') assert.match(floors,/^地下\d+階$/, e.id);
       if(e.id!=='slime_5_berry')assert.equal(e.name.includes('の'),false,e.name);
       if(family==='goblin')assert.ok(e.name.startsWith('ゴブリン'),e.name);
       assert.ok(data.skills[e.classSkill]?.description,e.name);

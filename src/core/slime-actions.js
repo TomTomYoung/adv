@@ -1,10 +1,12 @@
-import {hasMonsterHabit} from './monster-habits.js';
+import {hasMonsterHabit, MONSTER_HABITS} from './monster-habits.js';
 import {abilityCategory} from './ability-category.js';
 import {depth, living, moveTo, profession, weakest} from './monster-family-field.js';
 import {applyStun} from './battle-turns.js';
 import {applyStatus, hasActiveStatus, removeStatus} from './status-effects.js';
-import {splitSlime} from './battle-reinforcements.js';
+import {splitSlime, tryDropDivision} from './battle-reinforcements.js';
 import {recordDefeated} from './records.js';
+import {describeTarget, emitFeedback, playBattleCue} from './feedback.js';
+import {unitKey} from './buffs.js';
 
 const kind = unit => unit?.family === 'slime' ? profession(unit) : null;
 const isOil = u => kind(u) === 'oil';
@@ -42,6 +44,19 @@ export function slimeLabels(u){
   return result.filter(Boolean);
 }
 
+function sacrificeDrop(engine, slime, ally) {
+  const habit = MONSTER_HABITS.healing_drop;
+  const healed = Math.min(ally.stats.hp - ally.hp, Math.ceil(ally.stats.hp * habit.healRatio));
+  ally.hp += healed;
+  slime.hp = 0;
+  recordDefeated(engine);
+  say(engine, slime, habit.name + 'で' + ally.name + 'のHPを' + healed + '回復し、消滅した。');
+  const source = describeTarget(engine, unitKey(slime));
+  const target = {...describeTarget(engine, unitKey(ally)), healing: healed, hpAfter: ally.hp};
+  playBattleCue(engine, 'skill_heal', source, [target], false, habit.name);
+  emitFeedback(engine, {effects: ['fade_out'], targets: [source], phase: 'defeat'});
+}
+
 export function slimeTurn(engine,u,cast){
   const s=engine.state,b=s.battle,t=u.tactics,foes=party(s),mates=allies(s,u);
   if(!foes.length)return;
@@ -54,7 +69,10 @@ export function slimeTurn(engine,u,cast){
   const step=(v,delta)=>moveTo(engine,v,Math.max(0,Math.min(2,depth(s,v)+delta)));
   switch(kind(u)){
     case 'drop':
+      if (hurt && hpRatio(hurt) <= MONSTER_HABITS.healing_drop.threshold && hasMonsterHabit(engine.data, u, 'healing_drop'))
+        return sacrificeDrop(engine, u, hurt);
       if(t.phase==='stretch'){delete t.phase;return use(target);}
+      if (hasMonsterHabit(engine.data, u, 'drop_division') && tryDropDivision(engine, u)) return;
       attack();return phase(engine,u,'stretch','体を細長く伸ばした。');
     case 'mochi':
       if(t.phase==='floor'){delete t.phase;say(engine,u,'床から体をはがした。');return;}

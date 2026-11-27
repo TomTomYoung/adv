@@ -1,5 +1,6 @@
 import {moveTo,syncFamilyBattle} from './monster-family-field.js';
 import {isRecord} from './expression.js';
+import {habitActiveAtLevel, MONSTER_HABITS} from './monster-habits.js';
 import {scaledEnemy} from './enemy.js';
 import {unitKey} from './buffs.js';
 import {battleAlive,frontlinePresent,traceFrontline} from './frontline-lifecycle.js';
@@ -33,7 +34,16 @@ export function reinforcementRoster(encounter, records, round = 1e6, enemies = {
     if (row.caller !== undefined) {
       if (typeof row.caller !== 'string' || !/^enemy_(0|[1-9]\d*)$/.test(row.caller)) return null;
       const caller = roster[Number(row.caller.slice(6))];
-      const callerSkill=enemies[caller]?.classSkill;
+      const definition = enemies[caller];
+      const callerSkill = definition?.classSkill;
+      if (row.kind === 'division') {
+        if (callerSkill !== 'family_slime_5_drop' || !definition.habits?.includes('drop_division') ||
+            !habitActiveAtLevel('drop_division', definition.level ?? definition.levelBand) ||
+            Object.keys(row).some(k => !['caller','round','eventId','kind'].includes(k)) ||
+            (row.eventId !== undefined && !integer(row.eventId, 1, 1e9))) return null;
+        roster.push(caller);
+        continue;
+      }
       const split=row.kind==='split'||(row.kind===undefined&&callerSkill==='family_slime_20_twins');
       if(row.kind!==undefined && (!split||row.kind!=='split'||!enemies[caller]?.habits?.includes('split_core')))return null;
       if(callerSkill==='family_skeleton_10_keyring'||split){
@@ -85,7 +95,7 @@ function appendReinforcement(engine, species, position, record) {
   (b.reinforcements ??= []).push({...record, round:b.round});
   return unit;
 }
-export const hasWhistled = (battle, caller) => battle.reinforcements?.some(r => r.caller === caller.instance && r.kind!=='split') ?? false;
+export const hasWhistled = (battle, caller) => battle.reinforcements?.some(r => r.caller === caller.instance && r.kind===undefined) ?? false;
 export function mothSummonPositions(engine, caller) {
   const s = engine.state, b = s.battle;
   if (hasWhistled(b, caller) || !engine.data.enemies[caller.id]?.ai.some(r => r.skill === 'moth_whistle')) return [];
@@ -94,11 +104,29 @@ export function mothSummonPositions(engine, caller) {
   const capacity = Math.min(3, 5 - b.enemies.filter(u => battleAlive(s,u)||u.reviveRound).length, 15 - b.enemies.length - pending);
   return capacity < 2 ? [] : freePositions(s).slice(0, capacity);
 }
+function slimeJoinCell(engine, preferred) {
+  const s = engine.state, b = s.battle;
+  const reserved = (engine.data.encounters[b.encounter].reinforcements?.length ?? 0) - (b.reinforcements?.filter(r => r.id).length ?? 0);
+  if (b.enemies.length + reserved >= 15 || b.enemies.filter(e => battleAlive(s,e) || e.reviveRound).length >= 5) return;
+  return freePositions(s, preferred)[0];
+}
+
+export function tryDropDivision(engine, parent) {
+  const cell = slimeJoinCell(engine);
+  if (!cell || engine.random() >= MONSTER_HABITS.drop_division.chance) return false;
+  const b = engine.state.battle, record = {caller: parent.instance, kind: 'division'};
+  if (b.frontline) record.eventId = b.frontline.eventSerial + 1;
+  const child = appendReinforcement(engine, parent.id, cell, record);
+  syncFamilyBattle(engine);
+  traceFrontline(engine, 'reinforcements', {units: [unitKey(child)]});
+  b.log.push(parent.name + 'が分裂し、' + child.name + 'が1体増えた。');
+  return true;
+}
+
 export function splitSlime(engine,parent){
-  const s=engine.state,b=s.battle;
-  const reserved=(engine.data.encounters[b.encounter].reinforcements?.length??0)-(b.reinforcements?.filter(r=>r.id).length??0);
-  if(parent.tactics.half||parent.hp<2||b.enemies.length+reserved>=15||b.enemies.filter(e=>battleAlive(s,e)||e.reviveRound).length>=5)return;
-  const cell=freePositions(s,{x:2,y:0})[0];if(!cell)return;
+  const b=engine.state.battle;
+  if(parent.tactics.half||parent.hp<2)return;
+  const cell=slimeJoinCell(engine,{x:2,y:0});if(!cell)return;
   const record={caller:parent.instance,kind:'split'};if(b.frontline)record.eventId=b.frontline.eventSerial+1;
   const child=appendReinforcement(engine,parent.id,cell,record);
   child.hp=Math.floor(parent.hp/2);parent.hp-=child.hp;

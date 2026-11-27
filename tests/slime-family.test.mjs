@@ -7,19 +7,20 @@ import {applyStun} from '../src/core/battle-turns.js';
 import {applyStatus,removeStatus} from '../src/core/status-effects.js';
 import {depth,moveTo} from '../src/core/monster-family-field.js';
 import {slimeSprite} from '../src/core/slime-actions.js';
+import {reinforcementRoster} from '../src/core/battle-reinforcements.js';
 import {validateSave} from '../src/core/save.js';
 import {shiftingDungeonData,SHIFTING_DUNGEON} from '../src/core/shifting-dungeon.js';
 
 const catalog=shiftingDungeonData(data);
-function start(mode,level=9,group='oil_globe_firebrand'){
+function start(mode,level=9,group='oil_globe_firebrand',legacy=false){
   const g=new GameEngine(catalog,91);drain(g);
   g.award(0,1000000,g.state.members);
   for(const id of g.state.members)g.state.actors[id].hp=g.stats(id).hp;
   g.dispatch({type:'travel',dungeon:SHIFTING_DUNGEON});
   const map=g.data.maps[g.data.dungeons[SHIFTING_DUNGEON].maps[level-1]];
   g.teleport(map.id,map.entrance.x,map.entrance.y,map.entrance.facing);
-  const enc=map.encounterPool.find(row=>row.encounter.endsWith('_'+group));
-  g.startBattle(enc.encounter,{win:[],escape:[],lose:[]},{battleMode:mode,manualTurns:true});
+  const encounter=legacy ? map.id+'_lv'+level+'_'+group : map.encounterPool.find(row=>row.encounter.endsWith('_'+group)).encounter;
+  g.startBattle(encounter,{win:[],escape:[],lose:[]},{battleMode:mode,manualTurns:true});
   g.random=()=>.49;return g;
 }
 const unit=(g,key)=>g.state.battle.enemies.find(u=>u.classSkill?.endsWith('_'+key));
@@ -34,6 +35,65 @@ function turn(g,u){
   assert.ok(g.dispatch({type:'battle.step'}));
 }
 for(const mode of ['classic','grid','frontline']){
+  test(mode+' 命のしずくは他の生きた魔物のうち最も弱った1体を中回復し、自身の撃破を1回記録する',()=>{
+    const g=start(mode,5,'slime_squad_1',true), b=g.state.battle, [slime,first,second]=b.enemies;
+    while(b.turnQueue[b.turnIndex]!=='enemy:'+slime.instance) assert.ok(g.dispatch({type:'battle.step'}));
+    slime.hp=1;
+    first.hp=Math.floor(first.stats.hp/2);
+    second.hp=Math.floor(second.stats.hp/4);
+    const hp=b.enemies.map(e=>e.hp), party=g.state.members.map(id=>g.state.actors[id].hp);
+    turn(g,slime);
+    assert.deepEqual(b.enemies.map(e=>e.hp),[0,hp[1],hp[2]+Math.ceil(second.stats.hp*.4)]);
+    assert.deepEqual(g.state.members.map(id=>g.state.actors[id].hp),party);
+    assert.equal(g.state.records.kills[slime.id],1);
+    g.load(g.save());
+    assert.equal(g.state.records.kills[slime.id],1);
+    assert.equal(g.state.battle.enemies.length,3);
+  });
+
+  test(mode+' Lv7では分裂せず、Lv8の分裂は同レベルの独立した全快個体を1体増やす',()=>{
+    const young=start(mode,7,'slime_squad_4',true), low=unit(young,'drop'), lowBattle=young.state.battle;
+    young.random=()=>0;
+    turn(young,low);
+    assert.equal(lowBattle.enemies.length,2);
+    assert.equal(low.tactics.phase,'stretch');
+    const row={kind:'division',caller:low.instance,round:1};
+    assert.equal(reinforcementRoster(young.data.encounters[lowBattle.encounter],[row],1,young.data.enemies),null);
+
+    const g=start(mode,8,'drop_stone_escort'), b=g.state.battle, parent=unit(g,'drop');
+    parent.hp-=7;parent.mp=0;
+    const hp=parent.hp,round=b.round;
+    g.random=()=>0;
+    turn(g,parent);
+    assert.equal(b.enemies.length,3);
+    const child=b.enemies.at(-1);
+    assert.deepEqual([parent.hp,parent.mp],[hp,0]);
+    assert.equal(child.id,parent.id);
+    assert.equal(child.level,8);
+    assert.notEqual(child.instance,parent.instance);
+    assert.deepEqual([child.hp,child.mp,child.statuses],[child.stats.hp,child.stats.mp,[]]);
+    assert.ok(!parent.tactics.half&&!child.tactics.half);
+    if(b.round===round) assert.ok(!b.turnQueue.includes('enemy:'+child.instance));
+    assert.deepEqual(validateSave(JSON.parse(g.save()),g.data),[]);
+    g.load(g.save());
+    const resumed=g.state.battle, copy=resumed.enemies.at(-1);
+    assert.equal(copy.instance,child.instance);
+    turn(g,copy);
+    assert.ok(resumed.round>round);
+    assert.equal(resumed.reinforcements.at(-1).caller,copy.instance);
+    assert.equal(resumed.enemies.at(-1).id,parent.id);
+    for(let i=0;resumed.enemies.length<5;i++){assert.ok(i<3);turn(g,resumed.enemies[0]);}
+    const full=5;
+    turn(g,copy);
+    assert.equal(resumed.enemies.length,full);
+    assert.deepEqual(validateSave(JSON.parse(g.save()),g.data),[]);
+    for(const e of resumed.enemies)hit(g,e,'light',2*e.stats.hp,'fire');
+    endBattle(g,'win');
+    assert.deepEqual(validateSave(JSON.parse(g.save()),g.data),[]);
+    g.load(g.save());drain(g);
+    assert.equal(g.state.records.kills[parent.id],full-1);
+  });
+
   test(mode+' 油玉の体当たり・直接接触・遠隔・炎弱点・消火を区別する',()=>{
     const g=start(mode),u=unit(g,'oil'),a=g.state.actors.ada;
     hit(g,u,'physical',1,'volley',{projectile:true});
@@ -147,4 +207,21 @@ test('油膜と易燃体を外すと被弾反応だけが消え、旧戦闘の�
   applyStatus(g.data,g.state,loaded,'ablaze');
   turn(g,loaded);
   assert.ok(g.state.battle.log.some(x=>x.includes('自爆して燃え尽きた')));
+});
+
+test('しずくスライム1体だけでは自滅せず、ちょうど半分の仲間の回復は分裂に優先する',()=>{
+  const g=start('classic',8,'drop_stone_escort'), [slime,mate]=g.state.battle.enemies;
+  g.random=()=>.24;
+  while(g.state.battle.turnQueue[g.state.battle.turnIndex]!=='enemy:'+slime.instance) assert.ok(g.dispatch({type:'battle.step'}));
+  mate.hp=Math.floor(mate.stats.hp/2);
+  turn(g,slime);
+  assert.equal(slime.hp,0);
+  assert.equal(g.state.battle.enemies.length,2);
+
+  const solo=start('classic',5,'drop_escort'), [last,other]=solo.state.battle.enemies;
+  hit(solo,other,'light',other.stats.hp*2,'fire');
+  last.hp=1;
+  turn(solo,last);
+  assert.equal(last.hp,1);
+  assert.equal(last.tactics.phase,'stretch');
 });

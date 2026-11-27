@@ -120,8 +120,8 @@ test('千変6〜9階は各階の専用編成を抽選し、共通候補と他の
   const additions = [
     ['stone_log_escort', 'shell_stone_guard', 'mochi_escort', 'stone_sling'],
     ['sticky_escort', 'hunter_iron_moth', 'diviner_butterflies'],
-    ['bone_shield_archer', 'berry_escort', 'bubble_escort', 'bone_skull_drummer'],
-    ['torch_oil_moth_swarm', 'oil_globe_firebrand']
+    ['bone_shield_archer', 'drop_stone_escort', 'berry_escort', 'bubble_escort', 'bone_skull_drummer'],
+    ['torch_oil_moth_swarm', 'oil_globe_firebrand', 'drop_moth_escort']
   ];
   for (const [index, ids] of additions.entries()) {
     const floor = index + 6;
@@ -147,7 +147,8 @@ test('千変5〜10階の亜人は指定の系統だけが出現し、スライ�
     const local = members.filter(m => m.family === 'slime');
     assert.ok(local.length > 0, floor);
     for (const slime of new Set(local)) {
-      assert.ok(!slimes.has(slime.id), slime.id);
+      if (slime.id === 'slime_5_drop') assert.ok([5,8,9].includes(floor));
+      else assert.ok(!slimes.has(slime.id), slime.id);
       slimes.add(slime.id);
     }
     for (const g of present) {
