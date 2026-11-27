@@ -324,21 +324,24 @@ test('a legacy solitary battle resumes with its original HP and rewards before t
   assert.ok(restored.map().encounterPool.every(entry => entry.encounter !== map.encounter));
 });
 
+function averageEncounterXp(catalog, map, actorLevel) {
+  const total = map.encounterPool.reduce((sum, entry) => sum + entry.weight, 0);
+  return map.encounterPool.reduce((sum, entry) => {
+    const encounter = catalog.encounters[entry.encounter];
+    assert.equal(encounter.progression.level, map.floor);
+    // Average integer rounding over 1,000 victories per formation.
+    let earned = 0;
+    for (let n = 1; n <= 1000; n++) earned += formationExperience(catalog, encounter, actorLevel, n);
+    return sum + earned / 1000 * entry.weight / total;
+  }, 0);
+}
+
 test('same-level encounters follow the requested pace across all 99 level-ups', () => {
   const targets = [8, 10, 14, 20, 30, 50, 70, 80, 100];
   for (let level = 1; level < 100; level++) {
     const target = targets[Math.min(level, targets.length) - 1];
     const map = playable.maps[playable.dungeons[id].maps[level - 1]];
-    const weight = map.encounterPool.reduce((sum, e) => sum + e.weight, 0);
-    let average = 0;
-    for (const entry of map.encounterPool) {
-      const encounter = playable.encounters[entry.encounter];
-      assert.equal(encounter.progression.level, level);
-      // Include the full integer XP rounding cycle to within 0.001 XP/win.
-      const earned = Array.from({length: 1000}, (_, i) => formationExperience(playable, encounter, level, i + 1))
-        .reduce((sum, xp) => sum + xp, 0);
-      average += earned / 1000 * entry.weight / weight;
-    }
+    const average = averageEncounterXp(playable, map, level);
     const cost = xpThreshold(playable, level) - xpThreshold(playable, level - 1);
     assert.ok(Math.abs(cost / average - target) < 0.02, 'Lv' + level);
     if (level >= 6) {
@@ -401,7 +404,7 @@ test('going deeper increases combat pressure, caps XP boosts and gives no XP on 
     endBattle(g, 'escape');
     assert.equal(g.state.actors.ada.xp, xp);
   }
-  const encounterAt = floor => g.data.encounters[g.data.maps[id + '_f' + floor].encounter];
-  assert.equal(formationExperience(g.data, encounterAt(8), 6, 1), formationExperience(g.data, encounterAt(7), 6, 1));
-  assert.ok(formationExperience(g.data, encounterAt(6), 6, 1) > formationExperience(g.data, encounterAt(1), 6, 1));
+  const xpAt = floor => averageEncounterXp(g.data, g.data.maps[id + '_f' + floor], 6);
+  assert.ok(Math.abs(xpAt(8) - xpAt(7)) < 0.001);
+  assert.ok(xpAt(6) > xpAt(1));
 });

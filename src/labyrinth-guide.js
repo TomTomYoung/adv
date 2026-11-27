@@ -23,6 +23,18 @@ let listedFamily;
 const familyLabels = {goblin: 'ゴブリン', orc: 'オーク', ogre: 'オーガ', skeleton: 'スケルトン', slime: 'スライム'};
 const familyPath = family => family ? 'monsters/' + family : 'monsters';
 
+function fillBandOptions() {
+  const common = $('source').value === 'common';
+  const select = $('band'), previous = Number(select.value);
+  select.replaceChildren();
+  option(select, 'all', common ? 'すべてのレベル帯' : 'すべての階');
+  for (const {first, last} of guideBands(data, common)) {
+    const span = range(first, last);
+    option(select, String(first), common ? 'Lv' + span : '地下' + span + '階');
+    if (first <= previous && previous <= last) select.value = String(first);
+  }
+}
+
 function drawGroups() {
   const common = $('source').value === 'common';
   const groups = $('groups');
@@ -30,12 +42,17 @@ function drawGroups() {
   groups.classList.toggle('common', common);
   $('probability-note').hidden = common;
   for (const section of guideBands(data, common)) {
-    const {first, last, band, total} = section;
-    if ($('band').value !== 'all' && Number($('band').value) !== band.minLevel) continue;
+    const {first, last, total} = section;
+    if ($('band').value !== 'all' && Number($('band').value) !== first) continue;
     const panel = el('article', undefined, 'band'), title = el('div', undefined, 'band-head');
     title.append(el('h3', 'Lv' + range(first, last)), el('small', common ? '共通候補' : '地下' + range(first, last) + '階'));
     panel.append(title);
-    for (const group of section.groups) {
+    // Floor additions come first; the common catalog retains the full roster.
+    const added = g => g.override && g.base === 0 && g.weight > 0;
+    const rows = common ? section.groups : section.groups
+      .filter(g => g.weight > 0 || g.override)
+      .sort((a, b) => Number(added(b)) - Number(added(a)));
+    for (const group of rows) {
       const row = el('div', undefined, 'group'), roster = el('div'), members = el('div', undefined, 'members');
       for (const member of group.members) {
         const label = el('a', undefined, 'member');
@@ -44,7 +61,8 @@ function drawGroups() {
         members.append(label);
       }
       roster.append(members);
-      if (group.override) roster.append(el('small', 'この階の優先設定　重み ' + group.base + ' → ' + group.weight, 'override'));
+      if (added(group)) roster.append(el('small', 'この階で追加', 'override'));
+      else if (group.override) roster.append(el('small', 'この階の優先設定　重み ' + group.base + ' → ' + group.weight, 'override'));
       const share = common ? '' : group.weight && total ? percent.format(group.weight / total) : '出現なし';
       const rate = el('span', share, 'chance');
       rate.setAttribute('aria-label', '出現率 ' + share);
@@ -362,14 +380,14 @@ function switchPage(event) {
 }
 async function init() {
   data = await loadGuide();
-  option($('band'), 'all', 'すべてのレベル帯');
-  for (const b of data.encounterGroups.bands) option($('band'), String(b.minLevel), 'Lv' + range(b.minLevel, b.maxLevel));
+  fillBandOptions();
   for (const [key, def] of Object.entries(data.actors)) option($('actor'), key, def.name);
   for (const [key, label] of Object.entries(gearStages)) option($('gear'), key, label);
   $('monster-search').addEventListener('input', filterMonsters);
   $('monster').addEventListener('change', () => { location.hash = familyPath(listedFamily) + '/' + $('monster').value; });
   $('level').max = data.system.maxLevel;
-  $('source').addEventListener('change', drawGroups); $('band').addEventListener('change', drawGroups);
+  $('source').addEventListener('change', () => { fillBandOptions(); drawGroups(); });
+  $('band').addEventListener('change', drawGroups);
   $('actor').addEventListener('change', () => {
     changeActor();
     location.hash = 'allies/' + $('actor').value;
