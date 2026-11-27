@@ -55,5 +55,5 @@ Q(190,'兵站係フウ','終戦翌日の補給村を、骸骨獣から守って�
   O('battle','まず襲撃を防ぎ、後処理を相談する','cleanup',{combat:'story_190',escape:'@evac',loss:'@evac',set:{sites:0}}),O('evac','戦わず村の避難を優先する','@evac')]),
  N('cleanup','群れは倒したが魔石は残る。三か所の封鎖と保管先の確認をすれば回収へ進める。',[
   O('site','次の魔石区画を一か所封鎖する','cleanup',{when:lt(R('sites'),3),set:{sites:add(R('sites'),1)},textAfter:'軍の地図の一か所と現地を照合し、その区画へ封鎖札を掛けた。'}),O('store','軍の安全な保管庫と受入れを確認する','cleanup',{when:not(F('store')),set:{store:true}}),O('collect','封鎖した全区画から回収する','@collect',{need:['store'],when:ge(R('sites'),3)}),O('only','今の討伐だけで任務を終える','@only')])
-],{evac:E('村からの避難','人々は避難した。軍用魔石は残り、再建前に回収する仕事を別に要請した。'),only:E('討伐後の戦場','今の群れは倒した。次の群れが来る余地を明記し、フウは撤収の手紙を読み返した。'),collect:E('終戦後の回収','軍が残って魔石を回収した。フウは帰還日を消し、「片付けてから帰る」と書き足した。')},{encounter:{enemy:'battlefield_bonebeast',name:'戦場の骸骨獣',sprite:'skeleton',undead:true}}),
+],{evac:E('村からの避難','人々は避難した。軍用魔石は残り、再建前に回収する仕事を別に要請した。'),only:E('討伐後の戦場','今の群れは倒した。次の群れが来る余地を明記し、フウは撤収の手紙を読み返した。'),collect:E('終戦後の回収','軍が残って魔石を回収した。フウは帰還日を消し、「片付けてから帰る」と書き足した。')},{encounter:{enemy:'battlefield_bonebeast',name:'戦場の骸骨獣',sprite:'monster_battlefield_bonebeast',undead:true}}),
 ];

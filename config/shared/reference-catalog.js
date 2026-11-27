@@ -36084,7 +36084,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "skeleton"
+      "id": "monster_kagaribi_ash_guard"
     },
     {
       "file": "kagaribi-content.json",
@@ -36128,7 +36128,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "skeleton"
+      "id": "monster_kagaribi_chain_bone"
     },
     {
       "file": "kagaribi-content.json",
@@ -36308,7 +36308,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "skeleton"
+      "id": "monster_kagaribi_patrol_guard"
     },
     {
       "file": "kagaribi-content.json",
@@ -36352,7 +36352,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "skeleton"
+      "id": "monster_kagaribi_ossuary_bone"
     },
     {
       "file": "kagaribi-content.json",
@@ -36374,7 +36374,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "skeleton"
+      "id": "monster_kagaribi_ossuary_remnant"
     },
     {
       "file": "kagaribi-content.json",
@@ -51849,11 +51849,11 @@ export const referenceData={
       },
       "guard_2": {
         "name": "塩哭きの廃坑の迷宮獣",
-        "sprite": "skeleton"
+        "sprite": "monster_guard_2"
       },
       "guard_2_elite": {
         "name": "塩哭きの廃坑の守護者",
-        "sprite": "skeleton"
+        "sprite": "monster_guard_2_elite"
       },
       "guard_3": {
         "name": "根喰みの地下庭園の迷宮獣",
@@ -52049,7 +52049,7 @@ export const referenceData={
       },
       "battlefield_bonebeast": {
         "name": "戦場の骸骨獣",
-        "sprite": "skeleton"
+        "sprite": "monster_battlefield_bonebeast"
       },
       "kuragari": {
         "name": "くらがり",
@@ -52089,7 +52089,7 @@ export const referenceData={
       },
       "kagaribi_ash_guard": {
         "name": "赤錆の番兵",
-        "sprite": "skeleton"
+        "sprite": "monster_kagaribi_ash_guard"
       },
       "kagaribi_cinder_golem": {
         "name": "灰積みゴーレム",
@@ -52097,7 +52097,7 @@ export const referenceData={
       },
       "kagaribi_chain_bone": {
         "name": "鎖引き骸骨",
-        "sprite": "skeleton"
+        "sprite": "monster_kagaribi_chain_bone"
       },
       "kagaribi_kiln_warden": {
         "name": "炉守りの亡霊",
@@ -52121,7 +52121,7 @@ export const referenceData={
       },
       "kagaribi_patrol_guard": {
         "name": "巡回路の赤錆番兵",
-        "sprite": "skeleton"
+        "sprite": "monster_kagaribi_patrol_guard"
       },
       "kagaribi_kiln_golem": {
         "name": "炭焼き場の灰積み",
@@ -52129,11 +52129,11 @@ export const referenceData={
       },
       "kagaribi_ossuary_bone": {
         "name": "納骨堂の鎖引き",
-        "sprite": "skeleton"
+        "sprite": "monster_kagaribi_ossuary_bone"
       },
       "kagaribi_ossuary_remnant": {
         "name": "納骨堂の残骸兵",
-        "sprite": "skeleton"
+        "sprite": "monster_kagaribi_ossuary_remnant"
       },
       "waterway_sluice_beast": {
         "name": "水門獣",
@@ -89013,7 +89013,15 @@ export const referenceData={
       "monster_slime_bottle_open": "assets/images/monsters/families/slime_bottle_open.webp",
       "monster_slime_molt_shell": "assets/images/monsters/families/slime_molt_shell.webp",
       "monster_slime_twin_half": "assets/images/monsters/families/slime_twin_half.webp",
-      "monster_slime_oil_lit": "assets/images/monsters/families/slime_oil_lit.webp"
+      "monster_slime_oil_lit": "assets/images/monsters/families/slime_oil_lit.webp",
+      "monster_guard_2": "assets/images/monsters/guard_2.webp",
+      "monster_guard_2_elite": "assets/images/monsters/guard_2_elite.webp",
+      "monster_battlefield_bonebeast": "assets/images/monsters/battlefield_bonebeast.webp",
+      "monster_kagaribi_ash_guard": "assets/images/monsters/kagaribi_ash_guard.webp",
+      "monster_kagaribi_chain_bone": "assets/images/monsters/kagaribi_chain_bone.webp",
+      "monster_kagaribi_patrol_guard": "assets/images/monsters/kagaribi_patrol_guard.webp",
+      "monster_kagaribi_ossuary_bone": "assets/images/monsters/kagaribi_ossuary_bone.webp",
+      "monster_kagaribi_ossuary_remnant": "assets/images/monsters/kagaribi_ossuary_remnant.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
