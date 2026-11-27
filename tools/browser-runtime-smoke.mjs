@@ -167,6 +167,8 @@ try{
     const moves=sheet.locator('.block').filter({has:guide.getByText('行動と使用条件',{exact:true})});
     const traits=sheet.locator('.block').filter({has:guide.getByText('習性',{exact:true})});
     for(const action of actions)await moves.getByText(action,{exact:true}).first().waitFor();
+    if(id==='garden_root_shell')assert.match(await moves.innerText(),/受けるダメージを50%/);
+    if(id==='slime_5_oil')assert.match(await moves.innerText(),/命中時100%で油状態Lv1/);
     for(const habit of habits){
       await traits.getByText(habit,{exact:true}).waitFor();
       assert.equal(await moves.getByText(habit,{exact:true}).count(),0);
@@ -200,13 +202,20 @@ try{
   await guide.locator('#enemies').waitFor();
   const catalog = JSON.parse(await fs.readFile(path.join(root,'data/encounter-groups.json'),'utf8'));
   assert.equal(await guide.locator('.band').count(),await guide.locator('#band option').count()-1);
-  for(const floor of [6,7,8,9]){
+  for(const floor of [5,6,7,8,9,10]){
     await guide.locator('#band').selectOption(String(floor));
     assert.deepEqual(await guide.locator('.band-head small').allTextContents(),['地下'+floor+'階']);
     const additions=guide.locator('.group').filter({hasText:'この階で追加'});
-    assert.equal(await additions.count(),2);
+    const profile=catalog.dungeons.shifting_labyrinth;
+    const floorAdditions=Object.entries(profile.floors[floor]).filter(([id,weight])=>weight>0&&!profile.weights[id]);
+    assert.equal(await additions.count(),floorAdditions.length);
     assert.equal(await additions.locator('.chance').first().isVisible(),true);
+    const species=await guide.locator('.group .member').evaluateAll(links=>links.map(link=>link.hash.split('/').at(-1)));
+    const families=new Set(species.map(id=>enemies[id].family).filter(f=>['goblin','orc','ogre'].includes(f)));
+    assert.deepEqual([...families],[[5,6].includes(floor)?'goblin':floor<9?'orc':'ogre']);
+    assert.ok(species.some(id=>enemies[id].family==='slime'));
   }
+  await guide.locator('#band').selectOption('9');
   await guide.locator('#source').selectOption('common');
   assert.equal(await guide.locator('#band').inputValue(),'6');
   assert.equal(await guide.locator('.band-head h3').textContent(),'Lv6〜9');

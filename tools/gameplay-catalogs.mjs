@@ -1,3 +1,4 @@
+import {statLabels, elementLabels, buffEffectText} from '../src/application/skill-effects.js';
 import {torchTargetLabels} from '../src/application/monster-catalog.js';
 import {abilityCategory} from '../src/application/character-profile.js';
 import {guardDamageRate} from '../src/core/battle-turns.js';
@@ -5,8 +6,6 @@ import {guardDamageRate} from '../src/core/battle-turns.js';
 const targetLabels={enemy:'敵1体',ally:'味方1人',self:'自分',all_enemies:'敵全体',all_allies:'味方全体',location:'地点'};
 const itemTypeLabels={consumable:'消耗品',material:'素材',equipment:'装備品',key:'重要品',dungeon_tool:'ダンジョン道具'};
 const slotLabels={weapon:'武器',armor:'防具',charm:'護符'};
-const statLabels={hp:'HP',mp:'MP',str:'力',vit:'防御',agi:'速さ',int:'知力'};
-const elementLabels={physical:'物理',fire:'炎',ice:'氷',lightning:'雷',water:'水',light:'光',earth:'地',dark:'闇'};
 const refLabels={
   'source.stats.str':'使用者の力','source.stats.vit':'使用者の防御','source.stats.agi':'使用者の速さ','source.stats.int':'使用者の知力',
   'target.stats.str':'対象の力','target.stats.vit':'対象の防御','target.stats.agi':'対象の速さ','target.stats.int':'対象の知力'
@@ -53,18 +52,6 @@ function expressionText(node){
 }
 const rawText=(data,effect)=>effect.formula?expressionText(data.formulas?.[effect.formula]??effect.formula):String(effect.amount??0);
 const chanceText=chance=>`${Math.round((chance??1)*1000)/10}%`;
-const buffEffectText=(data,id)=>{
-  const b=data.buffs?.[id];if(!b)return `補正 ${id}`;
-  const values=[];
-  for(const [key,n] of Object.entries(b.stats??{}))values.push(`${statLabels[key]??key} ×${n}`);
-  for(const [element,n] of Object.entries(b.resist??{}))values.push(`${elementLabels[element]??element}被ダメージ ×${n}`);
-  if(b.physicalPower!==undefined)values.push(`次の行動の物理威力 ×${b.physicalPower}`);
-  if(b.physicalTaken!==undefined)values.push(`次の物理被害1回 ×${b.physicalTaken}`);
-  if(b.blocksMovement)values.push('自発移動と次のFrontline自動前進を阻止');
-  if(b.classicAccuracyPenalty)values.push(`Classic命中率−${b.classicAccuracyPenalty*100}ポイント`);
-  values.push(b.consume==='next_action'?'次の本人の行動機会に消費':`持続 ${b.turns}ターン`);
-  return values.join(' / ');
-};
 function effectCalculation(data,skillId,effect,prefix='計算式',priorEffects=[]){
   const base=`max(0, ${rawText(data,effect)})`;
   if(effect.type==='damage'){

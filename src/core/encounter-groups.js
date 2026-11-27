@@ -18,11 +18,12 @@ export function floorEncounterGroups(data, map) {
   if (!band) return;
 
   const weights = encounterWeightsForFloor(profile, map.floor);
-  const encounterPool = [];
+  const encounterPool = [], defined = [];
   for (const [group, roster] of Object.entries(band.groups)) {
     const weight = weights[group] ?? 0;
     if (!Number.isFinite(weight) || weight < 0) throw Error(map.id + ': 遭遇重みが不正です ' + group);
-    if (weight === 0) continue;
+    // Explicit zero keeps former battles and kill records loadable, outside the draw pool.
+    if (!Object.hasOwn(weights, group)) continue;
     const enemies = [], names = [];
     for (const [species, count] of Object.entries(roster)) {
       const base = data.enemies[species], stats = enemyStats(catalog, band.enemies[species], level);
@@ -46,17 +47,18 @@ export function floorEncounterGroups(data, map) {
       data.encounters[encounter].frontlinePositions = formation;
       data.encounters[encounter].enemyPositions = formation.map(p => ({x: p.lane, y: 2 - p.depth}));
     }
-    encounterPool.push({encounter, weight});
+    defined.push(encounter);
+    if (weight > 0) encounterPool.push({encounter, weight});
   }
   if (encounterPool.length) {
     if (profile.progression) {
       const count = id => data.encounters[id].enemies.length;
       const weight = encounterPool.reduce((sum, e) => sum + e.weight, 0);
       const meanSize = encounterPool.reduce((sum, e) => sum + count(e.encounter) * e.weight, 0) / weight;
-      for (const entry of encounterPool) {
-        const encounter = data.encounters[entry.encounter];
+      for (const id of defined) {
+        const encounter = data.encounters[id];
         // Half the reward is for victory, half is proportional to the size of this formation.
-        encounter.progression = {dungeon: map.dungeon, level, rewardFactor: (1 + count(entry.encounter) / meanSize) / 2};
+        encounter.progression = {dungeon: map.dungeon, level, rewardFactor: (1 + count(id) / meanSize) / 2};
       }
     }
     return {encounter: encounterPool[0].encounter, encounterPool};
