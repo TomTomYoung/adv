@@ -68,7 +68,8 @@
         "trap_ceiling": 15,
         "trap_fireline": 18,
         "trap_vise": 21,
-        "trap_coffin": 24
+        "trap_coffin": 24,
+        "trap_treadle": 8
       },
       "il": {
         "twin_thunder": 6
@@ -76,6 +77,13 @@
       "sera": {
         "stun_break": 3,
         "lay_to_rest": 8
+      },
+      "toma": {
+        "medicine_leaf": 1,
+        "medicine_amber": 8,
+        "medicine_echo": 12,
+        "medicine_moon": 18,
+        "medicine_marrow": 24
       }
     }
   },
@@ -578,6 +586,14 @@
           "target": "location",
           "maxTargets": 1,
           "lifetime": "equipped"
+        },
+        {
+          "skill": "battle_disarm",
+          "level": 1,
+          "api": "battle.skill",
+          "target": "self",
+          "maxTargets": 1,
+          "lifetime": "equipped"
         }
       ]
     },
@@ -752,6 +768,14 @@
           "level": 10,
           "api": "party.recon",
           "target": "location",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "battle_disarm",
+          "level": 1,
+          "api": "battle.skill",
+          "target": "self",
           "maxTargets": 1,
           "lifetime": "equipped"
         }
@@ -2617,7 +2641,7 @@
         "dungeon"
       ],
       "mp": 2,
-      "description": "既知の床罠・向いている壁面罠を解除する。技能Lv2から回収可能な罠の部品を拾える。",
+      "description": "既知の床罠・向いている壁面罠を解除する。技能Lv2から回収可能な罠の部品を拾える。 戦闘中は罠を1基解除する。",
       "maxSkillLevel": 3,
       "growthDisplay": "full",
       "levels": {
@@ -4494,7 +4518,7 @@
       "name": "薬草の手当",
       "mp": 0,
       "target": "ally",
-      "description": "傷ついた仲間を一度だけ回復します。",
+      "description": "傷ついた仲間のうち残りHP割合が最も低い1体に、一戦に一度、個体Lvで使える最上位の薬を投与します。",
       "effects": [
         {
           "type": "heal",
@@ -6356,6 +6380,119 @@
           "type": "damage",
           "element": "fire",
           "formula": "heavy"
+        }
+      ]
+    },
+    "plague_bite": {
+      "name": "病牙",
+      "mp": 0,
+      "target": "enemy",
+      "description": "物理攻撃が命中すると35%で病気が1段階進む。最大Lv3。",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "physical",
+          "element": "physical"
+        },
+        {
+          "type": "status",
+          "status": "disease",
+          "chance": 0.35
+        }
+      ]
+    },
+    "hamelin": {
+      "name": "ハーメルン",
+      "mp": 0,
+      "target": "self",
+      "description": "ハーメルンで生存中の煤ネズミ・疫病ネズミに号令をかけ、隊員1人を一斉に襲わせます。ネズミがいないときは合図笛を使います。",
+      "effects": []
+    },
+    "medicine_leaf": {
+      "name": "若葉の丸薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "最大HPの25%を回復。速さが15%低下。2巡終了で解除。",
+      "effects": [
+        {
+          "type": "medicine",
+          "healRate": 0.25,
+          "status": "drug_drowsiness"
+        }
+      ]
+    },
+    "medicine_amber": {
+      "name": "琥珀の煎薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "最大HPの40%を回復。力が15%低下。戦闘終了で解除。",
+      "effects": [
+        {
+          "type": "medicine",
+          "healRate": 0.4,
+          "status": "drug_weakness"
+        }
+      ]
+    },
+    "medicine_echo": {
+      "name": "返り咲きの薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "最大HPの55%を回復。服用から2回目の巡終了時にMPを6失う。",
+      "effects": [
+        {
+          "type": "medicine",
+          "healRate": 0.55,
+          "status": "drug_rebound"
+        }
+      ]
+    },
+    "medicine_moon": {
+      "name": "月露の霊薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "最大HPの75%を回復。次に魔法を1回使うと、通常の消費に加えてMPを8失う。",
+      "effects": [
+        {
+          "type": "medicine",
+          "healRate": 0.75,
+          "status": "drug_spell_recoil"
+        }
+      ]
+    },
+    "medicine_marrow": {
+      "name": "命脈の秘薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "最大HPの100%を回復。服用者の防御が永久に1低下する。累計5まで。",
+      "effects": [
+        {
+          "type": "medicine",
+          "healRate": 1.0,
+          "permanentVitLoss": 1
+        }
+      ]
+    },
+    "trap_treadle": {
+      "name": "踏み板罠",
+      "mp": 0,
+      "target": "self",
+      "description": "敵・味方・設置者を問わず、最初に直接物理攻撃を当てた者が踏む。設置者の通常攻撃の50%の威力。1回発動。",
+      "effects": [
+        {
+          "type": "set_trap",
+          "trap": "treadle"
+        }
+      ]
+    },
+    "battle_disarm": {
+      "name": "罠解除",
+      "mp": 2,
+      "target": "self",
+      "description": "戦場の罠を1基解除。敵の罠を優先し、同じ陣営なら先に置かれたものを選ぶ。",
+      "effects": [
+        {
+          "type": "disarm_trap"
         }
       ]
     }
@@ -8358,7 +8495,16 @@
     "trap_coffin": "skill_root",
     "stone_beetle_throw": "skill_smash",
     "armadillo_rampage": "skill_roll",
-    "bomb_rock_throw": "skill_fire"
+    "bomb_rock_throw": "skill_fire",
+    "plague_bite": "skill_venom",
+    "hamelin": "guard",
+    "medicine_leaf": "skill_heal",
+    "medicine_amber": "skill_heal",
+    "medicine_echo": "skill_heal",
+    "medicine_moon": "skill_heal",
+    "medicine_marrow": "skill_heal",
+    "trap_treadle": "skill_root",
+    "battle_disarm": "skill_root"
   },
   "gridProfiles": {
     "power": {
@@ -11562,6 +11708,114 @@
         "shape": "single"
       },
       "trajectory": "lob",
+      "friendlyFire": false
+    },
+    "plague_bite": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "hamelin": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_leaf": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_amber": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_echo": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_moon": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_marrow": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "trap_treadle": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "battle_disarm": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
       "friendlyFire": false
     }
   },
@@ -17985,6 +18239,222 @@
       "allyRange": {
         "min": 0,
         "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "plague_bite": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "hamelin": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_leaf": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_amber": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_echo": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_moon": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_marrow": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "trap_treadle": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "battle_disarm": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
       },
       "area": {
         "shape": "single"

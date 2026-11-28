@@ -18413,6 +18413,16 @@ export const referenceData={
       "id": "medicinal_leaf"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "plague_rat",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -29926,6 +29936,18 @@ export const referenceData={
       "file": "jobs.json",
       "path": [
         "jobs",
+        "rogue",
+        "grants",
+        4,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "battle_disarm"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
         "assassin",
         "grants",
         0,
@@ -30089,6 +30111,18 @@ export const referenceData={
       ],
       "kind": "fieldAbilities",
       "id": "recon"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        11,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "battle_disarm"
     },
     {
       "file": "jobs.json",
@@ -33854,6 +33888,78 @@ export const referenceData={
       ],
       "kind": "formulas",
       "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "plague_bite",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "plague_bite",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "disease"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_leaf",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_drowsiness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_amber",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_weakness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_echo",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_rebound"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_moon",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_spell_recoil"
     },
     {
       "file": "jobs.json",
@@ -51747,6 +51853,33 @@ export const referenceData={
       },
       "bomb_rock_throw": {
         "name": "爆弾岩投げ"
+      },
+      "plague_bite": {
+        "name": "病牙"
+      },
+      "hamelin": {
+        "name": "ハーメルン"
+      },
+      "medicine_leaf": {
+        "name": "若葉の丸薬"
+      },
+      "medicine_amber": {
+        "name": "琥珀の煎薬"
+      },
+      "medicine_echo": {
+        "name": "返り咲きの薬"
+      },
+      "medicine_moon": {
+        "name": "月露の霊薬"
+      },
+      "medicine_marrow": {
+        "name": "命脈の秘薬"
+      },
+      "trap_treadle": {
+        "name": "踏み板罠"
+      },
+      "battle_disarm": {
+        "name": "罠解除"
       }
     },
     "items": {
@@ -52849,6 +52982,10 @@ export const referenceData={
       "slime_25_abyss": {
         "name": "底なしスライム",
         "sprite": "monster_slime_25_abyss"
+      },
+      "plague_rat": {
+        "name": "疫病ネズミ",
+        "sprite": "monster_vault_mouse"
       }
     },
     "encounters": {
@@ -53320,6 +53457,21 @@ export const referenceData={
       },
       "aegis_ward": {
         "name": "飛び道具の結界"
+      },
+      "disease": {
+        "name": "病気"
+      },
+      "drug_drowsiness": {
+        "name": "薬の眠気"
+      },
+      "drug_weakness": {
+        "name": "薬の脱力"
+      },
+      "drug_rebound": {
+        "name": "反動待ち"
+      },
+      "drug_spell_recoil": {
+        "name": "魔力過敏"
       }
     },
     "shops": {
@@ -82321,6 +82473,69 @@ export const referenceData={
       "path": [
         "skills",
         "bomb_rock_throw"
+      ]
+    },
+    "skills/plague_bite": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "plague_bite"
+      ]
+    },
+    "skills/hamelin": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "hamelin"
+      ]
+    },
+    "skills/medicine_leaf": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_leaf"
+      ]
+    },
+    "skills/medicine_amber": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_amber"
+      ]
+    },
+    "skills/medicine_echo": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_echo"
+      ]
+    },
+    "skills/medicine_moon": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_moon"
+      ]
+    },
+    "skills/medicine_marrow": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_marrow"
+      ]
+    },
+    "skills/trap_treadle": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_treadle"
+      ]
+    },
+    "skills/battle_disarm": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "battle_disarm"
       ]
     },
     "fieldAbilities/survey": {

@@ -12,9 +12,10 @@ test('five bestiary families include the sixth Lv5 slime and a distinct sprite f
   assert.equal(classes.length,126);
   assert.equal(new Set(classes.map(e=>data.assets.images[e.sprite])).size,126);
   const sections=guideBands(data,false);
+  assert.equal(monsterFloorText(sections,'goblin_5_piper'),'地下12〜29階');
   for(const family of ['goblin','orc','ogre','skeleton','slime'])for(const lv of [5,10,15,20,25]){
     const entries=classes.filter(e=>e.family===family&&e.levelBand===lv);
-    assert.equal(entries.length,family==='slime'&&lv===5?6:5);
+    assert.equal(entries.length,lv===5?({goblin:4,slime:6}[family]??5):5);
     for(const e of entries){
       const floors = monsterFloorText(sections,e.id);
       assert.ok(floors, e.id);

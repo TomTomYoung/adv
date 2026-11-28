@@ -62,7 +62,8 @@ test('同種の比較行が全階の通常遭遇個体と一致し、重み0・�
     assert.deepEqual(monsterLevelRows(guide, sections, species), expected.get(species) ?? [], species);
   }
   const rat = monsterLevelRows(guide, sections, 'kagaribi_soot_rat');
-  assert.deepEqual(rat.map(r => [r.level,r.stats.hp,r.habits]), [
+  assert.deepEqual(rat.filter(r=>r.level>=12).map(r=>r.level),Array.from({length:18},(_,i)=>12+i));
+  assert.deepEqual(rat.filter(r=>r.level<12).map(r => [r.level,r.stats.hp,r.habits]), [
     [1,17,[]], [2,28,[]], [3,40,[]], [4,45,[]], [5,53,['soot_smoke']]
   ]);
 });

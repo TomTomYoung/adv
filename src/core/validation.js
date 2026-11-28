@@ -153,7 +153,7 @@ export function validateContent(data){
   for(const [id,formula] of Object.entries(data.formulas))expression(formula,`formulas.${id}`);
   for(const [id,skill] of Object.entries(data.skills)){
     if(!['enemy','ally','self','all_enemies','all_allies'].includes(skill.target)||!Number.isInteger(skill.mp)||skill.mp<0)fail(id,'スキル対象・MPが不正です');
-    for(const effect of skill.effects??[]){if(!['damage','heal','guard','stun','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel','lay_to_rest','set_trap','purge_undead'].includes(effect.type))fail(id,'未知のスキル効果');if(effect.formula)reference(data.formulas,effect.formula,id);if(effect.status)reference(data.statuses,effect.status,id);if(effect.amount!==undefined&&(!Number.isFinite(effect.amount)||effect.amount<0))fail(id,'効果量が不正です');}
+    for(const effect of skill.effects??[]){if(!['damage','heal','guard','stun','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel','lay_to_rest','set_trap','medicine','disarm_trap','purge_undead'].includes(effect.type))fail(id,'未知のスキル効果');if(effect.formula)reference(data.formulas,effect.formula,id);if(effect.status)reference(data.statuses,effect.status,id);if(effect.amount!==undefined&&(!Number.isFinite(effect.amount)||effect.amount<0))fail(id,'効果量が不正です');}
   }
   for(const [id,a] of Object.entries(data.actors)){for(const skill of a.skills)reference(data.skills,skill,id);if(a.portrait)reference(data.assets.images,a.portrait,id);}
   for(const [id,enemy] of Object.entries(data.enemies)){

@@ -22,6 +22,13 @@ function trigger(engine,t) {
   remove(engine.state,t);
   engine.state.battle.log.push(name(engine,unit(engine.state,t.owner))+'の'+engine.data.skills[t.skill].name+'が発動した。');
 }
+export function disarmBattleTrap(engine, source) {
+  const list=traps(engine.state);
+  const trap=list.find(t=>hostile(t,source)) ?? list[0];
+  if(!trap)return;
+  remove(engine.state,trap);
+  engine.state.battle.log.push(name(engine,source)+'は'+name(engine,unit(engine.state,trap.owner))+'の'+engine.data.skills[trap.skill].name+'を解除した。');
+}
 export function battleTrapLabels(engine) {
   const s=engine.state;
   return traps(s).map(t=>name(engine,unit(s,t.owner))+'の'+engine.data.skills[t.skill].name+'（'+name(engine,unit(s,t.target))+'）');
@@ -83,8 +90,14 @@ export function trapDamageRate(engine,source,target,element,projectile,action) {
 export function afterTrapAction(engine,source,targets,results,id,skill,contact,strike,itemId) {
   const s=engine.state;
   for(const t of traps(s)){
-    if(!traps(s).includes(t)||!hostile(t,source))continue;
+    if(!traps(s).includes(t))continue;
     const kind=spec(engine,t).trap;
+    if(kind==='treadle' && contact && results.some(r=>r.hit)){
+      trigger(engine,t);
+      if(battleAlive(s,source))strike(unit(s,t.owner),source,t.skill,0.5);
+      continue;
+    }
+    if(!hostile(t,source))continue;
     if(kind==='siphon' && !itemId && skill.mp>0 && abilityCategory(id)==='magic'){
       trigger(engine,t);const loss=Math.min(source.mp,2);source.mp-=loss;
       s.battle.log.push(name(engine,source)+'のMPが'+loss+'減った。');continue;

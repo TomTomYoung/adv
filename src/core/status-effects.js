@@ -95,11 +95,26 @@ export function cleanseCandidates(target,effect){
   const present=target.statuses??[];
   return effect.statuses?effect.statuses.filter(id=>present.includes(id)).slice(0,1):effect.status?present.filter(id=>id===effect.status):[...present];
 }
+function triggerMedicineReaction(data,state,target,id,on){
+  const reaction=statusEffect(data,target,id)?.medicineTrigger;
+  if(reaction?.on!==on)return;
+  const spent=Math.min(target.mp,reaction.mpLoss);
+  target.mp-=spent;
+  state.battle.log.push((target.name??data.actors[target.id].name)+'は'+data.statuses[id].name+'でMPを'+spent+'失った。');
+  removeStatus(target,id);
+}
+export function medicineOnMagic(data,state,source,skillId,itemId){
+  if(itemId||abilityCategory(skillId)!=='magic')return;
+  for(const {id} of activeStatuses(data,state,source))triggerMedicineReaction(data,state,source,id,'magic');
+}
 export function tickStatuses(data,state,target,clock){
   for(const [id,timer] of Object.entries(target.statusDurations??{})){
     if(!target.statuses.includes(id)){delete target.statusDurations[id];continue;}
     if(!dungeonEffectActive(data,state,'status',id)||timer[clock]===undefined)continue;
-    if(--timer[clock]<=0)removeStatus(target,id);
+    if(--timer[clock]<=0){
+      triggerMedicineReaction(data,state,target,id,'expiry');
+      removeStatus(target,id);
+    }
   }
 }
 // Recovery age belongs to the unit, so ending a battle or loading cannot reset it.
@@ -145,6 +160,7 @@ export function fieldItemUser(data,state,holder='shared'){
 }
 export function statusStats(data,state,target,base){
   const stats={...base};
+  if(target.medicineVitLoss)stats.vit=Math.max(0,stats.vit-target.medicineVitLoss);
   for(const id of target.statuses??[])if(dungeonEffectActive(data,state,'status',id))for(const [key,scale] of Object.entries(statusEffect(data,target,id)?.stats??{}))stats[key]=Math.max(0,Math.floor(stats[key]*scale));
   return stats;
 }
@@ -172,6 +188,9 @@ function effectErrors(e){
   if(e.wetDamageScale!==undefined&&(!Number.isFinite(e.wetDamageScale)||e.wetDamageScale<0||e.wetDamageScale>5))return true;
   if(e.wetBacklashRate!==undefined&&(!Number.isFinite(e.wetBacklashRate)||e.wetBacklashRate<0||e.wetBacklashRate>1))return true;
   if(e.wetSuppressElements!==undefined&&(!Array.isArray(e.wetSuppressElements)||e.wetSuppressElements.some(x=>!['ice','lightning'].includes(x))))return true;
+  if(e.medicineTrigger!==undefined && (!e.battleOnly || !record(e.medicineTrigger) ||
+    !['magic','expiry'].includes(e.medicineTrigger.on) || !Number.isSafeInteger(e.medicineTrigger.mpLoss) ||
+    e.medicineTrigger.mpLoss<1 || e.medicineTrigger.mpLoss>999 || e.medicineTrigger.on==='expiry'&&!e.duration?.turns))return true;
   if(e.duration!==undefined&&!statusDurationValid(e.duration))return true;
   if(e.stats!==undefined&&(!record(e.stats)||Object.entries(e.stats).some(([k,n])=>!['str','vit','agi','int'].includes(k)||!Number.isFinite(n)||n<0||n>5)))return true;
   return false;
@@ -186,6 +205,7 @@ export function statusDefinitionsErrors(data){
 }
 export function statusStateErrors(data,target){
   const errors=[];if(new Set(target.statuses).size!==target.statuses.length)errors.push('状態異常が重複しています');
+  if(target.medicineVitLoss!==undefined&&(!Number.isInteger(target.medicineVitLoss)||target.medicineVitLoss<1||target.medicineVitLoss>5))errors.push('薬の永久防御低下が不正です');
   if(target.statusDurations!==undefined&&(!record(target.statusDurations)||Object.entries(target.statusDurations).some(([id,v])=>!data.statuses[id]||!target.statuses.includes(id)||!statusDurationValid(v))))errors.push('状態異常の残り時間が不正です');
   if(target.statusLevels!==undefined&&(!record(target.statusLevels)||Object.entries(target.statusLevels).some(([id,v])=>!data.statuses[id]||!target.statuses.includes(id)||!statusLevelValid(v)||v===1)))errors.push('状態異常Lvが不正です');
   if(target.statusRecoveryTurns!==undefined&&(!record(target.statusRecoveryTurns)||Object.entries(target.statusRecoveryTurns).some(([id,v])=>!data.statuses[id]||!target.statuses.includes(id)||!statusEffect(data,target,id)?.recovery||!Number.isSafeInteger(v)||v<0||v>1e6)))errors.push('状態異常の回復経過ターンが不正です');

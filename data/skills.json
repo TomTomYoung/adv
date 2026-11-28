@@ -5819,7 +5819,7 @@
     "name": "薬草の手当",
     "mp": 0,
     "target": "ally",
-    "description": "傷ついた仲間を一度だけ回復します。",
+    "description": "傷ついた仲間のうち残りHP割合が最も低い1体に、一戦に一度、個体Lvで使える最上位の薬を投与します。",
     "effects": [
       {
         "type": "heal",
@@ -13558,6 +13558,443 @@
         "shape": "single"
       },
       "trajectory": "lob",
+      "friendlyFire": false
+    }
+  },
+  "plague_bite": {
+    "name": "病牙",
+    "mp": 0,
+    "target": "enemy",
+    "description": "物理攻撃が命中すると35%で病気が1段階進む。最大Lv3。",
+    "effects": [
+      {
+        "type": "damage",
+        "formula": "physical",
+        "element": "physical"
+      },
+      {
+        "type": "status",
+        "status": "disease",
+        "chance": 0.35
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    }
+  },
+  "hamelin": {
+    "name": "ハーメルン",
+    "mp": 0,
+    "target": "self",
+    "description": "ハーメルンで生存中の煤ネズミ・疫病ネズミに号令をかけ、隊員1人を一斉に襲わせます。ネズミがいないときは合図笛を使います。",
+    "effects": [],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_leaf": {
+    "name": "若葉の丸薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "最大HPの25%を回復。速さが15%低下。2巡終了で解除。",
+    "effects": [
+      {
+        "type": "medicine",
+        "healRate": 0.25,
+        "status": "drug_drowsiness"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_amber": {
+    "name": "琥珀の煎薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "最大HPの40%を回復。力が15%低下。戦闘終了で解除。",
+    "effects": [
+      {
+        "type": "medicine",
+        "healRate": 0.4,
+        "status": "drug_weakness"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_echo": {
+    "name": "返り咲きの薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "最大HPの55%を回復。服用から2回目の巡終了時にMPを6失う。",
+    "effects": [
+      {
+        "type": "medicine",
+        "healRate": 0.55,
+        "status": "drug_rebound"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_moon": {
+    "name": "月露の霊薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "最大HPの75%を回復。次に魔法を1回使うと、通常の消費に加えてMPを8失う。",
+    "effects": [
+      {
+        "type": "medicine",
+        "healRate": 0.75,
+        "status": "drug_spell_recoil"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_marrow": {
+    "name": "命脈の秘薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "最大HPの100%を回復。服用者の防御が永久に1低下する。累計5まで。",
+    "effects": [
+      {
+        "type": "medicine",
+        "healRate": 1.0,
+        "permanentVitLoss": 1
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "trap_treadle": {
+    "name": "踏み板罠",
+    "mp": 0,
+    "target": "self",
+    "description": "敵・味方・設置者を問わず、最初に直接物理攻撃を当てた者が踏む。設置者の通常攻撃の50%の威力。1回発動。",
+    "effects": [
+      {
+        "type": "set_trap",
+        "trap": "treadle"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "battle_disarm": {
+    "name": "罠解除",
+    "mp": 2,
+    "target": "self",
+    "description": "戦場の罠を1基解除。敵の罠を優先し、同じ陣営なら先に置かれたものを選ぶ。",
+    "effects": [
+      {
+        "type": "disarm_trap"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
       "friendlyFire": false
     }
   }

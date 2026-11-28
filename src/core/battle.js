@@ -1,4 +1,5 @@
-import {afterTrapAction,setBattleTrap,settleTrapDeaths,snareAttack,spreadTrapFire,trapDamageRate,viseStopsCover} from './battle-traps.js';
+import {giveMedicine,medicineChoices} from './medicines.js';
+import {disarmBattleTrap,afterTrapAction,setBattleTrap,settleTrapDeaths,snareAttack,spreadTrapFire,trapDamageRate,viseStopsCover} from './battle-traps.js';
 import {sootOnHit} from './soot-smoke.js';
 import {oilBurnout,slimeAfterDamage,slimeDeflect,slimeHitType,slimeInitiative,slimeMoved,slimePower,slimeTurn} from './slime-actions.js';
 import {settleSkeletonCrown,skeletonAfterDamage,skeletonGuardBroken,skeletonInterrupted,skeletonTurn} from './skeleton-actions.js';
@@ -20,7 +21,7 @@ import {isGrid,gridStart,gridMovePlan,gridCells,position,distance,revivePosition
 import {gridTargetPlan,gridSelections,targetingProfile} from './battle-targeting.js';
 import {effectiveSkill,recordSkillUse} from './skill-levels.js';
 import {resolvePreemptive,applyStun,consumeStun,applyGuard,clearGuard,forgetTrapGuard,stunned,guardLevel,guardDamageRate} from './battle-turns.js';
-import {applyStatus,removeStatus,statusStats,tickStatuses,applyStatusClock,recoverStatuses,statusAbilityReason,statusActionReason,rollActionStatus,statusAccuracy,statusEffectAtLevel,activeStatuses,statusControl,clearBattleStatuses,wakeOnDamage,criticalChance,CRITICAL_DAMAGE_MULTIPLIER} from './status-effects.js';
+import {medicineOnMagic,applyStatus,removeStatus,statusStats,tickStatuses,applyStatusClock,recoverStatuses,statusAbilityReason,statusActionReason,rollActionStatus,statusAccuracy,statusEffectAtLevel,activeStatuses,statusControl,clearBattleStatuses,wakeOnDamage,criticalChance,CRITICAL_DAMAGE_MULTIPLIER} from './status-effects.js';
 import {ignitionReason} from './fire-hazards.js';
 import {beginBattleResult} from './battle-results.js';
 import {wetResistance,wetAfterSkill,wetSkillBlocked} from './wet.js';
@@ -114,6 +115,7 @@ export function battleSkillPlan(engine,actorId,skillId,targetId,options={}){
   const grant=permission(engine.data,s,actorId,skillId,'battle.skill');
   if(!grant)return fail('この職業・レベルでは習得していません。');
   const reason=statusAbilityReason(engine.data,s,s.actors[actorId],skillId)||effectsProblem(engine.data,skill,s)||costProblem(engine.data,s,actorId,skill);if(reason)return fail(reason);
+  if(skill.effects.some(e=>e.type==='disarm_trap')&&!b.traps?.length)return fail('戦場に解除できる罠がありません。');
   if(skill.effects.some(e=>e.type==='repel')){
     if(!canRepel(engine.data,s,skill))return fail('この火で撃退できるのは、篝火の迷宮のくらがりです。');
     const wetReason=ignitionReason(engine.data,s);if(wetReason)return fail(wetReason);
@@ -220,6 +222,8 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   }
   let brokeGuard=false;
   for(const effect of skill.effects){
+    if(effect.type==='disarm_trap'){disarmBattleTrap(engine,source);continue;}
+    if(effect.type==='medicine'){giveMedicine(engine,target,targetStats.hp,effect,skill);continue;}
     if(effect.type==='frontline_remove'){removeFrontline(engine,target);break;}
     if(effect.type==='frontline_knockback'){const loss=knockbackFrontline(engine,target,effect);damageTotal+=loss;if(loss){wakeOnDamage(engine,target);sootOnHit(engine,source,target);}recordDefeated(engine,false,source);continue;}
     if(effect.type==='stun'){
@@ -509,13 +513,19 @@ export function battleItemPlan(engine,actorId,itemId,targetId){
   return {ok:true,skill,skillId:item.battleSkill,itemId,targets:[target]};
 }
 function performSkill(engine,source,selection){
+  if(selection.skillId==='family_goblin_5_herbalist'){
+    const level=engine.data.enemies[source.id]?.level??source.levelBand??source.level??1;
+    const recipe=medicineChoices(engine.data,level).at(-1);
+    if(recipe)selection={...selection,skill:engine.data.skills[recipe],skillId:recipe};
+  }
   const {skill,skillId,targets,itemId}=selection,enemySource=Boolean(source.instance),s=engine.state;
   if(itemId)engine.give(itemId,-1);
   else if(enemySource)source.mp-=skill.mp;
   else{
     payCost(engine,source.id,skill);
-    recordSkillUse(engine,source.id,skillId,{weapon:skill.effects.some(e=>e.type==='damage'&&e.element==='physical')});
+    recordSkillUse(engine,source.id,skillId==='battle_disarm'?'trap_disarm':skillId,{weapon:skill.effects.some(e=>e.type==='damage'&&e.element==='physical')});
   }
+  medicineOnMagic(engine.data,s,source,skillId,itemId);
   if(skill.effects.some(e=>e.type==='repel')){
     const lit=kindlePortable(engine.data,s,skill.fireEffect,engine);
     if(s.battle&&lit){
@@ -873,6 +883,7 @@ function frontlineReact(engine,reactor,on,attacker){
   const plan=reactor.instance?frontlineTargetPlan(engine,reactor,skill,rule.skill,unitKey(target)):battleSkillPlan(engine,reactor.id,rule.skill,unitKey(target));
   if(!plan.ok||reactor.instance&&reactor.mp<skill.mp)continue;
   if(reactor.instance)reactor.mp-=skill.mp;else{payCost(engine,reactor.id,skill);recordSkillUse(engine,reactor.id,rule.skill);}
+  medicineOnMagic(d,s,reactor,rule.skill);
   // Reactions use shared effects but do not recursively trigger onHit reactions.
   const wasOiled=hasActiveStatus(d,s,reactor,'oiled');
   const selected=sampleSkillTargets(engine,reactor,skill,rule.skill,plan.targets);

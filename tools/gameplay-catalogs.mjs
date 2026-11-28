@@ -57,6 +57,7 @@ function expressionText(node){
 const rawText=(data,effect)=>effect.formula?expressionText(data.formulas?.[effect.formula]??effect.formula):String(effect.amount??0);
 const chanceText=chance=>`${Math.round((chance??1)*1000)/10}%`;
 function effectCalculation(data,skillId,effect,prefix='計算式',priorEffects=[]){
+  if(effect.type==='medicine'||effect.type==='disarm_trap')return data.skills[skillId].description;
   if(effect.type==='set_trap')return '設置時には発動せず、戦闘中に条件が成立すると1回発動。';
   const base=`max(0, ${rawText(data,effect)})`;
   if(effect.type==='damage'){

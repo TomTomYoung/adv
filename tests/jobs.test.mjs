@@ -1,3 +1,4 @@
+import {setBattleTrap} from '../src/core/battle-traps.js';
 import {nextFormation} from '../src/core/battle-formation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -28,6 +29,10 @@ for(const job of Object.values(data.jobs))test(`30職実行 ${job.name}: Lv1/5/1
       const run=setup(job.id,level);equipSkill(run,grant.skill);run.healAll();
       const spec=data.skills[grant.skill],finisher=spec.effects.some(e=>e.type==='lay_to_rest');
       start(run,finisher?'kagaribi_deep_pair':'wild_pair_10');
+      if(spec.effects.some(e=>e.type==='disarm_trap')){
+        const enemy=run.state.battle.enemies[0];
+        setBattleTrap(run,enemy,enemy,'trap_barb');
+      }
       if(finisher){
         const skeleton=run.state.battle.enemies[0];
         assert.equal(battleSkillPlan(run,'ada',grant.skill,skeleton.instance).ok,false);
