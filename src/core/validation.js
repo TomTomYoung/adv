@@ -157,6 +157,7 @@ export function validateContent(data){
   }
   for(const [id,a] of Object.entries(data.actors)){for(const skill of a.skills)reference(data.skills,skill,id);if(a.portrait)reference(data.assets.images,a.portrait,id);}
   for(const [id,enemy] of Object.entries(data.enemies)){
+    if(enemy.minEncounterLevel!==undefined&&(!Number.isSafeInteger(enemy.minEncounterLevel)||enemy.minEncounterLevel<1||enemy.minEncounterLevel>data.system.maxLevel))fail(id,'最低遭遇Lvが不正です');
     if(enemy.habits!==undefined&&!validHabits(enemy.habits))fail(id,'習性のIDまたは重複が不正です');
     if(enemy.actionMode!==undefined&&enemy.actionMode!=='rules')fail(id,'未知の行動選択方式です');
   }

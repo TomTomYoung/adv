@@ -52,7 +52,7 @@ function drawGroups() {
     panel.append(title);
     // Floor additions come first; the common catalog retains the full roster.
     const added = g => g.override && g.base === 0 && g.weight > 0;
-    const rows = common ? section.groups : section.groups
+    const rows = common ? section.groups.filter(g => g.minimumLevel <= last) : section.groups
       .filter(g => g.weight > 0)
       .sort((a, b) => Number(added(b)) - Number(added(a)));
     for (const group of rows) {
@@ -64,6 +64,7 @@ function drawGroups() {
         members.append(label);
       }
       roster.append(members);
+      if (common && group.minimumLevel > first) roster.append(el('small', 'Lv' + group.minimumLevel + 'から'));
       if (added(group)) roster.append(el('small', 'この階で追加', 'override'));
       else if (group.override) roster.append(el('small', 'この階の優先設定　重み ' + group.base + ' → ' + group.weight, 'override'));
       const share = common ? '' : percent.format(group.weight / total);

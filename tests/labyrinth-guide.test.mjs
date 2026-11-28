@@ -70,11 +70,11 @@ test('同種の比較行が全階の通常遭遇個体と一致し、重み0・�
 
 test('一つの帯の途中にある優先設定と、重みゼロの候補を区別する', () => {
   const data = {...guide, encounterGroups: structuredClone(guide.encounterGroups)};
-  const band = data.encounterGroups.bands.find(b => b.minLevel === 11);
+  const band = data.encounterGroups.bands.find(b => b.minLevel === 15);
   const id = Object.keys(band.groups)[0];
-  data.encounterGroups.dungeons.shifting_labyrinth.floors = {13: {[id]: 0}};
+  data.encounterGroups.dungeons.shifting_labyrinth.floors = {18: {[id]: 0}};
   const sections = guideBands(data, false).filter(s => s.band === band);
-  assert.deepEqual(sections.map(s => [s.first, s.last]), [[11, 12], [13, 13], [14, 14]]);
+  assert.deepEqual(sections.map(s => [s.first, s.last]), [[15, 17], [18, 18], [19, 19]]);
   const disabled = sections[1].groups.find(g => g.id === id);
   assert.equal(disabled.weight, 0);
   assert.equal(disabled.override, true);

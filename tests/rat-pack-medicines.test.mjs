@@ -7,6 +7,7 @@ import {applyStatus,statusLevel} from '../src/core/status-effects.js';
 import {setBattleTrap} from '../src/core/battle-traps.js';
 import {unitKey} from '../src/core/buffs.js';
 import {xpThreshold} from '../src/core/progression.js';
+import {floorEncounterGroups} from '../src/core/encounter-groups.js';
 import {shiftingDungeonData} from '../src/core/shifting-dungeon.js';
 import {validateSave} from '../src/core/save.js';
 
@@ -146,6 +147,12 @@ test('トーマと薬草師は同じLv境界で薬を解放し、群れの自然
     assert.equal(species(lv).has('goblin_5_piper'),false);
   }
   assert.ok(species(12).has('goblin_5_piper'));
+  const custom={...data,enemies:{...data.enemies},encounters:{},encounterGroups:structuredClone(data.encounterGroups)};
+  for(const [floor,group] of [[6,'plague_pack'],[11,'piper_swarm']]){
+    custom.encounterGroups.dungeons.shifting_labyrinth.floors[floor][group]=99;
+    const pool=floorEncounterGroups(custom,{id:'custom',dungeon:'shifting_labyrinth',floor,recommendedLevel:floor});
+    assert.ok(pool.encounterPool.every(e=>!e.encounter.endsWith('_'+group)));
+  }
 });
 
 test('ハーメルンは標的が倒れた時点で攻撃を打ち切り、別の隊員に向かわない',()=>{

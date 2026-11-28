@@ -251,6 +251,8 @@ try{
   await guide.locator('#source').selectOption('common');
   assert.equal(await guide.locator('#band').inputValue(),'6');
   assert.equal(await guide.locator('.band-head h3').textContent(),'Lv6〜9');
+  assert.match(await guide.locator('.group').filter({hasText:'疫病ネズミ'}).innerText(),/Lv8から/);
+  assert.equal(await guide.locator('.group').filter({hasText:'ゴブリン笛吹き'}).count(),0);
   await guide.locator('#source').selectOption('dungeon');
   await guide.locator('#band').selectOption('3');
   const floorWeights = {...catalog.dungeons.shifting_labyrinth.weights, ...catalog.dungeons.shifting_labyrinth.floors[3]};

@@ -1,5 +1,5 @@
 import {habitActiveAtLevel} from '../core/monster-habits.js';
-import {encounterEnemyStats, encounterWeightsForFloor} from '../core/encounter-groups.js';
+import {encounterEnemyStats, encounterWeightsForFloor, rosterMinimumLevel} from '../core/encounter-groups.js';
 import {actorStats, canEquip, grantsFor} from '../core/jobs.js';
 import {readContentJson} from '../core/read-content-json.js';
 
@@ -23,6 +23,10 @@ export function guideBands(data, common) {
     const end = common ? band.maxLevel : Math.min(max, band.maxLevel);
     if (band.minLevel > end) continue;
     const cuts = new Set([band.minLevel, end + 1]);
+    if (!common) for (const roster of Object.values(band.groups)) {
+      const level = rosterMinimumLevel(data, roster);
+      if (level > band.minLevel && level <= end) cuts.add(level);
+    }
     if (!common) for (const f of Object.keys(profile.floors ?? {}).map(Number)) {
       if (f >= band.minLevel && f <= end) { cuts.add(f); cuts.add(f + 1); }
     }
@@ -35,9 +39,10 @@ export function guideBands(data, common) {
           const enemy = data.enemies[species];
           return {id: species, name: enemy.name, image: data.assets.images[enemy.sprite], count};
         });
-        const weight = weights[id] ?? 0;
+        const minimumLevel = rosterMinimumLevel(data, roster);
+        const weight = first < minimumLevel ? 0 : weights[id] ?? 0;
         const override = !common && Object.hasOwn(profile.floors?.[first] ?? {}, id);
-        return {id, members, count: members.reduce((sum, m) => sum + m.count, 0),
+        return {id, members, minimumLevel, count: members.reduce((sum, m) => sum + m.count, 0),
           weight, base: profile.weights[id] ?? 0, override};
       });
       const total = groups.reduce((sum, row) => sum + row.weight, 0);
