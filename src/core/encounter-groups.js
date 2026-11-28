@@ -5,6 +5,9 @@ export function encounterEnemyStats(catalog, template, level) {
     [key, Math.floor(value + (level - 1) * perLevel[key])]));
 }
 
+export const rosterMinimumLevel = (data, roster) => Math.max(1,
+  ...Object.keys(roster).map(id => data.enemies[id]?.minEncounterLevel ?? 1));
+
 export const encounterWeightsForFloor = (profile, floor) => ({...profile.weights, ...profile.floors?.[floor]});
 
 // The band defines eligible rosters. A dungeon assigns weights to them and a
@@ -20,10 +23,11 @@ export function floorEncounterGroups(data, map) {
   const weights = encounterWeightsForFloor(profile, map.floor);
   const encounterPool = [], defined = [];
   for (const [group, roster] of Object.entries(band.groups)) {
-    const weight = weights[group] ?? 0;
-    if (!Number.isFinite(weight) || weight < 0) throw Error(map.id + ': 遭遇重みが不正です ' + group);
+    const configured = weights[group] ?? 0;
+    if (!Number.isFinite(configured) || configured < 0) throw Error(map.id + ': 遭遇重みが不正です ' + group);
     // Explicit zero keeps former battles and kill records loadable, outside the draw pool.
     if (!Object.hasOwn(weights, group)) continue;
+    const weight = level < rosterMinimumLevel(data, roster) ? 0 : configured;
     const enemies = [], names = [];
     for (const [species, count] of Object.entries(roster)) {
       const base = data.enemies[species], stats = encounterEnemyStats(catalog, band.enemies[species], level);

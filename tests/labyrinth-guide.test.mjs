@@ -62,18 +62,19 @@ test('同種の比較行が全階の通常遭遇個体と一致し、重み0・�
     assert.deepEqual(monsterLevelRows(guide, sections, species), expected.get(species) ?? [], species);
   }
   const rat = monsterLevelRows(guide, sections, 'kagaribi_soot_rat');
-  assert.deepEqual(rat.map(r => [r.level,r.stats.hp,r.habits]), [
+  assert.deepEqual(rat.filter(r=>r.level>=12).map(r=>r.level),Array.from({length:18},(_,i)=>12+i));
+  assert.deepEqual(rat.filter(r=>r.level<12).map(r => [r.level,r.stats.hp,r.habits]), [
     [1,17,[]], [2,28,[]], [3,40,[]], [4,45,[]], [5,53,['soot_smoke']]
   ]);
 });
 
 test('一つの帯の途中にある優先設定と、重みゼロの候補を区別する', () => {
   const data = {...guide, encounterGroups: structuredClone(guide.encounterGroups)};
-  const band = data.encounterGroups.bands.find(b => b.minLevel === 11);
+  const band = data.encounterGroups.bands.find(b => b.minLevel === 15);
   const id = Object.keys(band.groups)[0];
-  data.encounterGroups.dungeons.shifting_labyrinth.floors = {13: {[id]: 0}};
+  data.encounterGroups.dungeons.shifting_labyrinth.floors = {18: {[id]: 0}};
   const sections = guideBands(data, false).filter(s => s.band === band);
-  assert.deepEqual(sections.map(s => [s.first, s.last]), [[11, 12], [13, 13], [14, 14]]);
+  assert.deepEqual(sections.map(s => [s.first, s.last]), [[15, 17], [18, 18], [19, 19]]);
   const disabled = sections[1].groups.find(g => g.id === id);
   assert.equal(disabled.weight, 0);
   assert.equal(disabled.override, true);

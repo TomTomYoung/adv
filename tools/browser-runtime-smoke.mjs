@@ -114,7 +114,20 @@ try{
   ]);
   guide.on('pageerror',error=>errors.push(error.message));
   await guide.locator('#allies').waitFor();
-  assert.deepEqual(await guide.getByRole('navigation',{name:'図鑑のページ'}).getByRole('link').allTextContents(), ['キャラ図鑑','魔物図鑑','魔物編成']);
+  assert.deepEqual(await guide.getByRole('navigation',{name:'図鑑のページ'}).getByRole('link').allTextContents(), ['キャラ図鑑','魔物図鑑','魔物編成','罠表','薬表']);
+  await guide.locator('#nav-traps').click();
+  await guide.locator('#traps').waitFor();
+  assert.equal(await guide.locator('#trap-table tbody tr').count(),14);
+  assert.match(await guide.locator('#trap-table').innerText(),/踏み板罠.*設置者/);
+  await guide.locator('#nav-medicines').click();
+  await guide.locator('#medicines').waitFor();
+  const medicineRows=guide.locator('#medicine-table tbody tr');
+  assert.equal(await medicineRows.count(),25);
+  assert.equal(await medicineRows.locator('td:nth-child(4)').evaluateAll(cells=>cells.filter(cell=>cell.textContent.trim()).length),25);
+  assert.match(await medicineRows.filter({hasText:'鎮熱の煎じ薬'}).innerText(),/病気を全段階解除/);
+  assert.match(await guide.locator('#medicine-table').innerText(),/永久に1低下/);
+  await guide.locator('#nav-allies').click();
+  await guide.locator('#allies').waitFor();
   const allyCards = guide.locator('#ally-grid .guide-entry');
   assert.equal(await allyCards.count(),10);
   const columns = selector => guide.locator(selector).first().evaluate(node=>getComputedStyle(node).gridTemplateColumns.split(' ').length);
@@ -148,7 +161,7 @@ try{
     assert.equal(await monsterCards.count(),family==='slime'?26:25);
     const ids = await monsterCards.locator('a').evaluateAll(nodes=>nodes.map(a=>a.hash.split('/').at(-1)));
     assert.deepEqual(ids.sort(),Object.keys(enemies).filter(id=>enemies[id].family===family).sort());
-    assert.deepEqual(await guide.locator('#monster-index h3 small').allTextContents(),[family==='slime'?'6件':'5件',...Array(4).fill('5件')]);
+    assert.deepEqual(await guide.locator('#monster-index h3 small').allTextContents(),family==='goblin'?['4件','5件','1件','5件','5件','5件']:[family==='slime'?'6件':'5件',...Array(4).fill('5件')]);
     await monsterCards.first().getByRole('link').click();
     await guide.locator('#monster-sheet').waitFor();
     await guide.locator('#monsters-back').click();
@@ -182,9 +195,9 @@ try{
       assert.match(await traits.innerText(),/Lv5.*25%.*最大Lv3/);
       const levels=sheet.getByRole('region',{name:'レベル別の能力値と習性'});
       const rows=levels.locator('tbody tr');
-      assert.deepEqual(await rows.locator('th').allTextContents(),['Lv1','Lv2','Lv3','Lv4','Lv5']);
-      assert.deepEqual(await rows.locator('td:last-child').allTextContents(),['なし','なし','なし','なし','煤煙']);
-      assert.equal(await rows.last().locator('td').first().textContent(),'53 (+8)');
+      assert.deepEqual(await rows.locator('th').allTextContents(),['Lv1','Lv2','Lv3','Lv4','Lv5',...Array.from({length:18},(_,i)=>'Lv'+(12+i))]);
+      assert.deepEqual(await rows.locator('td:last-child').allTextContents(),['なし','なし','なし','なし',...Array(19).fill('煤煙')]);
+      assert.equal(await rows.nth(4).locator('td').first().textContent(),'53 (+8)');
       assert.equal(await guide.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     }
     if(id==='garden_root_shell')assert.match(await moves.innerText(),/受けるダメージを50%/);
@@ -241,6 +254,8 @@ try{
   await guide.locator('#source').selectOption('common');
   assert.equal(await guide.locator('#band').inputValue(),'6');
   assert.equal(await guide.locator('.band-head h3').textContent(),'Lv6〜9');
+  assert.match(await guide.locator('.group').filter({hasText:'疫病ネズミ'}).innerText(),/Lv8から/);
+  assert.equal(await guide.locator('.group').filter({hasText:'ゴブリン笛吹き'}).count(),0);
   await guide.locator('#source').selectOption('dungeon');
   await guide.locator('#band').selectOption('3');
   const floorWeights = {...catalog.dungeons.shifting_labyrinth.weights, ...catalog.dungeons.shifting_labyrinth.floors[3]};

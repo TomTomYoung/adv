@@ -261,9 +261,11 @@ function migrateMonsterActions(save,data){
     const oldWax=id==='slime_10_wick'&&t?.phase==='wax';
     const flag=id==='slime_5_sticky'?'stickyUsed':id==='slime_15_molt'?'shedSkinUsed':null;
     const oldGuard=u.rollingShellTurns!==undefined && u.guardTurns===undefined;
-    if(!oldRules && !oldGuard && !oldWax && !(flag&&t?.spent===true&&t[flag]===undefined))continue;
+    const oldPiper=id==='goblin_5_piper'&&u.levelBand===5&&data.enemies[id]?.levelBand===12;
+    if(!oldPiper && !oldRules && !oldGuard && !oldWax && !(flag&&t?.spent===true&&t[flag]===undefined))continue;
     updated??=clone(save);
     const unit=updated.state.battle.enemies[i];
+    if(oldPiper)unit.levelBand=12;
     if(oldRules)unit.ai=clone(current);
     if(oldGuard){unit.guardTurns=unit.rollingShellTurns;delete unit.rollingShellTurns;}
     if(oldWax){delete unit.tactics.phase;unit.tactics.meltedWax=true;}

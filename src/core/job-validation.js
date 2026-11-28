@@ -1,3 +1,4 @@
+import {medicineChoices} from './medicines.js';
 import {TRAP_KINDS} from './trap-skills.js';
 import {frontlineTargetingErrors} from './frontline-targeting.js';
 import {targetingErrors} from './battle-targeting.js';
@@ -40,7 +41,16 @@ export function skillDefinitionErrors(data,skill){
     if(effect.type==='stun'&&(!integer(effect.count??1,1,20)||effect.stack!==undefined&&!['refresh','add'].includes(effect.stack)))fail('スタン回数・重複指定不正');
     if(effect.type==='frontline_knockback'&&(!integer(effect.distance,1,3)||!integer(effect.collisionDamage,0,1000000)))fail('ノックバック距離・衝突ダメージ不正');
     if(effect.type==='set_trap' && (!TRAP_KINDS.includes(effect.trap) || (effect.trap==='bell' ? !['fire','ice','lightning','water'].includes(effect.element) : effect.element!==undefined)))fail('戦闘罠の種類・属性不正');
-    const common=['type',...(effect.type==='set_trap'?['trap']:[]),'formula','amount','scale','chance','element','itemHealing','buff','status','level',...(effect.type==='cleanse'?['statuses']:[]),...(effect.type==='stun'?['count','stack','breakGuard']:[]),...(effect.type==='frontline_knockback'?['distance','collisionDamage']:[])];
+    if(effect.type==='medicine'){
+      const [primary,marker]=skill.effects??[];
+      const hasPrimary=effect.healRate!==undefined
+        ? primary===effect && skill.effects.length===1 && finite(effect.healRate,.01,1)
+        : marker===effect && skill.effects.length===2 && (['restore_mp','buff','cleanse'].includes(primary.type) || primary.type==='status' && data.statuses[primary.status]?.beneficial);
+      const side=data.statuses[effect.status];
+      const hasSide=effect.permanentVitLoss===1 ? effect.status===undefined : effect.permanentVitLoss===undefined && side?.battleOnly && !side.beneficial;
+      if(skill.target!=='ally' || !hasPrimary || !hasSide)fail('薬の主効果・副作用不正');
+    }
+    const common=['type',...(effect.type==='medicine'?['healRate','permanentVitLoss']:[]),...(effect.type==='set_trap'?['trap']:[]),'formula','amount','scale','chance','element','itemHealing','buff','status','level',...(effect.type==='cleanse'?['statuses']:[]),...(effect.type==='stun'?['count','stack','breakGuard']:[]),...(effect.type==='frontline_knockback'?['distance','collisionDamage']:[])];
     if(Object.keys(effect).some(key=>!common.includes(key)))fail('未知の効果項目');
   }
   if(skill.effects?.some(e=>e.type==='repel')&&(skill.target!=='self'||skill.effects.length!==1||skill.selfEffects?.length||typeof skill.fireEffect!=='string'))fail('撃退技能の対象・効果が不正です');
@@ -154,7 +164,9 @@ export function validateJobState(data,state){
   for(const record of b.buffs){
     if(!isRecord(record)){fail('戦闘補正不正');continue;}
     const enemy=Object.hasOwn(record,'sourceEnemy')&&b.enemies.find(e=>e?.instance===record.sourceEnemy);
-    const enemySkill=enemy&&data.enemies[enemy.id]?.ai.some(r=>r.skill===record.sourceSkill)&&data.skills[record.sourceSkill];
+    const def=enemy && data.enemies[enemy.id];
+    const enemySkill=def && (def.ai.some(r=>r.skill===record.sourceSkill) ||
+      def.classSkill==='family_goblin_5_herbalist' && medicineChoices(data,def.level??def.levelBand).includes(record.sourceSkill)) && data.skills[record.sourceSkill];
     const definition=data.buffs[record.id],skill=Object.hasOwn(record,'sourceEnemy')?enemySkill:source(record),key=`${record.target}/${record.id}`;
     if(!definition||!skill||!targets.has(record.target)||!integer(record.remaining,1,definition?.turns??0)||seen.has(key)){fail('バフ期限・対象・付与元不正');continue;}seen.add(key);
     const origin=enemy?`enemy:${record.sourceEnemy}`:`actor:${record.sourceActor}`;

@@ -3,6 +3,7 @@ import {gearStages, guideActor, guideBands, loadGuide, monsterFloorText, monster
 import {conditionText, monsterGroups, targetText} from './application/monster-catalog.js';
 import {STAT_KEYS} from './core/jobs.js';
 
+import {medicineChoices} from './core/medicines.js';
 import {trapSkillChoices} from './core/trap-skills.js';
 import {MONSTER_HABITS} from './core/monster-habits.js';
 
@@ -51,7 +52,7 @@ function drawGroups() {
     panel.append(title);
     // Floor additions come first; the common catalog retains the full roster.
     const added = g => g.override && g.base === 0 && g.weight > 0;
-    const rows = common ? section.groups : section.groups
+    const rows = common ? section.groups.filter(g => g.minimumLevel <= last) : section.groups
       .filter(g => g.weight > 0)
       .sort((a, b) => Number(added(b)) - Number(added(a)));
     for (const group of rows) {
@@ -63,6 +64,7 @@ function drawGroups() {
         members.append(label);
       }
       roster.append(members);
+      if (common && group.minimumLevel > first) roster.append(el('small', 'Lv' + group.minimumLevel + 'から'));
       if (added(group)) roster.append(el('small', 'この階で追加', 'override'));
       else if (group.override) roster.append(el('small', 'この階の優先設定　重み ' + group.base + ' → ' + group.weight, 'override'));
       const share = common ? '' : percent.format(group.weight / total);
@@ -198,6 +200,8 @@ function monsterLevelComparison(rows, enemy) {
   const trapper = enemy.classSkill === 'family_goblin_5_trapper';
   const turnHabits = enemy.habits?.some(id => MONSTER_HABITS[id].onTurn);
   const columns = ['Lv', ...STAT_KEYS.map(k => data.jobProfile.statNames[k]), turnHabits ? '有効な行動・習性' : '有効な習性'];
+  const herbalist=enemy.classSkill==='family_goblin_5_herbalist';
+  if (herbalist) columns.push('使う薬');
   if (trapper) columns.push('設置できる罠');
   for (const label of columns) {
     const th = el('th', label);
@@ -215,6 +219,7 @@ function monsterLevelComparison(rows, enemy) {
       if (delta) cell.append(el('small', ' (' + (delta > 0 ? '+' : '−') + Math.abs(delta) + ')'));
     }
     tr.insertCell().textContent = row.habits.map(id => MONSTER_HABITS[id].name).join('、') || 'なし';
+    if (herbalist) tr.insertCell().textContent=medicineChoices(data,row.level).map(id=>data.skills[id].name).join('、');
     if (trapper) {
       const names = trapSkillChoices(data, row.level).map(id => data.skills[id].name.split('・')[0]);
       tr.insertCell().textContent = [...new Set(names)].join('、') || 'なし';
@@ -374,16 +379,37 @@ function changeActor() {
   for (const [key, job] of Object.entries(data.jobs)) option(jobs, key, job.name + (key === initial ? '（初期職）' : ''));
   jobs.value = initial;
 }
+function referenceTable(container, headings, rows) {
+  const table=el('table'), header=table.createTHead().insertRow(), body=table.createTBody();
+  for(const title of headings){const cell=el('th',title);cell.scope='col';header.append(cell);}
+  for(const values of rows){
+    const row=body.insertRow();
+    for(const value of values)row.insertCell().textContent=value;
+  }
+  $(container).replaceChildren(table);
+}
+function drawBattleReferences(){
+  const levels=data.jobProfile.personalSkills;
+  const traps=trapSkillChoices(data,data.system.maxLevel).sort((a,b)=>levels.nio[a]-levels.nio[b]);
+  referenceTable('trap-table',['習得Lv','罠','発動条件と効果'],traps.map(id=>[
+    levels.nio[id],data.skills[id].name,data.skills[id].description
+  ]));
+  referenceTable('medicine-table',['習得Lv','薬','主効果','副作用・発動条件'],medicineChoices(data,data.system.maxLevel).map(id=>{
+    const skill=data.skills[id];
+    const [main,side]=skill.description.split(' 副作用：');
+    return [levels.toma[id],skill.name,main,side??''];
+  }));
+}
 function switchPage(event) {
   const [section, key, child] = location.hash.slice(1).split('/');
   const family = section === 'monsters' && Object.hasOwn(familyLabels, key ?? '') ? key : '';
   const entryId = family ? child : key;
-  const active = ['monsters', 'enemies'].includes(section) ? section : 'allies';
-  for (const id of ['allies', 'monsters', 'enemies']) {
+  const active = ['monsters', 'enemies', 'traps', 'medicines'].includes(section) ? section : 'allies';
+  for (const id of ['allies', 'monsters', 'enemies', 'traps', 'medicines']) {
     $(id).hidden = id !== active;
     $('nav-' + id).setAttribute('aria-current', id === active ? 'page' : 'false');
   }
-  if (active === 'enemies') return;
+  if (!['allies','monsters'].includes(active)) return;
   const allies = active === 'allies';
   if (!allies) {
     fillMonsterList(family);
@@ -449,6 +475,6 @@ async function init() {
   });
   $('levels').addEventListener('toggle', refreshAlly);
   window.addEventListener('hashchange', switchPage);
-  drawGroups(); switchPage(); $('status').hidden = true;
+  drawBattleReferences(); drawGroups(); switchPage(); $('status').hidden = true;
 }
 init().catch(error => { $('status').textContent = '図鑑を読み込めませんでした。' + error.message; });

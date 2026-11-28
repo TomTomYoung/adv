@@ -68,7 +68,8 @@
         "trap_ceiling": 15,
         "trap_fireline": 18,
         "trap_vise": 21,
-        "trap_coffin": 24
+        "trap_coffin": 24,
+        "trap_treadle": 8
       },
       "il": {
         "twin_thunder": 6
@@ -76,6 +77,33 @@
       "sera": {
         "stun_break": 3,
         "lay_to_rest": 8
+      },
+      "toma": {
+        "medicine_leaf": 1,
+        "medicine_amber": 8,
+        "medicine_echo": 12,
+        "medicine_moon": 18,
+        "medicine_marrow": 24,
+        "medicine_clear_dew": 2,
+        "medicine_snakeleaf": 3,
+        "medicine_dawn_eye": 3,
+        "medicine_wake_salts": 4,
+        "medicine_redroot": 5,
+        "medicine_swiftfeather": 6,
+        "medicine_stoneskin": 7,
+        "medicine_feverleaf": 8,
+        "medicine_numb_oil": 9,
+        "medicine_sage_incense": 10,
+        "medicine_silver_honey": 11,
+        "medicine_still_echo": 12,
+        "medicine_hawk_eye": 13,
+        "medicine_water_edge": 14,
+        "medicine_bubble_film": 15,
+        "medicine_rain_film": 16,
+        "medicine_breaker": 17,
+        "medicine_razor_wine": 18,
+        "medicine_prism": 20,
+        "medicine_star_sight": 24
       }
     }
   },
@@ -578,6 +606,14 @@
           "target": "location",
           "maxTargets": 1,
           "lifetime": "equipped"
+        },
+        {
+          "skill": "battle_disarm",
+          "level": 1,
+          "api": "battle.skill",
+          "target": "self",
+          "maxTargets": 1,
+          "lifetime": "equipped"
         }
       ]
     },
@@ -752,6 +788,14 @@
           "level": 10,
           "api": "party.recon",
           "target": "location",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "battle_disarm",
+          "level": 1,
+          "api": "battle.skill",
+          "target": "self",
           "maxTargets": 1,
           "lifetime": "equipped"
         }
@@ -2617,7 +2661,7 @@
         "dungeon"
       ],
       "mp": 2,
-      "description": "既知の床罠・向いている壁面罠を解除する。技能Lv2から回収可能な罠の部品を拾える。",
+      "description": "既知の床罠・向いている壁面罠を解除する。技能Lv2から回収可能な罠の部品を拾える。 戦闘中は罠を1基解除する。",
       "maxSkillLevel": 3,
       "growthDisplay": "full",
       "levels": {
@@ -4494,7 +4538,7 @@
       "name": "薬草の手当",
       "mp": 0,
       "target": "ally",
-      "description": "傷ついた仲間を一度だけ回復します。",
+      "description": "一戦に一度、個体Lvまでの薬を1体に投与。瀕死の仲間、治せる状態異常、負傷、MP不足の順に優先し、余裕があれば2巡目以降に強化薬を使う。",
       "effects": [
         {
           "type": "heal",
@@ -6356,6 +6400,462 @@
           "type": "damage",
           "element": "fire",
           "formula": "heavy"
+        }
+      ]
+    },
+    "plague_bite": {
+      "name": "病牙",
+      "mp": 0,
+      "target": "enemy",
+      "description": "物理攻撃が命中すると35%で病気が1段階進む。最大Lv3。",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "physical",
+          "element": "physical"
+        },
+        {
+          "type": "status",
+          "status": "disease",
+          "chance": 0.35
+        }
+      ]
+    },
+    "hamelin": {
+      "name": "ハーメルン",
+      "mp": 0,
+      "target": "self",
+      "description": "ハーメルンで生存中の煤ネズミ・疫病ネズミに号令をかけ、隊員1人を一斉に襲わせます。ネズミがいないときは合図笛を使います。",
+      "effects": []
+    },
+    "medicine_leaf": {
+      "name": "若葉の丸薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "最大HPの25%を回復。 副作用：速さが15%低下。2巡終了で解除。",
+      "effects": [
+        {
+          "type": "medicine",
+          "healRate": 0.25,
+          "status": "drug_drowsiness"
+        }
+      ]
+    },
+    "medicine_amber": {
+      "name": "琥珀の煎薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "最大HPの40%を回復。 副作用：力が15%低下。戦闘終了で解除。",
+      "effects": [
+        {
+          "type": "medicine",
+          "healRate": 0.4,
+          "status": "drug_weakness"
+        }
+      ]
+    },
+    "medicine_echo": {
+      "name": "返り咲きの薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "最大HPの55%を回復。 副作用：服用から2回目の巡終了時にMPを6失う。",
+      "effects": [
+        {
+          "type": "medicine",
+          "healRate": 0.55,
+          "status": "drug_rebound"
+        }
+      ]
+    },
+    "medicine_moon": {
+      "name": "月露の霊薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "最大HPの75%を回復。 副作用：次に魔法を1回使うと、通常の消費に加えてMPを8失う。",
+      "effects": [
+        {
+          "type": "medicine",
+          "healRate": 0.75,
+          "status": "drug_spell_recoil"
+        }
+      ]
+    },
+    "medicine_marrow": {
+      "name": "命脈の秘薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "最大HPの100%を回復。 副作用：服用者の防御が永久に1低下する。累計5まで。",
+      "effects": [
+        {
+          "type": "medicine",
+          "healRate": 1.0,
+          "permanentVitLoss": 1
+        }
+      ]
+    },
+    "trap_treadle": {
+      "name": "踏み板罠",
+      "mp": 0,
+      "target": "self",
+      "description": "敵・味方・設置者を問わず、最初に直接物理攻撃を当てた者が踏む。設置者の通常攻撃の50%の威力。1回発動。",
+      "effects": [
+        {
+          "type": "set_trap",
+          "trap": "treadle"
+        }
+      ]
+    },
+    "battle_disarm": {
+      "name": "罠解除",
+      "mp": 2,
+      "target": "self",
+      "description": "戦場の罠を1基解除。敵の罠を優先し、同じ陣営なら先に置かれたものを選ぶ。",
+      "effects": [
+        {
+          "type": "disarm_trap"
+        }
+      ]
+    },
+    "medicine_clear_dew": {
+      "name": "澄み露のしずく",
+      "mp": 0,
+      "target": "ally",
+      "description": "MPを12回復。 副作用：速さ−15%（2巡）。",
+      "effects": [
+        {
+          "type": "restore_mp",
+          "amount": 12
+        },
+        {
+          "type": "medicine",
+          "status": "drug_drowsiness"
+        }
+      ]
+    },
+    "medicine_snakeleaf": {
+      "name": "蛇抜きの丸薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "劇毒、毒の順に、かかっているものを1種類、全段階解除。 副作用：力−15%（戦闘終了まで）。",
+      "effects": [
+        {
+          "type": "cleanse",
+          "statuses": [
+            "virulent_poison",
+            "poison"
+          ]
+        },
+        {
+          "type": "medicine",
+          "status": "drug_weakness"
+        }
+      ]
+    },
+    "medicine_dawn_eye": {
+      "name": "夜明けの目薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "暗闇を全段階解除。 副作用：服用から2回目の巡終了時にMPを6失う。",
+      "effects": [
+        {
+          "type": "cleanse",
+          "statuses": [
+            "blindness"
+          ]
+        },
+        {
+          "type": "medicine",
+          "status": "drug_rebound"
+        }
+      ]
+    },
+    "medicine_wake_salts": {
+      "name": "目覚ましの嗅ぎ薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "眠りを全段階解除。 副作用：防御−15%（2巡）。",
+      "effects": [
+        {
+          "type": "cleanse",
+          "statuses": [
+            "sleep"
+          ]
+        },
+        {
+          "type": "medicine",
+          "status": "drug_soft_knees"
+        }
+      ]
+    },
+    "medicine_redroot": {
+      "name": "火走りの強壮薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "力＋25%（2巡）。 副作用：防御−15%（2巡）。",
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "battle_cry"
+        },
+        {
+          "type": "medicine",
+          "status": "drug_soft_knees"
+        }
+      ]
+    },
+    "medicine_swiftfeather": {
+      "name": "矢羽根の滴",
+      "mp": 0,
+      "target": "ally",
+      "description": "速さ＋50%（2巡）。 副作用：力−15%（戦闘終了まで）。",
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "agility"
+        },
+        {
+          "type": "medicine",
+          "status": "drug_weakness"
+        }
+      ]
+    },
+    "medicine_stoneskin": {
+      "name": "石皮の塗り薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "防御＋30%（2巡）。 副作用：速さ−15%（2巡）。",
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "steadfast"
+        },
+        {
+          "type": "medicine",
+          "status": "drug_drowsiness"
+        }
+      ]
+    },
+    "medicine_feverleaf": {
+      "name": "鎮熱の煎じ薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "病気を全段階解除。 副作用：次に魔法を使った時、追加でMPを8失う。",
+      "effects": [
+        {
+          "type": "cleanse",
+          "statuses": [
+            "disease"
+          ]
+        },
+        {
+          "type": "medicine",
+          "status": "drug_spell_recoil"
+        }
+      ]
+    },
+    "medicine_numb_oil": {
+      "name": "雷ほどきの油",
+      "mp": 0,
+      "target": "ally",
+      "description": "麻痺を全段階解除。 副作用：防御−15%（2巡）。",
+      "effects": [
+        {
+          "type": "cleanse",
+          "statuses": [
+            "paralysis"
+          ]
+        },
+        {
+          "type": "medicine",
+          "status": "drug_soft_knees"
+        }
+      ]
+    },
+    "medicine_sage_incense": {
+      "name": "思考の霊香",
+      "mp": 0,
+      "target": "ally",
+      "description": "知力＋35%（3巡）。 副作用：次に魔法を使った時、追加でMPを8失う。",
+      "effects": [
+        {
+          "type": "status",
+          "status": "drug_insight",
+          "level": 1
+        },
+        {
+          "type": "medicine",
+          "status": "drug_spell_recoil"
+        }
+      ]
+    },
+    "medicine_silver_honey": {
+      "name": "舌ほどきの蜜",
+      "mp": 0,
+      "target": "ally",
+      "description": "呪文封印を全段階解除。 副作用：服用から2回目の巡終了時にMPを6失う。",
+      "effects": [
+        {
+          "type": "cleanse",
+          "statuses": [
+            "spell_seal"
+          ]
+        },
+        {
+          "type": "medicine",
+          "status": "drug_rebound"
+        }
+      ]
+    },
+    "medicine_still_echo": {
+      "name": "木霊鎮めの散薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "こんらん、暴発の順に、かかっているものを1種類、全段階解除。 副作用：速さ−15%（2巡）。",
+      "effects": [
+        {
+          "type": "cleanse",
+          "statuses": [
+            "confusion",
+            "misfire"
+          ]
+        },
+        {
+          "type": "medicine",
+          "status": "drug_drowsiness"
+        }
+      ]
+    },
+    "medicine_hawk_eye": {
+      "name": "的見の点眼液",
+      "mp": 0,
+      "target": "ally",
+      "description": "必中（2巡）。 副作用：防御−15%（2巡）。",
+      "effects": [
+        {
+          "type": "status",
+          "status": "sure_hit",
+          "level": 2
+        },
+        {
+          "type": "medicine",
+          "status": "drug_soft_knees"
+        }
+      ]
+    },
+    "medicine_water_edge": {
+      "name": "水刃の滴",
+      "mp": 0,
+      "target": "ally",
+      "description": "通常攻撃と物理技に水属性を付与（3巡）。 副作用：服用から2回目の巡終了時にMPを6失う。",
+      "effects": [
+        {
+          "type": "status",
+          "status": "water_infusion",
+          "level": 1
+        },
+        {
+          "type": "medicine",
+          "status": "drug_rebound"
+        }
+      ]
+    },
+    "medicine_bubble_film": {
+      "name": "泡膜の乳液",
+      "mp": 0,
+      "target": "ally",
+      "description": "次に命中する投射を付随効果ごと1回防ぐ。 副作用：速さ−15%（2巡）。",
+      "effects": [
+        {
+          "type": "status",
+          "status": "aegis_ward",
+          "level": 1
+        },
+        {
+          "type": "medicine",
+          "status": "drug_drowsiness"
+        }
+      ]
+    },
+    "medicine_rain_film": {
+      "name": "氷雨の皮膜薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "油・火だるまをまとめて解除。どちらにもかかっていない時は、油・火だるまの付与か火属性ダメージを1回防ぐ。 副作用：力−15%（戦闘終了まで）。",
+      "effects": [
+        {
+          "type": "status",
+          "status": "water_ward",
+          "level": 1
+        },
+        {
+          "type": "medicine",
+          "status": "drug_weakness"
+        }
+      ]
+    },
+    "medicine_breaker": {
+      "name": "剛撃の噛み薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "次の行動の物理威力＋30%。攻撃以外の行動でも消費。 副作用：次に魔法を使った時、追加でMPを8失う。",
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "exp_breath30"
+        },
+        {
+          "type": "medicine",
+          "status": "drug_spell_recoil"
+        }
+      ]
+    },
+    "medicine_razor_wine": {
+      "name": "切先の銘酒",
+      "mp": 0,
+      "target": "ally",
+      "description": "会心率＋50ポイント（3巡）。 副作用：防御−15%（2巡）。",
+      "effects": [
+        {
+          "type": "status",
+          "status": "critical_up",
+          "level": 3
+        },
+        {
+          "type": "medicine",
+          "status": "drug_soft_knees"
+        }
+      ]
+    },
+    "medicine_prism": {
+      "name": "七色の護身薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "火・氷・雷・水・光・土・闇の被ダメージ−25%（2巡）。 副作用：次に魔法を使った時、追加でMPを8失う。",
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "exp_magic75"
+        },
+        {
+          "type": "medicine",
+          "status": "drug_spell_recoil"
+        }
+      ]
+    },
+    "medicine_star_sight": {
+      "name": "星読みの秘薬",
+      "mp": 0,
+      "target": "ally",
+      "description": "命中した攻撃が必ず会心（2巡）。 副作用：防御が永久に1低下。命脈の秘薬と合わせて1人につき累計5まで。",
+      "effects": [
+        {
+          "type": "status",
+          "status": "guaranteed_critical",
+          "level": 2
+        },
+        {
+          "type": "medicine",
+          "permanentVitLoss": 1
         }
       ]
     }
@@ -8358,7 +8858,36 @@
     "trap_coffin": "skill_root",
     "stone_beetle_throw": "skill_smash",
     "armadillo_rampage": "skill_roll",
-    "bomb_rock_throw": "skill_fire"
+    "bomb_rock_throw": "skill_fire",
+    "plague_bite": "skill_venom",
+    "hamelin": "guard",
+    "medicine_leaf": "skill_heal",
+    "medicine_amber": "skill_heal",
+    "medicine_echo": "skill_heal",
+    "medicine_moon": "skill_heal",
+    "medicine_marrow": "skill_heal",
+    "trap_treadle": "skill_root",
+    "battle_disarm": "skill_root",
+    "medicine_clear_dew": "skill_heal",
+    "medicine_snakeleaf": "skill_heal",
+    "medicine_dawn_eye": "skill_heal",
+    "medicine_wake_salts": "skill_heal",
+    "medicine_redroot": "skill_heal",
+    "medicine_swiftfeather": "skill_heal",
+    "medicine_stoneskin": "skill_heal",
+    "medicine_feverleaf": "skill_heal",
+    "medicine_numb_oil": "skill_heal",
+    "medicine_sage_incense": "skill_heal",
+    "medicine_silver_honey": "skill_heal",
+    "medicine_still_echo": "skill_heal",
+    "medicine_hawk_eye": "skill_heal",
+    "medicine_water_edge": "skill_heal",
+    "medicine_bubble_film": "skill_heal",
+    "medicine_rain_film": "skill_heal",
+    "medicine_breaker": "skill_heal",
+    "medicine_razor_wine": "skill_heal",
+    "medicine_prism": "skill_heal",
+    "medicine_star_sight": "skill_heal"
   },
   "gridProfiles": {
     "power": {
@@ -11562,6 +12091,354 @@
         "shape": "single"
       },
       "trajectory": "lob",
+      "friendlyFire": false
+    },
+    "plague_bite": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "hamelin": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_leaf": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_amber": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_echo": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_moon": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_marrow": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "trap_treadle": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "battle_disarm": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_clear_dew": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_snakeleaf": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_dawn_eye": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_wake_salts": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_redroot": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_swiftfeather": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_stoneskin": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_feverleaf": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_numb_oil": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_sage_incense": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_silver_honey": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_still_echo": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_hawk_eye": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_water_edge": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_bubble_film": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_rain_film": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_breaker": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_razor_wine": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_prism": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "medicine_star_sight": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
       "friendlyFire": false
     }
   },
@@ -17981,6 +18858,702 @@
       "range": {
         "min": 1,
         "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "plague_bite": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "hamelin": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_leaf": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_amber": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_echo": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_moon": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_marrow": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "trap_treadle": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "battle_disarm": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_clear_dew": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_snakeleaf": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_dawn_eye": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_wake_salts": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_redroot": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_swiftfeather": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_stoneskin": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_feverleaf": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_numb_oil": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_sage_incense": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_silver_honey": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_still_echo": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_hawk_eye": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_water_edge": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_bubble_film": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_rain_film": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_breaker": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_razor_wine": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_prism": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "medicine_star_sight": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
       },
       "allyRange": {
         "min": 0,

@@ -135,7 +135,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 成長/Lv：HP 6.5 / MP 2 / STR 1.9 / VIT 0.8 / AGI 0.8 / INT 1.3。現在職の加算：なし。
 装備：weapon＝dagger・sword / armor＝light / charm＝charm。
-習得：Lv1 毒の刃 (battle.skill) / Lv5 武器落とし (battle.skill) / Lv10 軽身の構え (battle.skill) / Lv1 罠解除 (trap.disarm)。
+習得：Lv1 毒の刃 (battle.skill) / Lv5 武器落とし (battle.skill) / Lv10 軽身の構え (battle.skill) / Lv1 罠解除 (trap.disarm) / Lv1 罠解除 (battle.skill)。
 特性：{"trapDamage":0.7}。鍵や物語条件を無視する解錠・盗品複製は行いません。
 
 ### 暗殺者 (assassin)
@@ -153,7 +153,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 成長/Lv：HP 6.5 / MP 2 / STR 1.8 / VIT 0.9 / AGI 0.8 / INT 1.3。現在職の加算：なし。
 装備：weapon＝dagger・bow / armor＝light / charm＝charm。
-習得：Lv1 毒の刃 (battle.skill) / Lv5 足払い (battle.skill) / Lv10 周辺測量 (map.reveal) / Lv1 登攀誘導 (voxel.traverse) / Lv1 罠解除 (trap.disarm) / Lv1 罠発見 (trap.detect) / Lv5 奇襲 (party.ambush) / Lv1 索敵 (encounter.seek) / Lv1 哨戒 (party.patrol) / Lv5 迷彩 (party.camouflage) / Lv10 偵察 (party.recon)。
+習得：Lv1 毒の刃 (battle.skill) / Lv5 足払い (battle.skill) / Lv10 周辺測量 (map.reveal) / Lv1 登攀誘導 (voxel.traverse) / Lv1 罠解除 (trap.disarm) / Lv1 罠発見 (trap.detect) / Lv5 奇襲 (party.ambush) / Lv1 索敵 (encounter.seek) / Lv1 哨戒 (party.patrol) / Lv5 迷彩 (party.camouflage) / Lv10 偵察 (party.recon) / Lv1 罠解除 (battle.skill)。
 特性：{"encounterRate":0.9,"escapeBonus":0.08}。直接火力より行軍の安全を重視します。
 
 ### 魔術師 (mage)
@@ -392,7 +392,7 @@ MP2。水没していない場所で炎を使い、隊全員の濡れを解除�
 
 ### 罠解除 (trap_disarm)
 
-既知の床罠・向いている壁面罠を解除する。技能Lv2から回収可能な罠の部品を拾える。 API: trap.disarm。使用場所: dungeon。
+既知の床罠・向いている壁面罠を解除する。技能Lv2から回収可能な罠の部品を拾える。 戦闘中は罠を1基解除する。 API: trap.disarm。使用場所: dungeon。
 技能Lv：1〜3。人物Lvによる習得条件とは独立。
 技能Lv2の変更：{"difficulty":2,"recover":true}。
 技能Lv3の変更：{"difficulty":3}。

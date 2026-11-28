@@ -1,5 +1,8 @@
+import {battleAlive} from './frontline-lifecycle.js';
+import {statusControl,rollActionStatus} from './status-effects.js';
+import {chooseHerbalistMedicine} from './medicines.js';
 import {goblinTrap} from './battle-traps.js';
-import {applyGuard,guarded} from './battle-turns.js';
+import {applyGuard,guarded,stunned} from './battle-turns.js';
 import {unitKey} from './buffs.js';
 import {breakDefense,depth,familyAfterMove,label,living,moveTo,profession,recordFamilyDeaths,tactics,weakest} from './monster-family-field.js';
 
@@ -70,13 +73,33 @@ export function familyTurn(engine,e,{cast,order},bonus=false) {
       return trap?use(trap.target,trap.id):use(target);
     }
     case 'dagger': return use(enemyById(f.lastVictim)??target);
-    case 'herbalist':
+    case 'herbalist': {
+      if(t.spent)return attack();
+      const dose=chooseHerbalistMedicine(engine,e,all);
+      if(!dose)return attack();
+      if(use(dose.target,dose.id))t.spent=true;
+      return;
+    }
     case 'cook': {
       const u=weakest(all);
       if (!t.spent&&u.hp<u.stats.hp) {t.spent=true;use(u);if(job==='cook')applyGuard(b,e);return;}
       return attack();
     }
-    case 'piper': f.focus=target.id;f.piper=e.instance;return signal();
+    case 'piper': {
+      const rats=mates.filter(u=>['plague_rat','kagaribi_soot_rat'].includes(engine.data.enemies[u.id].species??u.id));
+      if((engine.data.enemies[e.id].level??e.levelBand)>=12 && rats.length){
+        if(!use(e,'hamelin'))return;
+        say('ハーメルン！ '+label(engine,target)+'を狙え。');
+        for(const rat of rats){
+          if(!battleAlive(s,target)||!battleAlive(s,e))break;
+          if(!battleAlive(s,rat)||stunned(b,rat)||statusControl(engine.data,s,rat)||rollActionStatus(engine,rat,'actionFailureChance'))continue;
+          const species=engine.data.enemies[rat.id].species??rat.id;
+          use(target,species==='plague_rat'?'plague_bite':'attack',rat);
+        }
+        return;
+      }
+      f.focus=target.id;f.piper=e.instance;return signal();
+    }
     case 'cleaver':
     case 'stoker':
     case 'hex':

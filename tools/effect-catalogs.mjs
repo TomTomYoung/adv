@@ -53,6 +53,7 @@ const statusLevelText=(id,def,level)=>{
   if(effect.actionFailureChance!==undefined)parts.push(`行動時${percent(effect.actionFailureChance)}で行動不能（行動枠のみ消費）`);
   if(effect.accuracyRate!==undefined)parts.push(`攻撃・攻撃的な効果の命中率×${effect.accuracyRate}`);
   if(effect.confusionChance!==undefined)parts.push(`行動時${percent(effect.confusionChance)}で使用可能な行動・対象をランダム選択`);
+  if(effect.medicineTrigger)parts.push((effect.medicineTrigger.on==='expiry'?'持続終了時':'次の魔法使用時')+'に一度だけMP−'+effect.medicineTrigger.mpLoss);
   if(effect.actionDisabled)parts.push('戦闘中は行動不能（行動枠のみ消費）');
   if(effect.damageWakeChance!==undefined)parts.push(`攻撃によるHPダメージで${percent(effect.damageWakeChance)}の確率で解除`);
   if(effect.sureHit)parts.push('命中判定のある攻撃・効果が必中（くらやみより優先）');

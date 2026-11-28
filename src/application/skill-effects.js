@@ -1,3 +1,4 @@
+import {medicineChoices} from '../core/medicines.js';
 import {evaluate} from '../core/expression.js';
 import {guardDamageRate} from '../core/battle-turns.js';
 import {statusEffectAtLevel} from '../core/status-effects.js';
@@ -42,6 +43,8 @@ function effectText(data, enemy, effect, skill) {
     ? evaluate(data.formulas[effect.formula], {source: enemy, target: {stats: {vit: 10}}})
     : effect.amount);
   switch (effect.type) {
+    case 'medicine':
+    case 'disarm_trap':
     case 'set_trap': return skill.description;
     case 'damage': return elementLabels[effect.element] + 'ダメージ（目安' + amount() + '）';
     case 'heal': return 'HPを回復（基礎回復量' + amount() + '、最大HPまで）';
@@ -75,6 +78,10 @@ export function monsterActionEffects(data, enemy, skillId) {
     const effects = variant.effects.map(effect => effectText(data, enemy, effect, variant));
     if (effects.length) lines.push((when ? when + '：' : '') + (variant.projectile ? '投射攻撃。' : '') + effects.join('。続いて') + '。');
     for (const effect of variant.selfEffects ?? []) lines.push('行動後、自身に' + effectText(data, enemy, effect, variant) + '。');
+  }
+  if(skillId==='family_goblin_5_piper')lines.push('Lv12 ハーメルン：'+data.skills.hamelin.description);
+  if(skillId==='family_goblin_5_herbalist'){
+    return [skill.description,...medicineChoices(data,data.system.maxLevel).map(id=>'Lv'+data.jobProfile.personalSkills.toma[id]+' '+data.skills[id].name+'：'+data.skills[id].description)];
   }
   if(skillId==='family_goblin_5_trapper'){
     for(const [id,level] of Object.entries(data.jobProfile.personalSkills.nio)){

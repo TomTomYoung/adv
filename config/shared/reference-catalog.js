@@ -18413,6 +18413,16 @@ export const referenceData={
       "id": "medicinal_leaf"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "plague_rat",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -29926,6 +29936,18 @@ export const referenceData={
       "file": "jobs.json",
       "path": [
         "jobs",
+        "rogue",
+        "grants",
+        4,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "battle_disarm"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
         "assassin",
         "grants",
         0,
@@ -30089,6 +30111,18 @@ export const referenceData={
       ],
       "kind": "fieldAbilities",
       "id": "recon"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        11,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "battle_disarm"
     },
     {
       "file": "jobs.json",
@@ -33854,6 +33888,450 @@ export const referenceData={
       ],
       "kind": "formulas",
       "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "plague_bite",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "plague_bite",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "disease"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_leaf",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_drowsiness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_amber",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_weakness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_echo",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_rebound"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_moon",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_spell_recoil"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_clear_dew",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_drowsiness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_snakeleaf",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_weakness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_dawn_eye",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_rebound"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_wake_salts",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_soft_knees"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_redroot",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "battle_cry"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_redroot",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_soft_knees"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_swiftfeather",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "agility"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_swiftfeather",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_weakness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_stoneskin",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "steadfast"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_stoneskin",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_drowsiness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_feverleaf",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_spell_recoil"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_numb_oil",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_soft_knees"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_sage_incense",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_insight"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_sage_incense",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_spell_recoil"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_silver_honey",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_rebound"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_still_echo",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_drowsiness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_hawk_eye",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "sure_hit"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_hawk_eye",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_soft_knees"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_water_edge",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "water_infusion"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_water_edge",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_rebound"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_bubble_film",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "aegis_ward"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_bubble_film",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_drowsiness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_rain_film",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "water_ward"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_rain_film",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_weakness"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_breaker",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_breath30"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_breaker",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_spell_recoil"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_razor_wine",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "critical_up"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_razor_wine",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_soft_knees"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_prism",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_magic75"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_prism",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "drug_spell_recoil"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_star_sight",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "guaranteed_critical"
     },
     {
       "file": "jobs.json",
@@ -51747,6 +52225,93 @@ export const referenceData={
       },
       "bomb_rock_throw": {
         "name": "爆弾岩投げ"
+      },
+      "plague_bite": {
+        "name": "病牙"
+      },
+      "hamelin": {
+        "name": "ハーメルン"
+      },
+      "medicine_leaf": {
+        "name": "若葉の丸薬"
+      },
+      "medicine_amber": {
+        "name": "琥珀の煎薬"
+      },
+      "medicine_echo": {
+        "name": "返り咲きの薬"
+      },
+      "medicine_moon": {
+        "name": "月露の霊薬"
+      },
+      "medicine_marrow": {
+        "name": "命脈の秘薬"
+      },
+      "trap_treadle": {
+        "name": "踏み板罠"
+      },
+      "battle_disarm": {
+        "name": "罠解除"
+      },
+      "medicine_clear_dew": {
+        "name": "澄み露のしずく"
+      },
+      "medicine_snakeleaf": {
+        "name": "蛇抜きの丸薬"
+      },
+      "medicine_dawn_eye": {
+        "name": "夜明けの目薬"
+      },
+      "medicine_wake_salts": {
+        "name": "目覚ましの嗅ぎ薬"
+      },
+      "medicine_redroot": {
+        "name": "火走りの強壮薬"
+      },
+      "medicine_swiftfeather": {
+        "name": "矢羽根の滴"
+      },
+      "medicine_stoneskin": {
+        "name": "石皮の塗り薬"
+      },
+      "medicine_feverleaf": {
+        "name": "鎮熱の煎じ薬"
+      },
+      "medicine_numb_oil": {
+        "name": "雷ほどきの油"
+      },
+      "medicine_sage_incense": {
+        "name": "思考の霊香"
+      },
+      "medicine_silver_honey": {
+        "name": "舌ほどきの蜜"
+      },
+      "medicine_still_echo": {
+        "name": "木霊鎮めの散薬"
+      },
+      "medicine_hawk_eye": {
+        "name": "的見の点眼液"
+      },
+      "medicine_water_edge": {
+        "name": "水刃の滴"
+      },
+      "medicine_bubble_film": {
+        "name": "泡膜の乳液"
+      },
+      "medicine_rain_film": {
+        "name": "氷雨の皮膜薬"
+      },
+      "medicine_breaker": {
+        "name": "剛撃の噛み薬"
+      },
+      "medicine_razor_wine": {
+        "name": "切先の銘酒"
+      },
+      "medicine_prism": {
+        "name": "七色の護身薬"
+      },
+      "medicine_star_sight": {
+        "name": "星読みの秘薬"
       }
     },
     "items": {
@@ -52849,6 +53414,10 @@ export const referenceData={
       "slime_25_abyss": {
         "name": "底なしスライム",
         "sprite": "monster_slime_25_abyss"
+      },
+      "plague_rat": {
+        "name": "疫病ネズミ",
+        "sprite": "monster_vault_mouse"
       }
     },
     "encounters": {
@@ -53320,6 +53889,27 @@ export const referenceData={
       },
       "aegis_ward": {
         "name": "飛び道具の結界"
+      },
+      "disease": {
+        "name": "病気"
+      },
+      "drug_drowsiness": {
+        "name": "薬の眠気"
+      },
+      "drug_weakness": {
+        "name": "薬の脱力"
+      },
+      "drug_rebound": {
+        "name": "反動待ち"
+      },
+      "drug_spell_recoil": {
+        "name": "魔力過敏"
+      },
+      "drug_soft_knees": {
+        "name": "薬による膝のふらつき"
+      },
+      "drug_insight": {
+        "name": "思考明晰"
       }
     },
     "shops": {
@@ -82321,6 +82911,209 @@ export const referenceData={
       "path": [
         "skills",
         "bomb_rock_throw"
+      ]
+    },
+    "skills/plague_bite": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "plague_bite"
+      ]
+    },
+    "skills/hamelin": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "hamelin"
+      ]
+    },
+    "skills/medicine_leaf": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_leaf"
+      ]
+    },
+    "skills/medicine_amber": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_amber"
+      ]
+    },
+    "skills/medicine_echo": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_echo"
+      ]
+    },
+    "skills/medicine_moon": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_moon"
+      ]
+    },
+    "skills/medicine_marrow": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_marrow"
+      ]
+    },
+    "skills/trap_treadle": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trap_treadle"
+      ]
+    },
+    "skills/battle_disarm": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "battle_disarm"
+      ]
+    },
+    "skills/medicine_clear_dew": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_clear_dew"
+      ]
+    },
+    "skills/medicine_snakeleaf": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_snakeleaf"
+      ]
+    },
+    "skills/medicine_dawn_eye": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_dawn_eye"
+      ]
+    },
+    "skills/medicine_wake_salts": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_wake_salts"
+      ]
+    },
+    "skills/medicine_redroot": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_redroot"
+      ]
+    },
+    "skills/medicine_swiftfeather": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_swiftfeather"
+      ]
+    },
+    "skills/medicine_stoneskin": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_stoneskin"
+      ]
+    },
+    "skills/medicine_feverleaf": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_feverleaf"
+      ]
+    },
+    "skills/medicine_numb_oil": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_numb_oil"
+      ]
+    },
+    "skills/medicine_sage_incense": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_sage_incense"
+      ]
+    },
+    "skills/medicine_silver_honey": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_silver_honey"
+      ]
+    },
+    "skills/medicine_still_echo": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_still_echo"
+      ]
+    },
+    "skills/medicine_hawk_eye": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_hawk_eye"
+      ]
+    },
+    "skills/medicine_water_edge": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_water_edge"
+      ]
+    },
+    "skills/medicine_bubble_film": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_bubble_film"
+      ]
+    },
+    "skills/medicine_rain_film": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_rain_film"
+      ]
+    },
+    "skills/medicine_breaker": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_breaker"
+      ]
+    },
+    "skills/medicine_razor_wine": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_razor_wine"
+      ]
+    },
+    "skills/medicine_prism": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_prism"
+      ]
+    },
+    "skills/medicine_star_sight": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "medicine_star_sight"
       ]
     },
     "fieldAbilities/survey": {
