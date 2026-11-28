@@ -7,7 +7,7 @@ const expression={$ref:'#/$defs/value'};
 export const effectSchema={oneOf:[
  obj({type:{const:'set_trap'},trap:{enum:['barb','net','siphon','soot','snare','bell','ceiling','fireline','vise','coffin','treadle']},element:{enum:['fire','ice','water','lightning']}},['type','trap']),
  obj({type:{const:'disarm_trap'}},['type']),
- obj({type:{const:'medicine'},healRate:{type:'number',exclusiveMinimum:0,maximum:1},status:str,permanentVitLoss:{const:1}},['type','healRate']),
+ obj({type:{const:'medicine'},healRate:{type:'number',exclusiveMinimum:0,maximum:1},status:str,permanentVitLoss:{const:1}},['type']),
  obj({type:{const:'lay_to_rest'}},['type']),
  obj({type:{const:'purge_undead'}},['type']),
  obj({type:{const:'frontline_remove'}}),

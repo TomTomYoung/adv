@@ -5819,7 +5819,7 @@
     "name": "薬草の手当",
     "mp": 0,
     "target": "ally",
-    "description": "傷ついた仲間のうち残りHP割合が最も低い1体に、一戦に一度、個体Lvで使える最上位の薬を投与します。",
+    "description": "一戦に一度、個体Lvまでの薬を1体に投与。瀕死の仲間、治せる状態異常、負傷、MP不足の順に優先し、余裕があれば2巡目以降に強化薬を使う。",
     "effects": [
       {
         "type": "heal",
@@ -13662,7 +13662,7 @@
     "name": "若葉の丸薬",
     "mp": 0,
     "target": "ally",
-    "description": "最大HPの25%を回復。速さが15%低下。2巡終了で解除。",
+    "description": "最大HPの25%を回復。 副作用：速さが15%低下。2巡終了で解除。",
     "effects": [
       {
         "type": "medicine",
@@ -13711,7 +13711,7 @@
     "name": "琥珀の煎薬",
     "mp": 0,
     "target": "ally",
-    "description": "最大HPの40%を回復。力が15%低下。戦闘終了で解除。",
+    "description": "最大HPの40%を回復。 副作用：力が15%低下。戦闘終了で解除。",
     "effects": [
       {
         "type": "medicine",
@@ -13760,7 +13760,7 @@
     "name": "返り咲きの薬",
     "mp": 0,
     "target": "ally",
-    "description": "最大HPの55%を回復。服用から2回目の巡終了時にMPを6失う。",
+    "description": "最大HPの55%を回復。 副作用：服用から2回目の巡終了時にMPを6失う。",
     "effects": [
       {
         "type": "medicine",
@@ -13809,7 +13809,7 @@
     "name": "月露の霊薬",
     "mp": 0,
     "target": "ally",
-    "description": "最大HPの75%を回復。次に魔法を1回使うと、通常の消費に加えてMPを8失う。",
+    "description": "最大HPの75%を回復。 副作用：次に魔法を1回使うと、通常の消費に加えてMPを8失う。",
     "effects": [
       {
         "type": "medicine",
@@ -13858,7 +13858,7 @@
     "name": "命脈の秘薬",
     "mp": 0,
     "target": "ally",
-    "description": "最大HPの100%を回復。服用者の防御が永久に1低下する。累計5まで。",
+    "description": "最大HPの100%を回復。 副作用：服用者の防御が永久に1低下する。累計5まで。",
     "effects": [
       {
         "type": "medicine",
@@ -13990,6 +13990,1069 @@
       "range": {
         "min": 0,
         "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_clear_dew": {
+    "name": "澄み露のしずく",
+    "mp": 0,
+    "target": "ally",
+    "description": "MPを12回復。 副作用：速さ−15%（2巡）。",
+    "effects": [
+      {
+        "type": "restore_mp",
+        "amount": 12
+      },
+      {
+        "type": "medicine",
+        "status": "drug_drowsiness"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_snakeleaf": {
+    "name": "蛇抜きの丸薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "劇毒、毒の順に、かかっているものを1種類、全段階解除。 副作用：力−15%（戦闘終了まで）。",
+    "effects": [
+      {
+        "type": "cleanse",
+        "statuses": [
+          "virulent_poison",
+          "poison"
+        ]
+      },
+      {
+        "type": "medicine",
+        "status": "drug_weakness"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_dawn_eye": {
+    "name": "夜明けの目薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "暗闇を全段階解除。 副作用：服用から2回目の巡終了時にMPを6失う。",
+    "effects": [
+      {
+        "type": "cleanse",
+        "statuses": [
+          "blindness"
+        ]
+      },
+      {
+        "type": "medicine",
+        "status": "drug_rebound"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_wake_salts": {
+    "name": "目覚ましの嗅ぎ薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "眠りを全段階解除。 副作用：防御−15%（2巡）。",
+    "effects": [
+      {
+        "type": "cleanse",
+        "statuses": [
+          "sleep"
+        ]
+      },
+      {
+        "type": "medicine",
+        "status": "drug_soft_knees"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_redroot": {
+    "name": "火走りの強壮薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "力＋25%（2巡）。 副作用：防御−15%（2巡）。",
+    "effects": [
+      {
+        "type": "buff",
+        "buff": "battle_cry"
+      },
+      {
+        "type": "medicine",
+        "status": "drug_soft_knees"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_swiftfeather": {
+    "name": "矢羽根の滴",
+    "mp": 0,
+    "target": "ally",
+    "description": "速さ＋50%（2巡）。 副作用：力−15%（戦闘終了まで）。",
+    "effects": [
+      {
+        "type": "buff",
+        "buff": "agility"
+      },
+      {
+        "type": "medicine",
+        "status": "drug_weakness"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_stoneskin": {
+    "name": "石皮の塗り薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "防御＋30%（2巡）。 副作用：速さ−15%（2巡）。",
+    "effects": [
+      {
+        "type": "buff",
+        "buff": "steadfast"
+      },
+      {
+        "type": "medicine",
+        "status": "drug_drowsiness"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_feverleaf": {
+    "name": "鎮熱の煎じ薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "病気を全段階解除。 副作用：次に魔法を使った時、追加でMPを8失う。",
+    "effects": [
+      {
+        "type": "cleanse",
+        "statuses": [
+          "disease"
+        ]
+      },
+      {
+        "type": "medicine",
+        "status": "drug_spell_recoil"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_numb_oil": {
+    "name": "雷ほどきの油",
+    "mp": 0,
+    "target": "ally",
+    "description": "麻痺を全段階解除。 副作用：防御−15%（2巡）。",
+    "effects": [
+      {
+        "type": "cleanse",
+        "statuses": [
+          "paralysis"
+        ]
+      },
+      {
+        "type": "medicine",
+        "status": "drug_soft_knees"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_sage_incense": {
+    "name": "思考の霊香",
+    "mp": 0,
+    "target": "ally",
+    "description": "知力＋35%（3巡）。 副作用：次に魔法を使った時、追加でMPを8失う。",
+    "effects": [
+      {
+        "type": "status",
+        "status": "drug_insight",
+        "level": 1
+      },
+      {
+        "type": "medicine",
+        "status": "drug_spell_recoil"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_silver_honey": {
+    "name": "舌ほどきの蜜",
+    "mp": 0,
+    "target": "ally",
+    "description": "呪文封印を全段階解除。 副作用：服用から2回目の巡終了時にMPを6失う。",
+    "effects": [
+      {
+        "type": "cleanse",
+        "statuses": [
+          "spell_seal"
+        ]
+      },
+      {
+        "type": "medicine",
+        "status": "drug_rebound"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_still_echo": {
+    "name": "木霊鎮めの散薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "こんらん、暴発の順に、かかっているものを1種類、全段階解除。 副作用：速さ−15%（2巡）。",
+    "effects": [
+      {
+        "type": "cleanse",
+        "statuses": [
+          "confusion",
+          "misfire"
+        ]
+      },
+      {
+        "type": "medicine",
+        "status": "drug_drowsiness"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_hawk_eye": {
+    "name": "的見の点眼液",
+    "mp": 0,
+    "target": "ally",
+    "description": "必中（2巡）。 副作用：防御−15%（2巡）。",
+    "effects": [
+      {
+        "type": "status",
+        "status": "sure_hit",
+        "level": 2
+      },
+      {
+        "type": "medicine",
+        "status": "drug_soft_knees"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_water_edge": {
+    "name": "水刃の滴",
+    "mp": 0,
+    "target": "ally",
+    "description": "通常攻撃と物理技に水属性を付与（3巡）。 副作用：服用から2回目の巡終了時にMPを6失う。",
+    "effects": [
+      {
+        "type": "status",
+        "status": "water_infusion",
+        "level": 1
+      },
+      {
+        "type": "medicine",
+        "status": "drug_rebound"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_bubble_film": {
+    "name": "泡膜の乳液",
+    "mp": 0,
+    "target": "ally",
+    "description": "次に命中する投射を付随効果ごと1回防ぐ。 副作用：速さ−15%（2巡）。",
+    "effects": [
+      {
+        "type": "status",
+        "status": "aegis_ward",
+        "level": 1
+      },
+      {
+        "type": "medicine",
+        "status": "drug_drowsiness"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_rain_film": {
+    "name": "氷雨の皮膜薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "油・火だるまをまとめて解除。どちらにもかかっていない時は、油・火だるまの付与か火属性ダメージを1回防ぐ。 副作用：力−15%（戦闘終了まで）。",
+    "effects": [
+      {
+        "type": "status",
+        "status": "water_ward",
+        "level": 1
+      },
+      {
+        "type": "medicine",
+        "status": "drug_weakness"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_breaker": {
+    "name": "剛撃の噛み薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "次の行動の物理威力＋30%。攻撃以外の行動でも消費。 副作用：次に魔法を使った時、追加でMPを8失う。",
+    "effects": [
+      {
+        "type": "buff",
+        "buff": "exp_breath30"
+      },
+      {
+        "type": "medicine",
+        "status": "drug_spell_recoil"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_razor_wine": {
+    "name": "切先の銘酒",
+    "mp": 0,
+    "target": "ally",
+    "description": "会心率＋50ポイント（3巡）。 副作用：防御−15%（2巡）。",
+    "effects": [
+      {
+        "type": "status",
+        "status": "critical_up",
+        "level": 3
+      },
+      {
+        "type": "medicine",
+        "status": "drug_soft_knees"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_prism": {
+    "name": "七色の護身薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "火・氷・雷・水・光・土・闇の被ダメージ−25%（2巡）。 副作用：次に魔法を使った時、追加でMPを8失う。",
+    "effects": [
+      {
+        "type": "buff",
+        "buff": "exp_magic75"
+      },
+      {
+        "type": "medicine",
+        "status": "drug_spell_recoil"
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    }
+  },
+  "medicine_star_sight": {
+    "name": "星読みの秘薬",
+    "mp": 0,
+    "target": "ally",
+    "description": "命中した攻撃が必ず会心（2巡）。 副作用：防御が永久に1低下。命脈の秘薬と合わせて1人につき累計5まで。",
+    "effects": [
+      {
+        "type": "status",
+        "status": "guaranteed_critical",
+        "level": 2
+      },
+      {
+        "type": "medicine",
+        "permanentVitLoss": 1
+      }
+    ],
+    "frontlineTargeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "targeting": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
       },
       "area": {
         "shape": "single"

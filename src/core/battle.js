@@ -1,4 +1,4 @@
-import {giveMedicine,medicineChoices} from './medicines.js';
+import {giveMedicine,chooseHerbalistMedicine} from './medicines.js';
 import {disarmBattleTrap,afterTrapAction,setBattleTrap,settleTrapDeaths,snareAttack,spreadTrapFire,trapDamageRate,viseStopsCover} from './battle-traps.js';
 import {sootOnHit} from './soot-smoke.js';
 import {oilBurnout,slimeAfterDamage,slimeDeflect,slimeHitType,slimeInitiative,slimeMoved,slimePower,slimeTurn} from './slime-actions.js';
@@ -198,7 +198,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     }else b.log.push(target.name+'は仮死で、'+skill.name+'は効かなかった。');
     return 0;
   }
-  if(finishOnly(skill))return 0;
+  if(finishOnly(skill) || target.hp<=0 && skill.effects.at(-1)?.type==='medicine')return 0;
   if(target.hp<=0&&skill.effects.some(e=>e.type==='purge_undead')){
     if(isFrontline(s)&&target.instance&&engine.data.enemies[target.id]?.undead&&frontlineState(s,target)==='down'){removeFrontline(engine,target);b.log.push(`${target.name}の残骸を祓った。`);}
     return 0;
@@ -514,9 +514,12 @@ export function battleItemPlan(engine,actorId,itemId,targetId){
 }
 function performSkill(engine,source,selection){
   if(selection.skillId==='family_goblin_5_herbalist'){
-    const level=engine.data.enemies[source.id]?.level??source.levelBand??source.level??1;
-    const recipe=medicineChoices(engine.data,level).at(-1);
-    if(recipe)selection={...selection,skill:engine.data.skills[recipe],skillId:recipe};
+    if(source.tactics?.spent)return;
+    const allies=selection.targets.filter(unit=>unit.instance && battleAlive(engine.state,unit));
+    const dose=chooseHerbalistMedicine(engine,source,allies);
+    if(!dose)return;
+    (source.tactics??={}).spent=true;
+    selection={...selection,skill:engine.data.skills[dose.id],skillId:dose.id,targets:[dose.target]};
   }
   const {skill,skillId,targets,itemId}=selection,enemySource=Boolean(source.instance),s=engine.state;
   if(itemId)engine.give(itemId,-1);

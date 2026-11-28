@@ -1,5 +1,6 @@
 import {battleAlive} from './frontline-lifecycle.js';
 import {statusControl,rollActionStatus} from './status-effects.js';
+import {chooseHerbalistMedicine} from './medicines.js';
 import {goblinTrap} from './battle-traps.js';
 import {applyGuard,guarded,stunned} from './battle-turns.js';
 import {unitKey} from './buffs.js';
@@ -73,9 +74,10 @@ export function familyTurn(engine,e,{cast,order},bonus=false) {
     }
     case 'dagger': return use(enemyById(f.lastVictim)??target);
     case 'herbalist': {
-      const patient=weakest(all);
-      if(t.spent || patient.hp>=patient.stats.hp)return attack();
-      if(use(patient))t.spent=true;
+      if(t.spent)return attack();
+      const dose=chooseHerbalistMedicine(engine,e,all);
+      if(!dose)return attack();
+      if(use(dose.target,dose.id))t.spent=true;
       return;
     }
     case 'cook': {

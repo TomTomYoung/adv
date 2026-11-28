@@ -121,7 +121,10 @@ try{
   assert.match(await guide.locator('#trap-table').innerText(),/踏み板罠.*設置者/);
   await guide.locator('#nav-medicines').click();
   await guide.locator('#medicines').waitFor();
-  assert.equal(await guide.locator('#medicine-table tbody tr').count(),5);
+  const medicineRows=guide.locator('#medicine-table tbody tr');
+  assert.equal(await medicineRows.count(),25);
+  assert.equal(await medicineRows.locator('td:nth-child(4)').evaluateAll(cells=>cells.filter(cell=>cell.textContent.trim()).length),25);
+  assert.match(await medicineRows.filter({hasText:'鎮熱の煎じ薬'}).innerText(),/病気を全段階解除/);
   assert.match(await guide.locator('#medicine-table').innerText(),/永久に1低下/);
   await guide.locator('#nav-allies').click();
   await guide.locator('#allies').waitFor();

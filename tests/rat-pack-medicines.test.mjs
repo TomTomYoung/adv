@@ -177,3 +177,70 @@ test('旧Lv5の笛吹きを含む戦闘は、抽選から外れた編成のま�
   assert.ok(g.state.battle.log.some(s=>s.includes('合図笛')));
   assert.ok(!g.state.battle.log.some(s=>s.includes('ハーメルン！')));
 });
+
+test('HP回復以外の薬20種は習得Lvから選べ、主効果と副作用が服用者にだけ発生する',()=>{
+  const levels=data.jobProfile.personalSkills.toma;
+  const ids=Object.keys(levels).filter(id=>data.skills[id].effects.at(-1)?.type==='medicine' && !data.skills[id].effects[0].healRate);
+  assert.equal(ids.length,20);
+  const campaign=new GameEngine(playable,17);
+  for(let level=1;level<=24;level++){
+    campaign.award(0,xpThreshold(data,level-1)-campaign.state.actors.toma.xp,['toma']);
+    assert.deepEqual(campaign.skills('toma').filter(id=>ids.includes(id)).sort(),ids.filter(id=>levels[id]<=level).sort());
+  }
+  for(const id of ids){
+    const g=stage(12,'herbalist_escort'),s=g.state,caster=s.actors.toma,target=s.actors.il;
+    const [main,side]=data.skills[id].effects;
+    target.hp--;const hp=target.hp;
+    if(main.type==='cleanse')for(const condition of main.statuses)applyStatus(g.data,s,target,condition,undefined,3);
+    if(main.type==='restore_mp')target.mp=0;
+    cast(g,caster,id,target);
+    assert.equal(target.hp,hp,id);
+    if(main.type==='restore_mp')assert.equal(target.mp,12);
+    if(main.type==='cleanse'){
+      assert.ok(!target.statuses.includes(main.statuses[0]),id);
+      if(main.statuses[1])assert.equal(statusLevel(target,main.statuses[1]),3);
+    }
+    if(main.type==='buff')assert.ok(s.battle.buffs.some(b=>b.id===main.buff && b.target===unitKey(target) && b.sourceSkill===id),id);
+    if(main.type==='status'){
+      assert.ok(target.statuses.includes(main.status),id);
+      assert.equal(statusLevel(target,main.status),main.level);
+    }
+    if(side.status){
+      assert.ok(target.statuses.includes(side.status),id);
+      assert.ok(!caster.statuses.includes(side.status),id);
+    }else assert.equal(target.medicineVitLoss,1);
+    reload(g);
+  }
+});
+
+for(const mode of ['classic','grid','frontline']){
+  test(mode+' 薬草師は仲間の病気・MP不足に合う薬を選び、余裕があれば強化薬を使う',()=>{
+    const prepare=()=>{
+      const g=stage(20,'herbalist_escort',mode);
+      const [herb,rat]=g.state.battle.enemies;
+      return {g,herb,rat};
+    };
+    const dose=({g,herb})=>{turn(g,herb);assert.ok(g.dispatch({type:'battle.step'}));assert.ok(herb.tactics.spent);};
+    const sick=prepare();
+    applyStatus(sick.g.data,sick.g.state,sick.rat,'disease',undefined,3);
+    dose(sick);assert.ok(!sick.rat.statuses.includes('disease'));assert.ok(sick.rat.statuses.includes('drug_spell_recoil'));
+    const drained=prepare();drained.herb.mp=0;
+    dose(drained);assert.equal(drained.herb.mp,Math.min(12,drained.herb.stats.mp));assert.ok(drained.herb.statuses.includes('drug_drowsiness'));
+    const fit=prepare();fit.g.state.battle.round=2;
+    dose(fit);assert.ok(fit.g.state.battle.buffs.some(b=>b.id==='exp_magic75' && b.sourceEnemy===fit.herb.instance));
+    reload(fit.g);
+    const tampered=JSON.parse(fit.g.save());
+    tampered.state.battle.buffs[0].sourceEnemy=fit.rat.instance;
+    assert.ok(validateSave(tampered,fit.g.data).length);
+  });
+}
+
+test('星読みと命脈は永久防御低下の上限を共有し、会心の効果だけが2巡で切れる',()=>{
+  const g=stage(24,'herbalist_escort'),toma=g.state.actors.toma,il=g.state.actors.il,vit=g.stats('il').vit;
+  for(const id of ['marrow','star_sight','marrow','star_sight','marrow','star_sight'])cast(g,toma,'medicine_'+id,il);
+  assert.equal(g.stats('il').vit,vit-5);
+  assert.equal(statusLevel(il,'guaranteed_critical'),2);
+  cast(g,toma,'guard',toma,true);assert.ok(il.statuses.includes('guaranteed_critical'));
+  cast(g,toma,'guard',toma,true);assert.ok(!il.statuses.includes('guaranteed_critical'));
+  endBattle(g,'escape');drain(g);reload(g);assert.equal(g.stats('il').vit,vit-5);
+});

@@ -219,7 +219,7 @@ function monsterLevelComparison(rows, enemy) {
       if (delta) cell.append(el('small', ' (' + (delta > 0 ? '+' : '−') + Math.abs(delta) + ')'));
     }
     tr.insertCell().textContent = row.habits.map(id => MONSTER_HABITS[id].name).join('、') || 'なし';
-    if (herbalist) tr.insertCell().textContent=data.skills[medicineChoices(data,row.level).at(-1)].name;
+    if (herbalist) tr.insertCell().textContent=medicineChoices(data,row.level).map(id=>data.skills[id].name).join('、');
     if (trapper) {
       const names = trapSkillChoices(data, row.level).map(id => data.skills[id].name.split('・')[0]);
       tr.insertCell().textContent = [...new Set(names)].join('、') || 'なし';
@@ -394,9 +394,10 @@ function drawBattleReferences(){
   referenceTable('trap-table',['習得Lv','罠','発動条件と効果'],traps.map(id=>[
     levels.nio[id],data.skills[id].name,data.skills[id].description
   ]));
-  referenceTable('medicine-table',['習得Lv','薬','回復量・副作用・持続'],medicineChoices(data,data.system.maxLevel).map(id=>{
+  referenceTable('medicine-table',['習得Lv','薬','主効果','副作用・発動条件'],medicineChoices(data,data.system.maxLevel).map(id=>{
     const skill=data.skills[id];
-    return [levels.toma[id],skill.name,skill.description];
+    const [main,side]=skill.description.split(' 副作用：');
+    return [levels.toma[id],skill.name,main,side??''];
   }));
 }
 function switchPage(event) {

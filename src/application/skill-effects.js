@@ -1,3 +1,4 @@
+import {medicineChoices} from '../core/medicines.js';
 import {evaluate} from '../core/expression.js';
 import {guardDamageRate} from '../core/battle-turns.js';
 import {statusEffectAtLevel} from '../core/status-effects.js';
@@ -80,7 +81,7 @@ export function monsterActionEffects(data, enemy, skillId) {
   }
   if(skillId==='family_goblin_5_piper')lines.push('Lv12 ハーメルン：'+data.skills.hamelin.description);
   if(skillId==='family_goblin_5_herbalist'){
-    return [skill.description,...Object.entries(data.jobProfile.personalSkills.toma).filter(([id])=>data.skills[id].effects[0]?.type==='medicine').map(([id,lv])=>'Lv'+lv+' '+data.skills[id].name+'：'+data.skills[id].description)];
+    return [skill.description,...medicineChoices(data,data.system.maxLevel).map(id=>'Lv'+data.jobProfile.personalSkills.toma[id]+' '+data.skills[id].name+'：'+data.skills[id].description)];
   }
   if(skillId==='family_goblin_5_trapper'){
     for(const [id,level] of Object.entries(data.jobProfile.personalSkills.nio)){
